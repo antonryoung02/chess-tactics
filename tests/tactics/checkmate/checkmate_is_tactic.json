@@ -1,0 +1,137 @@
+[
+    {
+        "description": "Rook sacrifice in found mate in 3",
+        "start_fen": "r2k1r2/1B1n2b1/p3R1p1/7p/7q/5Q2/PP3PP1/3R2K1 w - - 1 22",
+        "start_index": 3,
+        "evaluations": [
+            [
+                {
+                    "eval": "5.08",
+                    "type": "cp",
+                    "move": {
+                        "from": "d5",
+                        "to": "b7"
+                    },
+                    "sequence": "g7d4 g2g3 h4g4 f3g4 d4f2 g1f2 h5g4 b7a8 d8c7 a8g2 h8b8 e6e2"
+                }
+            ],
+            [
+                {
+                    "eval": "5.23",
+                    "type": "cp",
+                    "move": {
+                        "from": "g7",
+                        "to": "d4"
+                    },
+                    "sequence": "g2g3 h4g4 f3g4 h5g4 b7a8 d4c5 a8c6 h8h7 e6g6 h7f7 g6g8 d8c7"
+                }
+            ],
+            [
+                {
+                    "eval": "3",
+                    "type": "mate",
+                    "move": {
+                        "from": "d1",
+                        "to": "d7"
+                    },
+                    "sequence": "d8d7 f3c6 d7d8 c6d6"
+                }
+            ],
+            [
+                {
+                    "eval": "2",
+                    "type": "mate",
+                    "move": {
+                        "from": "d8",
+                        "to": "d7"
+                    },
+                    "sequence": "f3c6 d7d8 c6d6"
+                }
+            ],
+            [
+                {
+                    "eval": "2",
+                    "type": "mate",
+                    "move": {
+                        "from": "f3",
+                        "to": "c6"
+                    },
+                    "sequence": "d7d8 c6d6"
+                }
+            ],
+            [
+                {
+                    "eval": "1",
+                    "type": "mate",
+                    "move": {
+                        "from": "d7",
+                        "to": "d8"
+                    },
+                    "sequence": "c6d6"
+                }
+            ],
+            [
+                {
+                    "eval": "1",
+                    "type": "mate",
+                    "move": {
+                        "from": "c6",
+                        "to": "d6"
+                    },
+                    "sequence": ""
+                }
+            ],
+            [
+                {
+                    "eval": 1,
+                    "type": "game_over",
+                    "move": {},
+                    "sequence": []
+                }
+            ]
+        ],
+
+        "expected": true
+    },
+    {
+        "description": "Found mate in 2 in an already won position",
+        "start_fen": "r2k1r2/1B1n2b1/p3R1p1/7p/7q/5Q2/PP3PP1/3R2K1 w - - 1 22",
+        "start_index": 3,
+        "evaluations": [
+            [
+                {
+                    "eval": "8",
+                    "type": "mate",
+                    "move": {
+                        "from": "d5",
+                        "to": "e4"
+                    },
+                    "sequence": "f3f2 c4d3 d2e1 d3b1 e1e2 a2c4 e2d2 b1b2 d2d1 c4b3 d1e1 b2c1"
+                }
+            ],
+            [
+                {
+                    "eval": "21",
+                    "type": "mate",
+                    "move": {
+                        "from": "d2",
+                        "to": "e1"
+                    },
+                    "sequence": "d4e3 e1f1 e3f3 f1g1 a2b1 g1h2 f3f4 h2g2 b1e4 g2h3 f4f3 h3h4"
+                }
+            ],
+            [
+                {
+                    "eval": "3",
+                    "type": "mate",
+                    "move": {
+                        "from": "a2",
+                        "to": "c4"
+                    },
+                    "sequence": "e2e1 d4e3 e1d1 c4b3"
+                }
+            ]
+        ],
+        "expected": false
+    }
+]

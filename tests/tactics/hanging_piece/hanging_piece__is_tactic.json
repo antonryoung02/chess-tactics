@@ -1,0 +1,118 @@
+[
+    {
+        "description": "Rook captures bishop for trade",
+        "start_fen": "1k2r3/4Bppp/8/p2R4/4n2P/5B2/r4PP1/2R3K1 b - - 0 27",
+        "prev_eval": [
+            {
+                "eval": "4.36",
+                "type": "cp",
+                "move": {
+                    "from": "e7",
+                    "to": "g5"
+                },
+                "sequence": "e4g5 f3d5 g5h3 g2h3 a2b2 d7f7 e8c8 c1e1"
+            }
+        ],
+        "curr_eval": [
+            {
+                "eval": "0.73",
+                "type": "cp",
+                "move": {
+                    "from": "e8",
+                    "to": "e7"
+                },
+                "sequence": "c1b1 b8c8 b1e1 a2a4 f3d1 a4b4 d5a5 e7b7 d1g4 c8b8 a5e5 e4f6"
+            }
+        ],
+        "prev_move": {
+            "color": "b",
+            "from": "d2",
+            "to": "a2",
+            "piece": "r",
+            "captured": "p",
+            "flags": "c",
+            "san": "Rxa2",
+            "lan": "d2a2",
+            "before": "1k2r3/3RBppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 b - - 6 26",
+            "after": "1k2r3/3RBppp/8/p2b4/4n2P/5B2/r4PP1/2R3K1 w - - 0 27"
+        },
+        "expected": false
+    },
+    {
+        "description": "Bishop captures free pawn in only good move",
+        "start_fen": "1k2r3/3RBppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 b - - 6 26",
+        "prev_eval": [
+            {
+                "eval": "1.96",
+                "type": "cp",
+                "move": {
+                    "from": "a2",
+                    "to": "a3"
+                },
+                "sequence": "g7g6 h4h5 h7h6 g1h2 g6g5 c7d7 d5a2 d7d2 e4d2 e7d6 b8a7 c1c7"
+            }
+        ],
+        "curr_eval": [
+            {
+                "eval": "0.63",
+                "type": "cp",
+                "move": {
+                    "from": "d5",
+                    "to": "a2"
+                },
+                "sequence": "d7c7 a2d5 g1h2 a5a4 h4h5 h7h6 f3e4 d5e4 e7h4 d2d5 h4g3 b8a8"
+            }
+        ],
+        "prev_move": {
+            "color": "b",
+            "from": "d8",
+            "to": "e8",
+            "piece": "r",
+            "flags": "n",
+            "san": "Re8",
+            "lan": "d8e8",
+            "before": "1k1r4/2R1Bppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 b - - 4 25",
+            "after": "1k2r3/2R1Bppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 w - - 5 26"
+        },
+        "expected": true
+    },
+    {
+        "description": "Opponent hangs a bishop in one move",
+        "start_fen": "3r4/5pk1/p3b2p/1pb1P1p1/2p1N1p1/P7/1P2KPP1/2B4R w - - 2 33",
+        "prev_eval": [
+            {
+                "eval": "-4.67",
+                "type": "cp",
+                "move": {
+                    "from": "c5",
+                    "to": "d4"
+                },
+                "sequence": "c1g5 h6g5 h1h5 c8d8 h5g5 g7f8 e4d6 a6a5 g5h5"
+            }
+        ],
+        "curr_eval": [
+            {
+                "eval": "1.94",
+                "type": "cp",
+                "move": {
+                    "from": "e4",
+                    "to": "c5"
+                },
+                "sequence": "d8d5 c1e3 d5e5 h1d1 h6h5 e2f1 g7g6 d1d8 c4c3 b2c3 e6c4 f1g1"
+            }
+        ],
+        "prev_move": {
+            "color": "w",
+            "from": "c3",
+            "to": "e4",
+            "piece": "n",
+            "flags": "n",
+            "san": "Ne4",
+            "lan": "c3e4",
+            "before": "2r5/5pk1/p3b2p/1pb1P1p1/2p3p1/P1N5/1P2KPP1/2B4R w - - 0 32",
+            "after": "2r5/5pk1/p3b2p/1pb1P1p1/2p1N1p1/P7/1P2KPP1/2B4R b - - 1 32"
+        },
+        "expected": true,
+        "debug": true
+    }
+]

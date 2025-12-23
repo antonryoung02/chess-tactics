@@ -1,0 +1,32 @@
+[
+    {
+        "start_fen": "1kr5/2r5/8/8/2P5/1BK5/8/8 b - - 0 1",
+        "square": "c4",
+        "expected": false
+    },
+    {
+        "start_fen": "b1rr3k/8/8/3Q4/8/8/6B1/K7 b - - 0 1",
+        "square": "d5",
+        "expected": true
+    },
+    {
+        "start_fen": "2rk4/2r5/2r5/8/1RP5/2KP4/8/8 b - - 0 1",
+        "square": "c4",
+        "expected": false
+    },
+    {
+        "start_fen": "2rk4/2r5/2r5/8/1RP5/2KP3r/8/8 b - - 0 1",
+        "square": "c4",
+        "expected": true
+    },
+    {
+        "start_fen": "2rk4/2r5/2r5/8/1RP5/1K1P3r/B7/8 b - - 0 1",
+        "square": "c4",
+        "expected": true
+    },
+    {
+        "start_fen": "2rk4/2r5/2r5/8/1RP5/3P3r/BK6/8 b - - 0 1",
+        "square": "c4",
+        "expected": false
+    }
+]

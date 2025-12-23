@@ -1,0 +1,68 @@
+[
+    {
+        "start_fen": "rnb1kbnr/pppqpppp/8/1B1p4/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 0 1",
+        "attacking_square": "b5",
+        "threatened_square": "d7",
+        "expected": [
+            { "from": "c7", "to": "c6" },
+            { "from": "b8", "to": "c6" }
+        ]
+    },
+    {
+        "start_fen": "rnbqkbnr/ppp1pppp/8/1B1p4/4P3/8/PPPP1PPP/RNBQK1NR b KQkq - 0 1",
+        "attacking_square": "b5",
+        "threatened_square": "e8",
+        "expected": [
+            { "from": "c7", "to": "c6" },
+            { "from": "b8", "to": "c6" },
+            { "from": "c8", "to": "d7" },
+            { "from": "b8", "to": "d7" }
+        ]
+    },
+    {
+        "start_fen": "5k2/2pn4/3p4/1B6/Q7/8/8/2K5 b - - 0 1",
+        "attacking_square": "b5",
+        "threatened_square": "d7",
+        "expected": []
+    },
+    {
+        "start_fen": "5k2/1ppn4/3p4/1B6/Q7/8/8/2K5 b - - 0 1",
+        "attacking_square": "b5",
+        "threatened_square": "d7",
+        "expected": [{ "from": "c7", "to": "c6" }]
+    },
+    {
+        "start_fen": "5k2/1bpn4/3p4/1B6/Q7/8/8/2K5 b - - 0 1",
+        "attacking_square": "b5",
+        "threatened_square": "d7",
+        "expected": []
+    },
+    {
+        "start_fen": "k1b5/1p6/7r/8/8/6B1/R5B1/2K5 b - - 0 1",
+        "attacking_square": "a2",
+        "threatened_square": "a8",
+        "expected": []
+    },
+    {
+        "start_fen": "k1b5/1p6/1rp5/8/8/6B1/R5B1/2K5 b - - 0 1",
+        "attacking_square": "a2",
+        "threatened_square": "a8",
+        "expected": [{ "from": "b6", "to": "a6" }]
+    },
+    {
+        "start_fen": "k1b5/1p6/1rp5/1b6/8/1b4B1/R5B1/R1K5 b - - 0 1",
+        "attacking_square": "a2",
+        "threatened_square": "a8",
+        "expected": [
+            { "from": "b6", "to": "a6" },
+            { "from": "b5", "to": "a6" },
+            { "from": "b3", "to": "a2" }
+        ]
+    },
+    {
+        "start_fen": "7r/p5p1/1pp1pk2/3bNp2/P1PPnP2/4K2P/2PB2P1/R7 b - - 9 28",
+        "attacking_square": "c4",
+        "threatened_square": "d5",
+        "expected": []
+    }
+]

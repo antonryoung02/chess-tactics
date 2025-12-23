@@ -1,0 +1,122 @@
+[
+    {
+        "description": "knight forks king and rook",
+        "start_fen": "8/4r1k1/8/8/8/2PPN3/1PK5/8 w - - 0 1",
+        "evaluation": [
+            {
+                "eval": "5.6",
+                "type": "cp",
+                "move": { "from": "e3", "to": "f5" },
+                "sequence": "g7f6 f5e7 f6e6 c2b3 e6d6 b3c4 d6e7 c4d5"
+            }
+        ],
+        "expected": true
+    },
+    {
+        "description": "pawn forks knight and bishop but pieces escape",
+        "start_fen": "8/6k1/8/3b1n2/8/4PP2/3PK3/3R4 w - - 0 1",
+        "evaluation": [
+            {
+                "eval": "3.5",
+                "type": "cp",
+                "move": { "from": "e3", "to": "e4" },
+                "sequence": "d5c4 d2d3 f5d4 e2e3 d4c2 e3d2 c4b3 d1g1"
+            }
+        ],
+        "expected": false
+    },
+    {
+        "description": "bishop attacks king and rook but is captured",
+        "start_fen": "3k4/p7/8/r7/8/8/5B2/5KR1 w - - 0 1",
+        "evaluation": [
+            {
+                "eval": "-0.1",
+                "type": "cp",
+                "move": { "from": "f2", "to": "b6" },
+                "sequence": "a7b6 f1e2 a5d5 g1a1 d8d7 e2e3 b6b5 e3e4 d5c5"
+            }
+        ],
+        "expected": false
+    },
+    {
+        "description": "knight forks king and pawn. KxB, NxP, then king moves and knight captures rook winning material",
+        "start_fen": "5r2/pp4kp/2p3p1/4n3/2P3P1/2NbK2P/PP2B3/3R4 b - - 5 23",
+        "evaluation": [
+            {
+                "eval": "-1.99",
+                "type": "cp",
+                "move": {
+                    "from": "e5",
+                    "to": "c4"
+                },
+                "sequence": "e3d3 c4b2 d3e3 b2d1 e2d1 f8f1 h3h4 f1e1"
+            }
+        ],
+        "expected": true
+    },
+    {
+        "description": "queen forks king and pawn to capture pawn on next move",
+        "start_fen": "r1bqk1nr/ppp2ppp/8/2b5/4p3/3P1N2/PP3PPP/RNBQKB1R w KQkq - 0 8",
+        "evaluation": [
+            {
+                "eval": "3.78",
+                "type": "cp",
+                "move": {
+                    "from": "d1",
+                    "to": "a4"
+                },
+                "sequence": "c8d7 a4e4 g8e7 f1e2 c5b6 b1c3 d7c6 e4c4"
+            }
+        ],
+        "expected": true
+    },
+    {
+        "description": "knight forks pawn and rook in losing position. gains 1pt material",
+        "start_fen": "3rr1k1/p5p1/1pp1p2p/2B1R3/3N4/7P/PPP3P1/2Kn4 w - - 0 26",
+        "evaluation": [
+            {
+                "eval": "-2.60",
+                "type": "cp",
+                "move": {
+                    "from": "d4",
+                    "to": "c6"
+                },
+                "sequence": "b6c5 c6d8 e8d8 e5e6 c5c4 b2b3 c4c3 e6c6"
+            }
+        ],
+        "expected": true
+    },
+    {
+        "description": "Protected rook forks queen and bishop",
+        "start_fen": "2r1r1k1/1p3ppp/p4b2/q4b2/2p2N2/P1P1BP2/1P1R1QPP/4R1K1 w - - 5 27",
+
+        "evaluation": [
+            {
+                "eval": "3.90",
+                "type": "cp",
+                "move": {
+                    "from": "d2",
+                    "to": "d5"
+                },
+                "sequence": "a5a4 d5f5 f6e5 f4h5 a4c6 f2h4 h7h6 h4g4 g7g6 f5e5 e8e5 h5f6"
+            }
+        ],
+        "expected": true
+    },
+    {
+        "description": "Queen forks king and rook on h4",
+        "start_fen": "2r3k1/5p1p/1q2bpp1/pp6/7R/1PPQ1P2/PK4PP/2R5 b - - 0 21",
+        "evaluation": [
+            {
+                "eval": "-4.59",
+                "type": "cp",
+                "move": {
+                    "from": "b6",
+                    "to": "f2"
+                },
+                "sequence": "c1c2 f2h4 d3b5 h4e1 a2a4 e1d1 b5e2 d1d6 e2f2 d6h2 f3f4 h2h5"
+            }
+        ],
+        "expected": true
+    }
+]
