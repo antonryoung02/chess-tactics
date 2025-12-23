@@ -1,82 +1,67 @@
 [
     {
         "description": "bishop skewers king and queen",
-        "start_fen": "rnbq3r/pp2kBpp/2p4n/8/1b2P3/1Qp2N2/PP4PP/RNB1K2R w KQ - 3 10",
-        "evaluation": [
-            {
+        "context": {
+            "position": "rnbq3r/pp2kBpp/2p4n/8/1b2P3/1Qp2N2/PP4PP/RNB1K2R w KQ - 3 10",
+            "evaluation": {
                 "eval": "5.92",
                 "type": "cp",
-                "move": {
-                    "from": "c1",
-                    "to": "g5"
-                },
+                "move": { "from": "c1", "to": "g5" },
                 "sequence": "e7d7 f3e5 d7c7 g5d8 c7d8 b3b4 c3b2 b4b2 h8g8"
             }
-        ],
+        },
         "expected": true
     },
     {
         "description": "queen skewers bishop to defended pawn",
-        "start_fen": "rnbq2nr/pp2kBpp/2p5/8/1b2P3/2p2N2/PP4PP/RNBQK2R w KQ - 1 9",
-        "evaluation": [
-            {
+        "context": {
+            "position": "rnbq2nr/pp2kBpp/2p5/8/1b2P3/2p2N2/PP4PP/RNBQK2R w KQ - 1 9",
+            "evaluation": {
                 "eval": "2.00",
                 "type": "cp",
-                "move": {
-                    "from": "d1",
-                    "to": "b3"
-                },
+                "move": { "from": "d1", "to": "b3" },
                 "sequence": "g8f6 b3b4 e7f7 b1c3 f7e8 b4c4 b7b5 c4c5"
             }
-        ],
+        },
         "expected": false
     },
     {
         "description": "bishop recaptures knight and trades bishop",
-        "start_fen": "r2q1rk1/pp2ppbp/3pbNp1/8/2PQP3/2B5/PP2BPPP/R3K2R b KQ - 0 13",
-        "evaluation": [
-            {
+        "context": {
+            "position": "r2q1rk1/pp2ppbp/3pbNp1/8/2PQP3/2B5/PP2BPPP/R3K2R b KQ - 0 13",
+            "evaluation": {
                 "eval": "-0.19",
                 "type": "cp",
-                "move": {
-                    "from": "g7",
-                    "to": "f6"
-                },
+                "move": { "from": "g7", "to": "f6" },
                 "sequence": "d4d2 f6c3 d2c3 a8c8 a2a4 a7a6 c3b4 a6a5"
             }
-        ],
+        },
         "expected": false
     },
     {
         "description": "bishop skewers queen and pawn, captures pawn",
-        "start_fen": "1rr3k1/p4ppp/2pbpn2/6Bq/3P2b1/3Q1N1P/PPPN1PP1/1R2K2R b K - 8 14",
-        "evaluation": [
-            {
+        "context": {
+            "position": "1rr3k1/p4ppp/2pbpn2/6Bq/3P2b1/3Q1N1P/PPPN1PP1/1R2K2R b K - 8 14",
+            "evaluation": {
                 "eval": "-1.86",
                 "type": "cp",
-                "move": {
-                    "from": "g4",
-                    "to": "f5"
-                },
+                "move": { "from": "g4", "to": "f5" },
                 "sequence": "d3e2 f5c2 b1c1 h5g6 g5f6"
             }
-        ],
+        },
         "expected": true
     },
     {
         "description": "rook skewers king and rook. king recaptures. other rook wins knight",
-        "start_fen": "8/2kr2pp/R7/1ppn2B1/8/2P2r2/PPK2P1P/3R4 w - - 0 28",
-        "evaluation": [
-            {
+        "context": {
+            "position": "8/2kr2pp/R7/1ppn2B1/8/2P2r2/PPK2P1P/3R4 w - - 0 28",
+            "evaluation": {
                 "eval": "4.38",
                 "type": "cp",
-                "move": {
-                    "from": "a6",
-                    "to": "a7"
-                },
+                "move": { "from": "a6", "to": "a7" },
                 "sequence": "c7c8 a7d7 f3f2 c2c1 c8d7 d1d5 d7e6 d5d2 f2f5 g5d8 c5c4 b2b3"
             }
-        ],
+        },
         "expected": true
     }
 ]

@@ -1,15 +1,7 @@
-import { BaseTactic } from "../../src/functions/base_tactic";
-import { EvaluationAnalysis } from "../../src/services/evaluation_service";
+import { BaseTactic } from "@utils/base_tactic";
 import { Chess, Move } from "chess.js";
 import isPieceThreatenedJson from "./base_tactic__is_piece_threatened.json";
 import isSquareUndefendedJson from "./base_tactic__is_square_undefended.json";
-
-export function createMockEvalService(overrides = {}): EvaluationAnalysis {
-    return {
-        getEvaluationAtPosition: jest.fn(),
-        ...overrides,
-    } as unknown as EvaluationAnalysis;
-}
 
 export function restoreMoves(startFen: string, rawMoves: { from: string; to: string }[]): Move[] {
     // JSON.stringify(Move) does not keep the Move interface
@@ -37,8 +29,7 @@ export function logBoardSequence(startFen: string, moveSequence: Move[]) {
 
 describe("invertTurn", () => {
     test("inverts white to play", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
 
         const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         const chess = new Chess(initialFen);
@@ -47,8 +38,7 @@ describe("invertTurn", () => {
     });
 
     test("is inverse of self", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
 
         const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         const chess = new Chess(initialFen);
@@ -60,8 +50,7 @@ describe("invertTurn", () => {
 
 describe("isPieceThreatened", () => {
     test("passes json test cases", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
 
         isPieceThreatenedJson.forEach((t) => {
             const chess = new Chess(t.start_fen);
@@ -82,8 +71,7 @@ describe("isPieceThreatened", () => {
 
 describe("isSquareUndefended", () => {
     test("passes json test cases", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
 
         isSquareUndefendedJson.forEach((t) => {
             const chess = new Chess(t.start_fen);
@@ -103,8 +91,7 @@ describe("isSquareUndefended", () => {
 
 describe("materialWasGained", () => {
     test("change of 0 returns false for both colors", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
         const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
         const whiteGained = baseTactic.materialWasGained(initialFen, initialFen, "w");
@@ -115,8 +102,7 @@ describe("materialWasGained", () => {
     });
 
     test("white advantage returns true for white", () => {
-        const evalService = createMockEvalService();
-        const baseTactic = new BaseTactic(evalService);
+        const baseTactic = new BaseTactic();
         const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         const fenWithExtraQueen = "rnbqkbnr/pppppppp/8/8/8/8/QPPPPPPP/RNBQKBNR w KQkq - 0 1";
 

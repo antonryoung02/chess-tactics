@@ -1,24 +1,21 @@
-import { TrapTactics } from "../../src/functions/trap";
+import { TrapTactics } from "@tactics/Trap";
 import getIsTacticJson from "./trap__is_tactic.json";
-import {
-    createMockEvalService,
-    restoreMoves,
-    logBoardSequence,
-} from "../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { TacticContext } from "@types";
 
 describe("isTactic", () => {
     test("passes json test cases", () => {
         getIsTacticJson.forEach((t) => {
-            const evalService = createMockEvalService();
-            const trapTactic = new TrapTactics(evalService);
+            const trapTactic = new TrapTactics();
             if (t?.debug) {
                 debugger;
             }
-            const result = trapTactic.isTactic(t.start_fen, t.evaluation);
+            const context = t.context as TacticContext;
+            const result = trapTactic.isTactic(context);
 
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
-                logBoardSequence(t.start_fen, []);
+                logBoardSequence(context.position, []);
             }
 
             expect(result !== null).toBe(t.expected);

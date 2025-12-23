@@ -1,25 +1,22 @@
 import isTacticJson from "./sacrifice__is_tactic.json";
-import { SacrificeTactics } from "../../src/functions/sacrifice";
+import { SacrificeTactics } from "@tactics/Sacrifice";
 
-import {
-    createMockEvalService,
-    restoreMoves,
-    logBoardSequence,
-} from "../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { TacticContext } from "@types";
 
 describe("Sacrifice.isTactic", () => {
     test("passes json test cases", () => {
-        const evalService = createMockEvalService();
-        const sacTactic = new SacrificeTactics(evalService);
+        const sacTactic = new SacrificeTactics();
 
         isTacticJson.forEach((t) => {
             if (t.debug) {
                 debugger;
             }
-            const result = sacTactic.isTactic(t.start_fen, t.evaluation);
+            const context = t.context as TacticContext;
+            const result = sacTactic.isTactic(context);
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
-                logBoardSequence(t.start_fen, []);
+                logBoardSequence(context.position, []);
             }
 
             expect(result !== null).toBe(t.expected);

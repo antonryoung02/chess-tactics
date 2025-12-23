@@ -1,6 +1,6 @@
-import { HangingPieceTactics } from "../../src/functions/hanging_piece";
+import { HangingPieceTactics } from "@tactics/HangingPiece";
 import getIsHangingPieceJson from "./hanging_piece__is_tactic.json";
-import { logBoardSequence } from "../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../base_tactic/base_tactic.test";
 
 describe("isTactic", () => {
     test("passes json test cases", () => {

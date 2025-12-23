@@ -6,22 +6,18 @@
         "expected": {
             "white_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b7"
                 },
                 {
-                    "value": 9,
                     "piece": "q",
                     "from": "d7"
                 },
                 {
-                    "value": 3,
                     "piece": "b",
                     "from": "e8"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b8"
                 }
@@ -29,17 +25,14 @@
             "white": { "p": 0, "n": 0, "b": 1, "r": 2, "q": 1, "k": 0, "total": 4 },
             "black_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b3"
                 },
                 {
-                    "value": 9,
                     "piece": "q",
                     "from": "b2"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b1"
                 }
@@ -54,12 +47,10 @@
         "expected": {
             "white_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "g4"
                 },
                 {
-                    "value": 10000,
                     "piece": "k",
                     "from": "c3"
                 }
@@ -67,12 +58,10 @@
             "white": { "p": 0, "n": 0, "b": 0, "r": 1, "q": 0, "k": 1, "total": 2 },
             "black_verbose": [
                 {
-                    "value": 3,
                     "piece": "b",
                     "from": "a6"
                 },
                 {
-                    "value": 9,
                     "piece": "q",
                     "from": "c7"
                 }
@@ -87,17 +76,14 @@
         "expected": {
             "white_verbose": [
                 {
-                    "value": 1,
                     "piece": "p",
                     "from": "d3"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b4"
                 },
                 {
-                    "value": 10000,
                     "piece": "k",
                     "from": "c3"
                 }
@@ -105,17 +91,14 @@
             "white": { "p": 1, "n": 0, "b": 0, "r": 1, "q": 0, "k": 1, "total": 3 },
             "black_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c6"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c7"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c8"
                 }
@@ -130,12 +113,10 @@
         "expected": {
             "white_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "b4"
                 },
                 {
-                    "value": 10000,
                     "piece": "k",
                     "from": "c3"
                 }
@@ -143,17 +124,14 @@
             "white": { "p": 0, "n": 0, "b": 0, "r": 1, "q": 0, "k": 1, "total": 2 },
             "black_verbose": [
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c6"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c7"
                 },
                 {
-                    "value": 5,
                     "piece": "r",
                     "from": "c8"
                 }
@@ -168,7 +146,6 @@
         "expected": {
             "white_verbose": [
                 {
-                    "value": 9,
                     "piece": "q",
                     "from": "e3"
                 }
@@ -176,7 +153,6 @@
             "white": { "p": 0, "n": 0, "b": 0, "r": 0, "q": 1, "k": 0, "total": 1 },
             "black_verbose": [
                 {
-                    "value": 9,
                     "piece": "q",
                     "from": "h2"
                 }

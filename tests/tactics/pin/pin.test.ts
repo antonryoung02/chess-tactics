@@ -1,17 +1,13 @@
 import getCosmeticPinsJson from "./pin__get_cosmetic_pins.json";
 import getIsTacticJson from "./pin__is_tactic.json";
 import { Chess, Move } from "chess.js";
-import { PinTactics } from "../../src/functions/pin";
-import {
-    createMockEvalService,
-    restoreMoves,
-    logBoardSequence,
-} from "../base_tactic/base_tactic.test";
+import { PinTactics } from "@tactics/Pin";
+import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { TacticContext } from "@types";
 
 describe("getCosmeticPins", () => {
     test("passes json test cases", () => {
-        const evalService = createMockEvalService();
-        const pinTactic = new PinTactics(evalService);
+        const pinTactic = new PinTactics();
 
         getCosmeticPinsJson.forEach((t) => {
             const chess = new Chess(t.start_fen);
@@ -32,13 +28,13 @@ describe("getCosmeticPins", () => {
 describe("isTactic", () => {
     test("passes json test cases", () => {
         getIsTacticJson.forEach((t) => {
-            const evalService = createMockEvalService();
-            const pinTactic = new PinTactics(evalService);
-            const result = pinTactic.isTactic(t.start_fen, t.evaluation);
+            const pinTactic = new PinTactics();
+            const context = t.context as TacticContext;
+            const result = pinTactic.isTactic(context);
 
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
-                logBoardSequence(t.start_fen, []);
+                logBoardSequence(t.context.position, []);
             }
 
             expect(result !== null).toBe(t.expected);

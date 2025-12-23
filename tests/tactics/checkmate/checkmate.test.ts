@@ -1,4 +1,4 @@
-import { CheckmateTactics } from "../../src/functions/checkmate";
+import { CheckmateTactics } from "@tactics/Checkmate";
 import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
 import isTacticJson from "./checkmate_is_tactic.json";
 

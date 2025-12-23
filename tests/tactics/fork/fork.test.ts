@@ -1,17 +1,13 @@
 import { Chess, Move } from "chess.js";
-import { ForkTactics } from "../../src/functions/fork";
+import { ForkTactics } from "@tactics/Fork";
 import getCosmeticForksJson from "./fork__get_cosmetic_forks.json";
 import getIsTacticJson from "./fork__is_tactic.json";
-import {
-    createMockEvalService,
-    restoreMoves,
-    logBoardSequence,
-} from "../base_tactic/base_tactic.test";
+import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { TacticContext } from "@types";
 
 describe("getCosmeticForks", () => {
     test("passes json test cases", () => {
-        const evalService = createMockEvalService();
-        const forkTactic = new ForkTactics(evalService);
+        const forkTactic = new ForkTactics();
         getCosmeticForksJson.forEach((t) => {
             const chess = new Chess(t.start_fen);
             const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
@@ -30,13 +26,13 @@ describe("getCosmeticForks", () => {
 describe("isTactic", () => {
     test("passes json test cases", () => {
         getIsTacticJson.forEach((t) => {
-            const evalService = createMockEvalService();
-            const forkTactic = new ForkTactics(evalService);
-            const result = forkTactic.isTactic(t.start_fen, t.evaluation);
+            const forkTactic = new ForkTactics();
+            const context = t.context as TacticContext;
+            const result = forkTactic.isTactic(context);
 
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
-                logBoardSequence(t.start_fen, []);
+                logBoardSequence(t.context.position, []);
             }
 
             expect(result !== null).toBe(t.expected);
