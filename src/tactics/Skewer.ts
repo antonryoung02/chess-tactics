@@ -1,25 +1,31 @@
 import { Chess, Move } from "chess.js";
 import { BaseTactic } from "@utils/base_tactic";
-import { PIECE_VALUES, fenAtEndOfSequence } from "./utils";
-import { Evaluation, FEN, TacticClassifier, TacticContext } from "@types";
+import { PIECE_VALUES } from "./utils";
+import { FEN, TacticClassifier, TacticContext } from "@types";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 const baseTactic = new BaseTactic();
 class SkewerTactics implements TacticClassifier {
-    isTactic(context: TacticContext) {
+    isTactic(context: TacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
 
         const cosmeticSkewers = this.getCosmeticSkewers(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticSkewers) {
-            const skewer = this.isTacticalSkewer(
-                position,
-                currentMove,
-                nextMoveWithPiece,
-                nextMoveWithoutPiece,
-                evaluation
-            );
-            if (skewer) return skewer;
+            const si = new SequenceInterpreter(position, evaluation);
+            const tacticalSequence = si.identifyWinningSequence(currentMove.to, [
+                nextMoveWithPiece.to,
+                nextMoveWithoutPiece.to,
+            ]);
+            if (tacticalSequence) {
+                return {
+                    type: "skewer",
+                    piece: currentMove.piece,
+                    position: position,
+                    sequence: tacticalSequence,
+                };
+            }
         }
         return null;
     }
@@ -75,53 +81,6 @@ class SkewerTactics implements TacticClassifier {
             }
         }
         return cosmeticSkewers;
-    }
-
-    isTacticalSkewer(
-        position: FEN,
-        currentMove: Move,
-        nextMoveWithPiece: Move,
-        nextMoveWithoutPiece: Move,
-        evaluation: Evaluation
-    ): any | null {
-        const chess = new Chess(position);
-        chess.move(currentMove);
-
-        const isCaptured = this.areSkeweredPiecesCaptured(
-            position,
-            currentMove,
-            [nextMoveWithPiece, nextMoveWithoutPiece],
-            evaluation
-        );
-        if (isCaptured)
-            return {
-                type: "skewer",
-                piece: currentMove.piece,
-                startFen: position,
-                sequence: [currentMove.san],
-            };
-
-        return null;
-    }
-
-    areSkeweredPiecesCaptured(
-        position: FEN,
-        currentMove: Move,
-        attackedPieces: Move[],
-        evaluation: Evaluation
-    ): boolean {
-        const nextKMoves = baseTactic.sequenceToMoveList(position, evaluation);
-        const captureSequence = baseTactic.getCaptureSequence(attackedPieces, nextKMoves);
-        const endFen = fenAtEndOfSequence(position, captureSequence);
-        const chess = new Chess(position);
-        chess.move(currentMove);
-        if (
-            captureSequence &&
-            baseTactic.materialWasGained(chess.fen(), endFen, position.split(" ")[1])
-        ) {
-            return true;
-        }
-        return false;
     }
 }
 

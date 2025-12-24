@@ -10,8 +10,7 @@
                 "sequence": "c3b3 d1d2 b2c1 a8c8 f1c4 c8c4 c1b1 e6f5"
             }
         },
-        "expected": true,
-        "debug": true
+        "expected": true
     },
     {
         "description": "Rook exchange sacrifice wins material on next turn",
@@ -89,8 +88,7 @@
                 "sequence": "h1h8 b1c2 h8g8 g6f5 g8g7 c2e2 e3d4 d3b5 d4c3"
             }
         },
-        "expected": false,
-        "debug": true
+        "expected": false
     },
     {
         "description": "Knight sac to win rook on discovery",
@@ -103,7 +101,8 @@
                 "sequence": "h6g5 e5e1 h7h6 g2f3 h6h5 e1a1 b4b3 f3e4 h5g6 a1a4 c4e6 e4e5"
             }
         },
-        "expected": true
+        "expected": true,
+        "debug": true
     },
     {
         "description": "Sacrifice bishop to deflect queen from rook",

@@ -1,4 +1,4 @@
-import { Move } from "chess.js";
+import { Move, PieceSymbol } from "chess.js";
 
 export type FEN = string;
 
@@ -10,7 +10,12 @@ export type Evaluation = {
     fen?: string;
 };
 
-export type Tactic = any;
+export type Tactic = {
+    type: TacticId;
+    piece: PieceSymbol;
+    position: FEN;
+    sequence: string[];
+};
 
 export type TacticContext = {
     position: FEN;

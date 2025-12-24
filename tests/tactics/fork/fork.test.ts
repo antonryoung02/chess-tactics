@@ -28,10 +28,14 @@ describe("isTactic", () => {
         getIsTacticJson.forEach((t) => {
             const forkTactic = new ForkTactics();
             const context = t.context as TacticContext;
+            if (t.debug) {
+                debugger;
+            }
             const result = forkTactic.isTactic(context);
-
             if ((result !== null) !== t.expected) {
-                console.log(`Failure: ${t.description}. ${t.expected}`);
+                console.log(
+                    `Failure: ${t.description}. Expected: ${t.expected}. Recieved: ${result}`
+                );
                 logBoardSequence(t.context.position, []);
             }
 

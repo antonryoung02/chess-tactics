@@ -4,10 +4,6 @@ import { Evaluation, FEN } from "@types";
 import type { Square, Move, Color, PieceSymbol } from "chess.js";
 
 class BaseTactic {
-    async isTactic(initialPosition: FEN, evaluation: Evaluation[]): Promise<any | null> {
-        throw new Error("Method 'isTactic()' must be overridden in subclass.");
-    }
-
     invertTurn(chess: Chess): void {
         let fenSplit = chess.fen().split(" ");
         fenSplit[1] = fenSplit[1] === "w" ? "b" : "w";
@@ -116,51 +112,6 @@ class BaseTactic {
         return newMoves.filter(
             (m) => originalMoves.map((n) => n.to).includes(m.to) === false && m.captured
         );
-    }
-
-    // TODO package method
-    sequenceToMoveList(startFen: FEN, evaluation: Evaluation) {
-        const chess = new Chess(startFen);
-        const m = chess.move(evaluation.move);
-
-        const moveList = [m];
-        const uciMoveList = evaluation.sequence.split(" ");
-        uciMoveList.forEach((m: any) => {
-            const move = chess.move(m);
-            moveList.push(move);
-        });
-
-        const truncatedList = [];
-        let trimmedEndCaptures = false;
-        for (let i = moveList.length - 1; i >= 0; i--) {
-            if (!trimmedEndCaptures && moveList[i].captured) {
-                // don't add
-            } else {
-                trimmedEndCaptures = true;
-                truncatedList.push(moveList[i]);
-            }
-        }
-
-        return truncatedList.reverse();
-    }
-
-    getCaptureSequence(attackedPieces: Move[], sequence: Move[]): string[] | null {
-        const captureSequence: string[] = [];
-        let capturedAttackedPieces = false;
-        for (const move of sequence) {
-            captureSequence.push(move.san);
-            if (
-                attackedPieces.filter((m) => {
-                    return m.to == move.to && m.captured == move.captured && m.piece == move.piece;
-                }).length > 0
-            ) {
-                capturedAttackedPieces = true;
-            }
-        }
-        if (capturedAttackedPieces) {
-            return captureSequence;
-        }
-        return null;
     }
 
     // TODO package method

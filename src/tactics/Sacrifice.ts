@@ -3,24 +3,25 @@ import { PIECE_VALUES } from "./utils";
 import { FEN, TacticClassifier, TacticContext } from "@types";
 import { ChessHelper } from "@utils/chess_helper";
 import { isWhiteToPlay } from "@utils/utils";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 class SacrificeTactics implements TacticClassifier {
     isTactic(context: TacticContext): any {
         const { position, evaluation } = context;
-        // Any eval with limited options implies you have to do it
-        // if (evaluation.length < 5) {
-        //     return null;
-        // }
         const chessCopy = new Chess(position);
         const move = evaluation.move;
 
         const currentMove = chessCopy.move(move);
-        if (this.sacrificedMaterial(position, currentMove)) {
+        const si = new SequenceInterpreter(position, evaluation);
+        const moveList = si.evaluationToMoveList();
+        const captureSequence = si.getCaptureSequence(position, moveList);
+
+        if (this.sacrificedMaterial(position, currentMove) && captureSequence.length > 0) {
             return {
                 type: "sacrifice",
                 piece: currentMove.piece,
                 startFen: position,
-                sequence: [`${currentMove.from}${currentMove.to}`],
+                sequence: captureSequence,
             };
         }
         return null;

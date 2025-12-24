@@ -36,7 +36,8 @@
                 "sequence": "d4d2 f6c3 d2c3 a8c8 a2a4 a7a6 c3b4 a6a5"
             }
         },
-        "expected": false
+        "expected": false,
+        "debug": true
     },
     {
         "description": "bishop skewers queen and pawn, captures pawn",

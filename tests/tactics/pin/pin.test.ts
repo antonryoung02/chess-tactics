@@ -14,7 +14,6 @@ describe("getCosmeticPins", () => {
             const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
             chess.move(moveSequence[0]);
             const result = pinTactic.getCosmeticPins(t.start_fen, moveSequence[0]);
-
             if (result.length !== t.expected) {
                 console.log(`Failure: ${t.description}`);
                 logBoardSequence(t.start_fen, moveSequence);
@@ -31,7 +30,6 @@ describe("isTactic", () => {
             const pinTactic = new PinTactics();
             const context = t.context as TacticContext;
             const result = pinTactic.isTactic(context);
-
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
                 logBoardSequence(t.context.position, []);

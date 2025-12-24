@@ -1,5 +1,5 @@
-import { Chess } from "chess.js";
 import { Evaluation, FEN } from "@types";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 class CheckmateTactics {
     isTactic(initialPosition: FEN, evaluations: any, i: number): any | null {
@@ -21,7 +21,8 @@ class CheckmateTactics {
         }
         let start = i;
         const initialMateInX = Math.abs(evaluations[i - 1][0].eval);
-        const sequence = this.sequenceToMoveList(initialPosition, evaluations[start - 1]);
+        const si = new SequenceInterpreter(initialPosition, evaluations[start - 1][0]);
+        const sequence = si.evaluationToMoveList();
         while (i < evaluations.length) {
             if (evaluations[i].type === "game_over" && Math.abs(evaluations[i].eval) === 1) break;
             if (this.playerExitedForcedMate(evaluations[i], evaluations[i - 1])) {
@@ -44,24 +45,6 @@ class CheckmateTactics {
             sequence: sequence,
             length: initialMateInX,
         };
-    }
-
-    sequenceToMoveList(startFen: FEN, evaluation: Evaluation[]) {
-        const chess = new Chess(startFen);
-        const m = chess.move(evaluation[0].move);
-
-        const moveList = [m.san];
-        if (evaluation[0].sequence === "") {
-            return moveList;
-        }
-        const uciMoveList = evaluation[0].sequence.split(" ");
-
-        uciMoveList.forEach((m: any) => {
-            const move = chess.move(m);
-            moveList.push(move.san);
-        });
-
-        return moveList;
     }
 
     playerExitedForcedMate(currEval: Evaluation, prevEval: Evaluation): boolean {

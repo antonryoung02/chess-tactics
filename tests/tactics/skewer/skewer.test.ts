@@ -31,11 +31,14 @@ describe("getCosmeticSkewers", () => {
 describe("isTactic", () => {
     test("passes json test cases", () => {
         getIsTacticJson.forEach((t) => {
+            if (t?.debug) {
+                debugger;
+            }
             const skewerTactic = new SkewerTactics();
             const context = t.context as TacticContext;
             const result = skewerTactic.isTactic(context);
             if ((result !== null) !== t.expected) {
-                console.log(`Failure: ${t.description}. ${t.expected}`);
+                console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
                 logBoardSequence(context.position, []);
             }
 

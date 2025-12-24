@@ -7,14 +7,10 @@ describe("isTactic", () => {
     test("passes json test cases", () => {
         getIsTacticJson.forEach((t) => {
             const trapTactic = new TrapTactics();
-            if (t?.debug) {
-                debugger;
-            }
             const context = t.context as TacticContext;
             const result = trapTactic.isTactic(context);
-
             if ((result !== null) !== t.expected) {
-                console.log(`Failure: ${t.description}. ${t.expected}`);
+                console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
                 logBoardSequence(context.position, []);
             }
 

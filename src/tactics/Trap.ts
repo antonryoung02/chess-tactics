@@ -1,9 +1,10 @@
-import { Chess, Move, Square } from "chess.js";
+import { Chess, Move } from "chess.js";
 import { BaseTactic } from "@utils/base_tactic";
-import { Evaluation, FEN, TacticClassifier, TacticContext } from "@types";
+import { FEN, TacticClassifier, TacticContext } from "@types";
 import { ChessHelper } from "@utils/chess_helper";
 import { PIECE_VALUES } from "./utils";
 import { colorToPlay } from "@utils/utils";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 const baseTactic = new BaseTactic();
 class TrapTactics implements TacticClassifier {
@@ -12,19 +13,24 @@ class TrapTactics implements TacticClassifier {
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
         const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
-        if (!cosmeticTrap) {
-            return null;
-        }
+        const si = new SequenceInterpreter(position, evaluation);
+        const tacticalSequence = si.identifyWinningSequence(
+            currentMove.to,
+            cosmeticTrap?.trappingSquares ?? []
+        );
         // add a 'was this piece actually captured by the engine'
-        return {
-            type: "trap",
-            piece: cosmeticTrap[1].captured,
-            startFen: position,
-            sequence: [cosmeticTrap[0].san],
-        };
+        if (tacticalSequence) {
+            return {
+                type: "trap",
+                piece: cosmeticTrap.trappedPiece,
+                startFen: position,
+                sequence: tacticalSequence,
+            };
+        }
+        return null;
     }
 
-    getCosmeticTrap(position: FEN, currentMove: Move): Move[] | null {
+    getCosmeticTrap(position: FEN, currentMove: Move): any | null {
         const chess = new Chess(position);
         const capturingMoves = this.getCapturablePieces(currentMove, position);
 
@@ -40,7 +46,10 @@ class TrapTactics implements TacticClassifier {
 
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
-                    return [currentMove, m]; //trapping move, move that captures trapped piece
+                    return {
+                        trappedPiece: m.captured,
+                        trappingSquares: capturingMoves.map((m) => m.to),
+                    };
                 } else {
                     const chessCopy = new Chess(chess.fen());
                     baseTactic.invertTurn(chessCopy);
@@ -51,7 +60,10 @@ class TrapTactics implements TacticClassifier {
                             colorToPlay(chessCopy.fen())
                         ) > 0
                     ) {
-                        return [currentMove, m]; //trapping move, move that captures trapped piece
+                        return {
+                            trappedPiece: m.captured,
+                            trappingSquares: capturingMoves.map((m) => m.to),
+                        };
                     }
                 }
             }

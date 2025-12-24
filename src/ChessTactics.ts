@@ -3,15 +3,22 @@ import { TacticFactory } from "./TacticFactory";
 
 export class ChessTactics {
     private tacticClassifiers: TacticClassifier[];
+    private tacticIds: TacticId[];
 
     constructor(tacticIds: TacticId[]) {
+        this.tacticIds = tacticIds;
         this.tacticClassifiers = [];
-        for (const t of tacticIds) {
+    }
+
+    private initializeClassifiers() {
+        this.tacticClassifiers = [];
+        for (const t of this.tacticIds) {
             this.tacticClassifiers.push(TacticFactory.create(t));
         }
     }
 
     classify(context: TacticContext): Tactic | null {
+        this.initializeClassifiers();
         for (const classifier of this.tacticClassifiers) {
             const tactic = classifier.isTactic(context);
             if (tactic) {

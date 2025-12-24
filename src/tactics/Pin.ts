@@ -1,26 +1,32 @@
 import { Chess, Move } from "chess.js";
 import { BaseTactic } from "@utils/base_tactic";
-import { fenAtEndOfSequence, PIECE_VALUES } from "./utils";
-import { Evaluation, FEN, TacticClassifier, TacticContext } from "@types";
+import { PIECE_VALUES } from "./utils";
+import { FEN, TacticClassifier, TacticContext } from "@types";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 const baseTactic = new BaseTactic();
 
 class PinTactics implements TacticClassifier {
-    isTactic(context: TacticContext) {
+    isTactic(context: TacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
 
         const cosmeticPins = this.getCosmeticPins(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {
-            const pin = this.isTacticalPin(
-                position,
-                currentMove,
-                nextMoveWithPiece,
-                nextMoveWithoutPiece,
-                evaluation
-            );
-            if (pin) return pin;
+            const si = new SequenceInterpreter(position, evaluation);
+            const tacticalSequence = si.identifyWinningSequence(currentMove.to, [
+                nextMoveWithPiece.to,
+                nextMoveWithoutPiece.to,
+            ]);
+            if (tacticalSequence) {
+                return {
+                    type: "pin",
+                    piece: currentMove.piece,
+                    position: position,
+                    sequence: tacticalSequence,
+                };
+            }
         }
         return null;
     }
@@ -40,11 +46,6 @@ class PinTactics implements TacticClassifier {
             if (!move.captured || move.captured === "k" || move.captured === currentMove.piece) {
                 continue;
             }
-            if (move.captured === "p") {
-                // are you actually preventing movement
-                // this is especially important for rooks/queens who might just be vertically in front/behind
-            }
-
             // Return to on next turn position and remove the piece
             chess.load(position);
             chess.move(currentMove);
@@ -74,49 +75,6 @@ class PinTactics implements TacticClassifier {
             }
         }
         return cosmeticPins;
-    }
-
-    isTacticalPin(
-        position: FEN,
-        currentMove: Move,
-        nextMoveWithPiece: Move,
-        nextMoveWithoutPiece: Move,
-        evaluation: Evaluation
-    ): any | null {
-        const chess = new Chess(position);
-        chess.move(currentMove);
-
-        const isCaptured = this.arePinnedPiecesCaptured(
-            position,
-            [nextMoveWithPiece, nextMoveWithoutPiece],
-            evaluation
-        );
-        if (isCaptured)
-            return {
-                type: "pin",
-                piece: currentMove.piece,
-                startFen: position,
-                sequence: [currentMove.san],
-            };
-
-        return null;
-    }
-
-    arePinnedPiecesCaptured(
-        position: FEN,
-        attackedPieces: Array<Move>,
-        evaluation: Evaluation
-    ): boolean {
-        const nextKMoves = baseTactic.sequenceToMoveList(position, evaluation);
-        const captureSequence = baseTactic.getCaptureSequence(attackedPieces, nextKMoves);
-        const endFen = fenAtEndOfSequence(position, captureSequence);
-        if (
-            captureSequence &&
-            baseTactic.materialWasGained(position, endFen, position.split(" ")[1])
-        ) {
-            return true;
-        }
-        return false;
     }
 
     movePreventsPawnMobility(
