@@ -1,11 +1,9 @@
 import { Evaluation, FEN } from "@types";
 import { Chess, Move, Square } from "chess.js";
 import { ChessHelper } from "./chess_helper";
-import { BaseTactic } from "./base_tactic";
-import { fenAtEndOfSequence } from "@tactics/utils";
+import { fenAtEndOfSequence, materialWasGained } from "./utils";
 import { colorToPlay } from "./utils";
 
-const baseTactic = new BaseTactic();
 export class SequenceInterpreter {
     private evaluation: Evaluation;
     private position: FEN;
@@ -49,7 +47,7 @@ export class SequenceInterpreter {
             const prevChess = new Chess(chess.fen());
             const m = chess.move(s);
             if (m.captured || chess.inCheck() || prevChess.inCheck()) {
-                matches.push(m);
+                matches.push(m.san);
             } else {
                 break;
             }
@@ -63,7 +61,7 @@ export class SequenceInterpreter {
     // the separation of tacticalSequence and remainingSequence
     // is to ensure that non-capturing engine intermezzos
     // still allow captures on attackedSquares to be found
-    identifyWinningSequence(attackerSquare: Square, attackedSquares: Square[]): string[] | null {
+    identifyWinningSequence(attackerSquares: Square[], attackedSquares: Square[]): string[] | null {
         if (attackedSquares.length === 0) return null;
         let tacticalSequence: string[] = [];
         const sequence = this.evaluationToMoveList();
@@ -74,7 +72,7 @@ export class SequenceInterpreter {
             tacticalSequence.push(move.san);
             const position = chess.fen();
             if (
-                this.capturedAttackedPieces(move, attackedSquares) ||
+                this.capturedAttackedPieces(move, attackerSquares, attackedSquares) ||
                 this.isDesparado(position, move)
             ) {
                 chess.move(move);
@@ -83,7 +81,7 @@ export class SequenceInterpreter {
                     this.getCaptureSequence(chess.fen(), remainingSequence)
                 );
                 if (
-                    baseTactic.materialWasGained(
+                    materialWasGained(
                         position,
                         fenAtEndOfSequence(this.position, tacticalSequence),
                         colorToPlay(this.position)
@@ -98,9 +96,18 @@ export class SequenceInterpreter {
         return null;
     }
 
-    private capturedAttackedPieces(move: Move, attackedSquares: Square[]): boolean {
+    private capturedAttackedPieces(
+        move: Move,
+        attackerSquares: Square[],
+        attackedSquares: Square[]
+    ): boolean {
         const capturedSquares = attackedSquares.filter((s) => {
-            return s === move.to && move.captured;
+            // move came from an attacker square, to an attackedSquare, and captured a piece
+            return (
+                attackerSquares.filter((s) => s === move.from).length > 0 &&
+                s === move.to &&
+                move.captured
+            );
         });
         return capturedSquares.length > 0;
     }

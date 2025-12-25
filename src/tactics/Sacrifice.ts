@@ -1,12 +1,12 @@
 import { Chess, Move } from "chess.js";
-import { PIECE_VALUES } from "./utils";
-import { FEN, TacticClassifier, TacticContext } from "@types";
+import { PIECE_VALUES } from "@utils/utils";
+import { FEN, TacticClassifier, BaseTacticContext } from "@types";
 import { ChessHelper } from "@utils/chess_helper";
 import { isWhiteToPlay } from "@utils/utils";
 import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 class SacrificeTactics implements TacticClassifier {
-    isTactic(context: TacticContext): any {
+    isTactic(context: BaseTacticContext): any {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const move = evaluation.move;

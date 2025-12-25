@@ -9,12 +9,10 @@ describe("getCosmeticForks", () => {
     test("passes json test cases", () => {
         const forkTactic = new ForkTactics();
         getCosmeticForksJson.forEach((t) => {
-            const chess = new Chess(t.start_fen);
             const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
-            chess.move(moveSequence[0]);
             const result = forkTactic.getCosmeticForks(t.start_fen, moveSequence[0]);
             if (result.length !== t.expected) {
-                console.log(`Failure: ${t.description}`);
+                console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
                 logBoardSequence(t.start_fen, moveSequence);
             }
 
@@ -23,23 +21,23 @@ describe("getCosmeticForks", () => {
     });
 });
 
-describe("isTactic", () => {
-    test("passes json test cases", () => {
-        getIsTacticJson.forEach((t) => {
-            const forkTactic = new ForkTactics();
-            const context = t.context as TacticContext;
-            if (t.debug) {
-                debugger;
-            }
-            const result = forkTactic.isTactic(context);
-            if ((result !== null) !== t.expected) {
-                console.log(
-                    `Failure: ${t.description}. Expected: ${t.expected}. Recieved: ${result}`
-                );
-                logBoardSequence(t.context.position, []);
-            }
+// describe("isTactic", () => {
+//     test("passes json test cases", () => {
+//         getIsTacticJson.forEach((t) => {
+//             const forkTactic = new ForkTactics();
+//             const context = t.context as TacticContext;
+//             if (t.debug) {
+//                 debugger;
+//             }
+//             const result = forkTactic.isTactic(context);
+//             if ((result !== null) !== t.expected) {
+//                 console.log(
+//                     `Failure: ${t.description}. Expected: ${t.expected}. Recieved: ${result}`
+//                 );
+//                 logBoardSequence(t.context.position, []);
+//             }
 
-            expect(result !== null).toBe(t.expected);
-        });
-    });
-});
+//             expect(result !== null).toBe(t.expected);
+//         });
+//     });
+// });

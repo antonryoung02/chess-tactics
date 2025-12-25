@@ -1,8 +1,6 @@
 import { Chess, Color, Move, Piece, PieceSymbol, Square, validateFen } from "chess.js";
 import { FEN } from "@types";
-import { PIECE_VALUES } from "@tactics/utils";
-import { colorToPlay } from "./utils";
-
+import { colorToPlay, PIECE_VALUES } from "./utils";
 // TODO package method ALL
 export class ChessHelper {
     public chess: Chess;
@@ -139,11 +137,17 @@ export class ChessHelper {
     }
 
     attackingSquareIsGood(fen: FEN, square: Square): boolean {
+        const chess = new Chess(fen);
+        const piece = chess.get(square);
+        if (piece?.type === "k") return true;
         const advantage = this.materialAdvantageAfterTradesAtSquare(fen, square, colorToPlay(fen));
         return advantage > 0;
     }
 
     attackingSquareIsBad(fen: FEN, square: Square): boolean {
+        const chess = new Chess(fen);
+        const piece = chess.get(square);
+        if (piece?.type === "k") return false;
         const advantage = this.materialAdvantageAfterTradesAtSquare(fen, square, colorToPlay(fen));
         return advantage < 0;
     }
@@ -169,6 +173,7 @@ export class ChessHelper {
             this.throwError("function called with defender to move");
         }
         const defenders: any = this.getSquareDefenders(fen, square, defendingColor, true);
+
         const attackers: any = this.getSquareDefenders(fen, square, attackingColor, true);
         let advantage = 0;
         let i = 0;

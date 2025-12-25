@@ -18,6 +18,16 @@ export function isWhiteToPlay(x: number | string) {
     }
 }
 
+export function fenAtEndOfSequence(startFen: FEN, sequence: string[] | null) {
+    if (!sequence) return startFen;
+    const chess = new Chess(startFen);
+    sequence.forEach((m) => {
+        chess.move(m);
+    });
+
+    return chess.fen();
+}
+
 export function colorToPlay(x: number | string): Color {
     const isWhite = isWhiteToPlay(x);
     return isWhite ? "w" : "b";
@@ -45,4 +55,50 @@ export function sanToMove(position: FEN, san: string): Move {
 
 export function moveToUci(move: Move | { from: string; to: string }) {
     return `${move.from}${move.to}`;
+}
+
+export function materialValueInPosition(position: FEN): Record<Color, number> {
+    const pieceCounts = pieceCountsInPosition(position);
+    const values: Record<Color, number> = { w: 0, b: 0 };
+
+    for (const [color, pieces] of Object.entries(pieceCounts) as [Color, any][]) {
+        for (const [piece, count] of Object.entries(pieces) as [PieceSymbol, number][]) {
+            if (piece !== "k") {
+                values[color] += PIECE_VALUES[piece] * count;
+            }
+        }
+    }
+    return values;
+}
+
+export function pieceCountsInPosition(position: FEN): Record<Color, Record<PieceSymbol, number>> {
+    const counts: Record<Color, Record<PieceSymbol, number>> = {
+        w: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
+        b: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
+    };
+
+    const pieces = position.split(" ")[0];
+    for (const p of pieces as PieceSymbol) {
+        if (!Object.keys(counts.w).includes(p.toLowerCase())) {
+            continue;
+        }
+        const pieceKey = p.toLowerCase() as PieceSymbol;
+        if (p === pieceKey) {
+            counts.b[pieceKey] += 1;
+        } else {
+            counts.w[pieceKey] += 1;
+        }
+    }
+    return counts;
+}
+
+export function materialWasGained(startFen: FEN, endFen: FEN, pieceColor: Color | string): boolean {
+    const startMaterial = materialValueInPosition(startFen);
+    const endMaterial = materialValueInPosition(endFen);
+    const startAdvantage = startMaterial.w - startMaterial.b;
+    const endAdvantage = endMaterial.w - endMaterial.b;
+    if (pieceColor === "w") {
+        return endAdvantage - startAdvantage > 0;
+    }
+    return endAdvantage - startAdvantage < 0;
 }

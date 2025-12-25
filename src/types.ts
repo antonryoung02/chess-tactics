@@ -17,14 +17,20 @@ export type Tactic = {
     sequence: string[];
 };
 
-export type TacticContext = {
+export type TacticContext = BaseTacticContext | PositionComparisonTacticContext;
+
+export type BaseTacticContext = {
     position: FEN;
     evaluation: Evaluation;
-    presvEvaluation?: Evaluation;
+};
+
+export type PositionComparisonTacticContext = BaseTacticContext & {
+    prevEvaluation: Evaluation;
+    prevMove: Move;
 };
 
 export interface TacticClassifier {
     isTactic(context: TacticContext): Tactic | null;
 }
 
-export type TacticId = "fork" | "pin" | "skewer" | "sacrifice" | "trap";
+export type TacticId = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "free";

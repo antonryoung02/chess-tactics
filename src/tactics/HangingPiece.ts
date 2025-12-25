@@ -1,47 +1,35 @@
-import { Chess, Move } from "chess.js";
-import { Evaluation, FEN } from "@types";
-import { PIECE_VALUES } from "./utils";
-import { ChessHelper } from "@utils/chess_helper";
-import { colorToPlay, isWhiteToPlay } from "@utils/utils";
-import { RatingAnalysis } from "@utils/rating_service";
+import { Chess } from "chess.js";
+import { PositionComparisonTacticContext } from "@types";
+import { PIECE_VALUES } from "@utils/utils";
+import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
+//
 class HangingPieceTactics {
-    isTactic(
-        initialPosition: FEN,
-        prevEval: Evaluation[],
-        currEval: Evaluation[],
-        prevMove: Move | { from: string; to: string; captured: string }
-    ): any | null {
-        const chessCopy = new Chess(initialPosition);
-        const currentMove = chessCopy.move(currEval[0].move);
-        const rs = new RatingAnalysis();
-        const wasWhite = !isWhiteToPlay(initialPosition);
-        const prevRating = rs.classifyMove(
-            rs.winningChanceDiff(prevEval[0], currEval[0], wasWhite)
-        );
-        // no captures on previous move
-        if (prevMove.to === currentMove.to && prevMove.captured) {
-            return null;
-        }
-        if (prevRating !== "mistake" && prevRating !== "blunder") {
-            return null;
-        }
+    isTactic(context: PositionComparisonTacticContext): any | null {
+        const { position, evaluation, prevEvaluation, prevMove } = context;
+        const chessCopy = new Chess(position);
+        const currentMove = chessCopy.move(evaluation.move);
+
         if (!currentMove.captured) {
             return null;
         }
-        const ch = new ChessHelper();
         if (
-            ch.materialAdvantageAfterTradesAtSquare(
-                initialPosition,
-                currentMove.to,
-                colorToPlay(initialPosition)
-            ) === PIECE_VALUES[currentMove.captured]
+            prevMove.captured &&
+            PIECE_VALUES[prevMove.captured] >= PIECE_VALUES[currentMove.captured]
         ) {
+            return null;
+        }
+
+        const si = new SequenceInterpreter(position, evaluation);
+        chessCopy.load(position);
+        const attackers = chessCopy.attackers(currentMove.to);
+        const tacticalSequence = si.identifyWinningSequence(attackers, [currentMove.to]);
+        if (tacticalSequence.length > 0) {
             return {
                 type: "hanging",
                 piece: currentMove.captured,
-                startFen: initialPosition,
-                sequence: [currentMove.san],
+                startFen: position,
+                sequence: tacticalSequence,
             };
         }
         return null;

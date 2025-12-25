@@ -1,21 +1,21 @@
-import { Chess, Move } from "chess.js";
+import { Chess, Move, Square } from "chess.js";
 import { BaseTactic } from "@utils/base_tactic";
-import { FEN, TacticClassifier, TacticContext } from "@types";
+import { BaseTacticContext, FEN, TacticClassifier, TacticContext } from "@types";
 import { ChessHelper } from "@utils/chess_helper";
-import { PIECE_VALUES } from "./utils";
+import { PIECE_VALUES } from "@utils/utils";
 import { colorToPlay } from "@utils/utils";
 import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 const baseTactic = new BaseTactic();
 class TrapTactics implements TacticClassifier {
-    isTactic(context: TacticContext): any | null {
+    isTactic(context: BaseTacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
         const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
         const si = new SequenceInterpreter(position, evaluation);
         const tacticalSequence = si.identifyWinningSequence(
-            currentMove.to,
+            [currentMove.to],
             cosmeticTrap?.trappingSquares ?? []
         );
         // add a 'was this piece actually captured by the engine'
@@ -78,7 +78,7 @@ class TrapTactics implements TacticClassifier {
         const escapeSquares = ch.getEscapeSquares(position, threatenedSquare);
         const blockingMoves = ch.getBlockingMoves(position, attackingSquare, threatenedSquare);
         // can't trap a pawn, any pinned piece should not be a 'trap'
-        if (move.captured === "p" || ch.piecePinnedToKing(position, move.to)) return false;
+        if (move.captured === "p" || this.piecePinnedToKing(position, move.to)) return false;
         return escapeSquares.length === 0 && blockingMoves.length === 0;
     }
 
@@ -97,6 +97,19 @@ class TrapTactics implements TacticClassifier {
             }
         }
         return targetedPieces;
+    }
+
+    private piecePinnedToKing(fen: FEN, square: Square): boolean {
+        const chess = new Chess(fen);
+        const color = chess.get(square)?.color;
+        const parts = fen.split(" ");
+        fen = parts[0] + " " + color + " " + parts.slice(2).join(" ");
+        chess.load(fen, { skipValidation: true });
+        if (chess.inCheck()) {
+            return false;
+        }
+        chess.remove(square);
+        return chess.inCheck();
     }
 }
 

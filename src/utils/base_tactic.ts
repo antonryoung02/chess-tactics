@@ -113,53 +113,6 @@ class BaseTactic {
             (m) => originalMoves.map((n) => n.to).includes(m.to) === false && m.captured
         );
     }
-
-    // TODO package method
-    materialWasGained(startFen: FEN, endFen: FEN, pieceColor: Color | string): boolean {
-        const startMaterial = this.materialValueInPosition(startFen);
-        const endMaterial = this.materialValueInPosition(endFen);
-        const startAdvantage = startMaterial.w - startMaterial.b;
-        const endAdvantage = endMaterial.w - endMaterial.b;
-        if (pieceColor === "w") {
-            return endAdvantage - startAdvantage > 0;
-        }
-        return endAdvantage - startAdvantage < 0;
-    }
-
-    materialValueInPosition(position: FEN): Record<Color, number> {
-        const pieceCounts = this.pieceCountsInPosition(position);
-        const values: Record<Color, number> = { w: 0, b: 0 };
-
-        for (const [color, pieces] of Object.entries(pieceCounts) as [Color, any][]) {
-            for (const [piece, count] of Object.entries(pieces) as [PieceSymbol, number][]) {
-                if (piece !== "k") {
-                    values[color] += PIECE_VALUES[piece] * count;
-                }
-            }
-        }
-        return values;
-    }
-
-    pieceCountsInPosition(position: FEN): Record<Color, Record<PieceSymbol, number>> {
-        const counts: Record<Color, Record<PieceSymbol, number>> = {
-            w: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
-            b: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
-        };
-
-        const pieces = position.split(" ")[0];
-        for (const p of pieces as PieceSymbol) {
-            if (!Object.keys(counts.w).includes(p.toLowerCase())) {
-                continue;
-            }
-            const pieceKey = p.toLowerCase() as PieceSymbol;
-            if (p === pieceKey) {
-                counts.b[pieceKey] += 1;
-            } else {
-                counts.w[pieceKey] += 1;
-            }
-        }
-        return counts;
-    }
 }
 
 export { BaseTactic };

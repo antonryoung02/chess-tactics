@@ -1,13 +1,13 @@
 import { Chess, Move } from "chess.js";
 import { BaseTactic } from "@utils/base_tactic";
-import { PIECE_VALUES } from "./utils";
-import { FEN, TacticClassifier, TacticContext } from "@types";
+import { PIECE_VALUES } from "@utils/utils";
+import { BaseTacticContext, FEN, TacticClassifier } from "@types";
 import { SequenceInterpreter } from "@utils/sequence_interpreter";
 
 const baseTactic = new BaseTactic();
 
 class PinTactics implements TacticClassifier {
-    isTactic(context: TacticContext): any | null {
+    isTactic(context: BaseTacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
@@ -15,10 +15,10 @@ class PinTactics implements TacticClassifier {
         const cosmeticPins = this.getCosmeticPins(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {
             const si = new SequenceInterpreter(position, evaluation);
-            const tacticalSequence = si.identifyWinningSequence(currentMove.to, [
-                nextMoveWithPiece.to,
-                nextMoveWithoutPiece.to,
-            ]);
+            const tacticalSequence = si.identifyWinningSequence(
+                [currentMove.to],
+                [nextMoveWithPiece.to, nextMoveWithoutPiece.to]
+            );
             if (tacticalSequence) {
                 return {
                     type: "pin",

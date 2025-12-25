@@ -1,6 +1,7 @@
 import { HangingPieceTactics } from "@tactics/HangingPiece";
 import getIsHangingPieceJson from "./hanging_piece__is_tactic.json";
 import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { PositionComparisonTacticContext } from "@types";
 
 describe("isTactic", () => {
     test("passes json test cases", () => {
@@ -9,15 +10,11 @@ describe("isTactic", () => {
                 debugger;
             }
             const hangingPieceTactic = new HangingPieceTactics();
-            const result = hangingPieceTactic.isTactic(
-                t.start_fen,
-                t.prev_eval,
-                t.curr_eval,
-                t.prev_move as { from: string; to: string; captured: string }
-            );
+            const context = t.context as PositionComparisonTacticContext;
+            const result = hangingPieceTactic.isTactic(context);
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
-                logBoardSequence(t.start_fen, []);
+                logBoardSequence(context.position, []);
             }
 
             expect(result !== null).toBe(t.expected);

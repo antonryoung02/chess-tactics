@@ -14,8 +14,6 @@ describe("Sacrifice.isTactic", () => {
             }
             const context = t.context as TacticContext;
             const result = sacTactic.isTactic(context);
-            console.log(context.position);
-            console.log(result?.sequence);
             if ((result !== null) !== t.expected) {
                 console.log(`Failure: ${t.description}. ${t.expected}`);
                 logBoardSequence(context.position, []);
