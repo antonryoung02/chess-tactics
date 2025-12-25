@@ -1,8 +1,7 @@
 import { Evaluation, FEN } from "@types";
 import { Chess, Move, Square } from "chess.js";
-import { ChessHelper } from "./chess_helper";
-import { fenAtEndOfSequence, materialWasGained } from "./utils";
-import { colorToPlay } from "./utils";
+import { ChessHelper } from "./ChessHelper";
+import { fenAtEndOfSequence, materialWasGained, colorToPlay } from "@utils";
 
 export class SequenceInterpreter {
     private evaluation: Evaluation;

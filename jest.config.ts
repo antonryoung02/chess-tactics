@@ -2,8 +2,8 @@ module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
     moduleNameMapper: {
-        "^@tactics/(.*)$": "<rootDir>/src/tactics/$1",
-        "^@utils/(.*)$": "<rootDir>/src/utils/$1",
+        "^@tactics": "<rootDir>/src/tactics/index",
+        "^@utils": "<rootDir>/src/utils/index",
         "^@types$": "<rootDir>/src/types",
     },
     collectCoverage: true,

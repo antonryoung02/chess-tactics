@@ -1,20 +1,17 @@
-import { TrapTactics } from "@tactics/Trap";
-import getIsTacticJson from "./trap__is_tactic.json";
+import { TrapTactics } from "@tactics";
+import isTacticJSON from "./trap__is_tactic.json";
 import { logBoardSequence } from "../../base_tactic/base_tactic.test";
-import { TacticContext } from "@types";
+import { IsTacticTestCase } from "tests/types";
 
-describe("isTactic", () => {
-    test("passes json test cases", () => {
-        getIsTacticJson.forEach((t) => {
-            const trapTactic = new TrapTactics();
-            const context = t.context as TacticContext;
-            const result = trapTactic.isTactic(context);
-            if ((result !== null) !== t.expected) {
-                console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
-                logBoardSequence(context.position, []);
-            }
+describe("TrapTactics.isTactic", () => {
+    test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
+        const trapTactic = new TrapTactics();
+        const result = trapTactic.isTactic(t.context);
+        if ((result !== null) !== t.expected) {
+            console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
+            logBoardSequence(t.context.position, []);
+        }
 
-            expect(result !== null).toBe(t.expected);
-        });
+        expect(result !== null).toBe(t.expected);
     });
 });

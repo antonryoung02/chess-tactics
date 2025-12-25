@@ -1,7 +1,6 @@
-import { Chess } from "chess.js";
-import { PIECE_VALUES } from "./utils";
-import { Evaluation, FEN } from "@types";
-import type { Square, Move, Color, PieceSymbol } from "chess.js";
+import { Chess, Square, Move } from "chess.js";
+import { PIECE_VALUES } from "@utils";
+import { FEN } from "@types";
 
 class BaseTactic {
     invertTurn(chess: Chess): void {

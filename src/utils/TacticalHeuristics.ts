@@ -1,6 +1,6 @@
 import { FEN } from "@types";
 import { Chess, Move, PieceSymbol, Color, Square } from "chess.js";
-import { PIECE_VALUES, colorToPlay } from "./utils";
+import { PIECE_VALUES, colorToPlay } from "@utils";
 
 export function attackingSquareIsGood(fen: FEN, square: Square): boolean {
     const chess = new Chess(fen);

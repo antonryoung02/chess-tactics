@@ -1,12 +1,11 @@
 import { Chess, Move } from "chess.js";
-import { BaseTactic } from "@utils/base_tactic";
-import { TacticClassifier, BaseTacticContext, FEN } from "@types";
-import { SequenceInterpreter } from "@utils/sequence_interpreter";
+import { BaseTactic, SequenceInterpreter } from "@utils";
+import { TacticClassifier, DefaultTacticContext, FEN } from "@types";
 
 const baseTactic = new BaseTactic();
 
 class ForkTactics implements TacticClassifier {
-    isTactic(context: BaseTacticContext): any | null {
+    isTactic(context: DefaultTacticContext): any | null {
         const { position, evaluation } = context;
         const si = new SequenceInterpreter(position, evaluation);
         const chessCopy = new Chess(position);

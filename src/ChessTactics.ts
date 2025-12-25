@@ -1,18 +1,19 @@
-import { Tactic, TacticContext, TacticClassifier, TacticId } from "@types";
+import { Tactic, TacticContext, TacticClassifier, TacticKey } from "@types";
 import { TacticFactory } from "./TacticFactory";
 
 export class ChessTactics {
     private tacticClassifiers: TacticClassifier[];
-    private tacticIds: TacticId[];
+    private selectedTactics: TacticKey[];
 
-    constructor(tacticIds: TacticId[]) {
-        this.tacticIds = tacticIds;
+    constructor(tactics: TacticKey[]) {
+        this.selectedTactics = tactics;
         this.tacticClassifiers = [];
+        this.initializeClassifiers();
     }
 
     private initializeClassifiers() {
         this.tacticClassifiers = [];
-        for (const t of this.tacticIds) {
+        for (const t of this.selectedTactics) {
             this.tacticClassifiers.push(TacticFactory.create(t));
         }
     }

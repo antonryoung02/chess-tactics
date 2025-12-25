@@ -1,6 +1,7 @@
-import { Chess, Color, Move, Piece, PieceSymbol, Square, validateFen } from "chess.js";
+import { Chess, Color, Move, PieceSymbol, Square } from "chess.js";
+import { colorToPlay, PIECE_VALUES } from "@utils";
 import { FEN } from "@types";
-import { colorToPlay, PIECE_VALUES } from "./utils";
+
 // TODO package method ALL
 export class ChessHelper {
     public chess: Chess;

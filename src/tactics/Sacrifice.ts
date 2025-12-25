@@ -1,12 +1,9 @@
 import { Chess, Move } from "chess.js";
-import { PIECE_VALUES } from "@utils/utils";
-import { FEN, TacticClassifier, BaseTacticContext } from "@types";
-import { ChessHelper } from "@utils/chess_helper";
-import { isWhiteToPlay } from "@utils/utils";
-import { SequenceInterpreter } from "@utils/sequence_interpreter";
+import { PIECE_VALUES, ChessHelper, SequenceInterpreter, colorToPlay } from "@utils";
+import { FEN, TacticClassifier, DefaultTacticContext } from "@types";
 
 class SacrificeTactics implements TacticClassifier {
-    isTactic(context: BaseTacticContext): any {
+    isTactic(context: DefaultTacticContext): any {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const move = evaluation.move;
@@ -27,13 +24,13 @@ class SacrificeTactics implements TacticClassifier {
         return null;
     }
 
-    sacrificedMaterial(fen: FEN, currentMove: Move) {
+    sacrificedMaterial(position: FEN, currentMove: Move) {
         if (currentMove.promotion || currentMove.piece === "p") {
             return false;
         }
         const cs = new ChessHelper();
-        const attackingColor = isWhiteToPlay(fen) ? "w" : "b";
-        if (cs.materialAdvantageAfterTradesAtSquare(fen, currentMove.to, attackingColor) < 0) {
+        const attackingColor = colorToPlay(position);
+        if (cs.materialAdvantageAfterTradesAtSquare(position, currentMove.to, attackingColor) < 0) {
             const materialGained = currentMove.captured ? PIECE_VALUES[currentMove.captured] : 0;
             const materialLost = PIECE_VALUES[currentMove.piece];
             return materialGained - materialLost < 0;

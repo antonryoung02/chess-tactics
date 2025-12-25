@@ -1,12 +1,10 @@
 import { Chess } from "chess.js";
 import { PositionComparisonTacticContext } from "@types";
-import { PIECE_VALUES } from "@utils/utils";
-import { SequenceInterpreter } from "@utils/sequence_interpreter";
+import { PIECE_VALUES, SequenceInterpreter } from "@utils";
 
-//
 class HangingPieceTactics {
     isTactic(context: PositionComparisonTacticContext): any | null {
-        const { position, evaluation, prevEvaluation, prevMove } = context;
+        const { position, evaluation, prevMove } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);
 

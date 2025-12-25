@@ -1,10 +1,8 @@
-import { BaseTactic } from "@utils/base_tactic";
+import { BaseTactic, materialWasGained } from "@utils";
 import { Chess, Move } from "chess.js";
 import isSquareUndefendedJson from "./base_tactic__is_square_undefended.json";
-import { materialWasGained } from "@utils/utils";
 
 export function restoreMoves(startFen: string, rawMoves: { from: string; to: string }[]): Move[] {
-    // JSON.stringify(Move) does not keep the Move interface
     const chess = new Chess(startFen);
     const restoredMoves: Move[] = [];
 
@@ -14,7 +12,6 @@ export function restoreMoves(startFen: string, rawMoves: { from: string; to: str
             throw new Error(`Invalid move: from ${from} to ${to} at position: ${chess.fen()}`);
         restoredMoves.push(move);
     }
-
     return restoredMoves;
 }
 

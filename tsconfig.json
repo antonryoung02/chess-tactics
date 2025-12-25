@@ -5,9 +5,9 @@
     "moduleResolution": "node",
     "baseUrl": ".", 
     "paths": {
-      "@tactics/*": ["./src/tactics/*"] ,
+      "@tactics": ["./src/tactics/index"] ,
       "@types": ["./src/types"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils": ["./src/utils/index"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,

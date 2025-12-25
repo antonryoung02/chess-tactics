@@ -1,12 +1,10 @@
 import { Chess, Move } from "chess.js";
-import { BaseTactic } from "@utils/base_tactic";
-import { PIECE_VALUES } from "@utils/utils";
-import { BaseTacticContext, FEN, TacticClassifier } from "@types";
-import { SequenceInterpreter } from "@utils/sequence_interpreter";
+import { BaseTactic, PIECE_VALUES, SequenceInterpreter } from "@utils";
+import { DefaultTacticContext, FEN, TacticClassifier } from "@types";
 
 const baseTactic = new BaseTactic();
 class SkewerTactics implements TacticClassifier {
-    isTactic(context: BaseTacticContext): any | null {
+    isTactic(context: DefaultTacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);

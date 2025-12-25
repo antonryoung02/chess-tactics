@@ -1,13 +1,15 @@
-import { TacticClassifier, TacticId } from "@types";
-import { ForkTactics } from "@tactics/Fork";
-import { PinTactics } from "@tactics/Pin";
-import { SacrificeTactics } from "@tactics/Sacrifice";
-import { SkewerTactics } from "@tactics/Skewer";
-import { TrapTactics } from "@tactics/Trap";
-import { HangingPieceTactics } from "@tactics/HangingPiece";
+import { TacticClassifier, TacticKey } from "@types";
+import {
+    ForkTactics,
+    PinTactics,
+    SkewerTactics,
+    SacrificeTactics,
+    TrapTactics,
+    HangingPieceTactics,
+} from "@tactics";
 
 export class TacticFactory {
-    static create(type: TacticId): TacticClassifier {
+    static create(type: TacticKey): TacticClassifier {
         switch (type) {
             case "fork":
                 return new ForkTactics();
@@ -19,7 +21,7 @@ export class TacticFactory {
                 return new SacrificeTactics();
             case "trap":
                 return new TrapTactics();
-            case "free":
+            case "hangingPiece":
                 return new HangingPieceTactics();
         }
     }

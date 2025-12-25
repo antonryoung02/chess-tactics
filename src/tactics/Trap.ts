@@ -1,14 +1,10 @@
 import { Chess, Move, Square } from "chess.js";
-import { BaseTactic } from "@utils/base_tactic";
-import { BaseTacticContext, FEN, TacticClassifier, TacticContext } from "@types";
-import { ChessHelper } from "@utils/chess_helper";
-import { PIECE_VALUES } from "@utils/utils";
-import { colorToPlay } from "@utils/utils";
-import { SequenceInterpreter } from "@utils/sequence_interpreter";
+import { BaseTactic, ChessHelper, PIECE_VALUES, colorToPlay, SequenceInterpreter } from "@utils";
+import { DefaultTacticContext, FEN, TacticClassifier } from "@types";
 
 const baseTactic = new BaseTactic();
 class TrapTactics implements TacticClassifier {
-    isTactic(context: BaseTacticContext): any | null {
+    isTactic(context: DefaultTacticContext): any | null {
         const { position, evaluation } = context;
         const chessCopy = new Chess(position);
         const currentMove = chessCopy.move(evaluation.move);

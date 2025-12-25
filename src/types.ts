@@ -1,4 +1,4 @@
-import { Move, PieceSymbol } from "chess.js";
+import { Color, Move, PieceSymbol, Square } from "chess.js";
 
 export type FEN = string;
 
@@ -10,27 +10,31 @@ export type Evaluation = {
     fen?: string;
 };
 
-export type Tactic = {
-    type: TacticId;
-    piece: PieceSymbol;
-    position: FEN;
-    sequence: string[];
-};
-
-export type TacticContext = BaseTacticContext | PositionComparisonTacticContext;
-
-export type BaseTacticContext = {
+export type DefaultTacticContext = {
     position: FEN;
     evaluation: Evaluation;
 };
 
-export type PositionComparisonTacticContext = BaseTacticContext & {
+export type PositionComparisonTacticContext = DefaultTacticContext & {
     prevEvaluation: Evaluation;
     prevMove: Move;
 };
+
+export type TacticContext = DefaultTacticContext | PositionComparisonTacticContext;
 
 export interface TacticClassifier {
     isTactic(context: TacticContext): Tactic | null;
 }
 
-export type TacticId = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "free";
+export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hangingPiece";
+
+export type Tactic = {
+    type: TacticKey;
+    attackingMove: Move;
+    attackedPieces: { square: Square; type: PieceSymbol; color: Color }[];
+    sequence: string[];
+    startPosition: FEN;
+    endPosition: FEN;
+    materialChange: number;
+    description: string;
+};
