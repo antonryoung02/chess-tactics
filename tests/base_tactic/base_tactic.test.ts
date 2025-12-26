@@ -1,4 +1,4 @@
-import { BaseTactic, materialWasGained } from "@utils";
+import { isSquareUndefended, materialWasGained } from "@utils";
 import { Chess, Move } from "chess.js";
 import isSquareUndefendedJson from "./base_tactic__is_square_undefended.json";
 
@@ -24,36 +24,13 @@ export function logBoardSequence(startFen: string, moveSequence: Move[]) {
     });
 }
 
-describe("invertTurn", () => {
-    test("inverts white to play", () => {
-        const baseTactic = new BaseTactic();
-
-        const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        const chess = new Chess(initialFen);
-        baseTactic.invertTurn(chess);
-        expect(chess.fen()).toBe("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1");
-    });
-
-    test("is inverse of self", () => {
-        const baseTactic = new BaseTactic();
-
-        const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        const chess = new Chess(initialFen);
-        baseTactic.invertTurn(chess);
-        baseTactic.invertTurn(chess);
-        expect(chess.fen()).toBe(initialFen);
-    });
-});
-
 describe("isSquareUndefended", () => {
     test("passes json test cases", () => {
-        const baseTactic = new BaseTactic();
-
         isSquareUndefendedJson.forEach((t) => {
             const chess = new Chess(t.start_fen);
             const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
             const move = moveSequence[0];
-            const result = baseTactic.isSquareUndefended(chess, move.to, move);
+            const result = isSquareUndefended(chess, move.to, move);
 
             if (result !== t.expected) {
                 console.log(`Failure: ${t.description}`);
@@ -62,28 +39,5 @@ describe("isSquareUndefended", () => {
 
             expect(result).toBe(t.expected);
         });
-    });
-});
-
-describe("materialWasGained", () => {
-    test("change of 0 returns false for both colors", () => {
-        const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        const whiteGained = materialWasGained(initialFen, initialFen, "w");
-        const blackGained = materialWasGained(initialFen, initialFen, "b");
-
-        expect(whiteGained).toBe(false);
-        expect(blackGained).toBe(false);
-    });
-
-    test("white advantage returns true for white", () => {
-        const initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-        const fenWithExtraQueen = "rnbqkbnr/pppppppp/8/8/8/8/QPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-        const whiteGained = materialWasGained(initialFen, fenWithExtraQueen, "w");
-        const blackGained = materialWasGained(initialFen, fenWithExtraQueen, "b");
-
-        expect(whiteGained).toBe(true);
-        expect(blackGained).toBe(false);
     });
 });

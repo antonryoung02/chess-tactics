@@ -1,6 +1,6 @@
 import { Color, Move, PieceSymbol, Square } from "chess.js";
 
-export type FEN = string;
+export type Fen = string;
 
 export type Evaluation = {
     type: string;
@@ -11,7 +11,7 @@ export type Evaluation = {
 };
 
 export type DefaultTacticContext = {
-    position: FEN;
+    position: Fen;
     evaluation: Evaluation;
 };
 
@@ -33,8 +33,8 @@ export type Tactic = {
     attackingMove: Move;
     attackedPieces: { square: Square; type: PieceSymbol; color: Color }[];
     sequence: string[];
-    startPosition: FEN;
-    endPosition: FEN;
+    startPosition: Fen;
+    endPosition: Fen;
     materialChange: number;
     description: string;
 };

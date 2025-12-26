@@ -1,8 +1,15 @@
 import { Chess, Move, Square } from "chess.js";
-import { BaseTactic, ChessHelper, PIECE_VALUES, colorToPlay, SequenceInterpreter } from "@utils";
-import { DefaultTacticContext, FEN, TacticClassifier } from "@types";
+import {
+    PIECE_VALUES,
+    colorToPlay,
+    SequenceInterpreter,
+    materialAdvantageAfterTradesAtSquare,
+    getEscapeSquares,
+    getBlockingMoves,
+    invertTurn,
+} from "@utils";
+import { DefaultTacticContext, Fen, TacticClassifier } from "@types";
 
-const baseTactic = new BaseTactic();
 class TrapTactics implements TacticClassifier {
     isTactic(context: DefaultTacticContext): any | null {
         const { position, evaluation } = context;
@@ -14,19 +21,20 @@ class TrapTactics implements TacticClassifier {
             [currentMove.to],
             cosmeticTrap?.trappingSquares ?? []
         );
-        // add a 'was this piece actually captured by the engine'
         if (tacticalSequence) {
             return {
                 type: "trap",
-                piece: cosmeticTrap.trappedPiece,
-                startFen: position,
-                sequence: tacticalSequence,
+                attackingMove: currentMove,
+                attackedPieces: [],
+                //piece: cosmeticTrap.trappedPiece,
+                ...tacticalSequence,
+                description: "",
             };
         }
         return null;
     }
 
-    getCosmeticTrap(position: FEN, currentMove: Move): any | null {
+    getCosmeticTrap(position: Fen, currentMove: Move): any | null {
         const chess = new Chess(position);
         const capturingMoves = this.getCapturablePieces(currentMove, position);
 
@@ -34,7 +42,6 @@ class TrapTactics implements TacticClassifier {
         if (capturingMoves.filter((m) => m.captured === "k").length > 0) return null;
 
         for (let i = 0; i < capturingMoves.length; i++) {
-            const ch = new ChessHelper();
             chess.load(position);
             chess.move(currentMove);
             const m = capturingMoves[i];
@@ -48,12 +55,12 @@ class TrapTactics implements TacticClassifier {
                     };
                 } else {
                     const chessCopy = new Chess(chess.fen());
-                    baseTactic.invertTurn(chessCopy);
+                    invertTurn(chessCopy);
                     if (
-                        ch.materialAdvantageAfterTradesAtSquare(
+                        materialAdvantageAfterTradesAtSquare(
                             chessCopy.fen(),
                             m.to,
-                            colorToPlay(chessCopy.fen())
+                            chessCopy.turn()
                         ) > 0
                     ) {
                         return {
@@ -67,23 +74,22 @@ class TrapTactics implements TacticClassifier {
         return null;
     }
 
-    private pieceIsTrapped(position: FEN, move: Move): boolean {
-        const ch = new ChessHelper();
+    private pieceIsTrapped(position: Fen, move: Move): boolean {
         const attackingSquare = move.from;
         const threatenedSquare = move.to;
-        const escapeSquares = ch.getEscapeSquares(position, threatenedSquare);
-        const blockingMoves = ch.getBlockingMoves(position, attackingSquare, threatenedSquare);
+        const escapeSquares = getEscapeSquares(position, threatenedSquare);
+        const blockingMoves = getBlockingMoves(position, attackingSquare, threatenedSquare);
         // can't trap a pawn, any pinned piece should not be a 'trap'
         if (move.captured === "p" || this.piecePinnedToKing(position, move.to)) return false;
         return escapeSquares.length === 0 && blockingMoves.length === 0;
     }
 
-    private getCapturablePieces(currentMove: Move, position: FEN): Array<Move> {
+    private getCapturablePieces(currentMove: Move, position: Fen): Array<Move> {
         // A capturable piece is one that can be taken. No other assumptions
         // game must be the initial position
         const chessCopy = new Chess(position);
         chessCopy.move(currentMove);
-        baseTactic.invertTurn(chessCopy);
+        invertTurn(chessCopy);
 
         const possibleMoves = chessCopy.moves({ verbose: true });
         let targetedPieces: Array<Move> = [];
@@ -95,7 +101,7 @@ class TrapTactics implements TacticClassifier {
         return targetedPieces;
     }
 
-    private piecePinnedToKing(fen: FEN, square: Square): boolean {
+    private piecePinnedToKing(fen: Fen, square: Square): boolean {
         const chess = new Chess(fen);
         const color = chess.get(square)?.color;
         const parts = fen.split(" ");

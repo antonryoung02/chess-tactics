@@ -1,8 +1,6 @@
 import { Chess, Move } from "chess.js";
-import { BaseTactic, SequenceInterpreter } from "@utils";
-import { TacticClassifier, DefaultTacticContext, FEN } from "@types";
-
-const baseTactic = new BaseTactic();
+import { getThreateningMoves, SequenceInterpreter } from "@utils";
+import { TacticClassifier, DefaultTacticContext, Fen } from "@types";
 
 class ForkTactics implements TacticClassifier {
     isTactic(context: DefaultTacticContext): any | null {
@@ -16,17 +14,17 @@ class ForkTactics implements TacticClassifier {
         if (tacticalSequence) {
             return {
                 type: "fork",
-                piece: currentMove.piece,
-                position: position,
-                sequence: tacticalSequence,
+                attackingMove: currentMove,
+                attackedPieces: [],
+                ...tacticalSequence,
+                description: "",
             };
         }
         return null;
     }
 
-    getCosmeticForks(position: FEN, currentMove: Move): Move[] {
-        const chess = new Chess(position);
-        const threateningMoves = baseTactic.getThreateningMoves(chess, currentMove, position);
+    getCosmeticForks(position: Fen, currentMove: Move): Move[] {
+        const threateningMoves = getThreateningMoves(position, currentMove);
         if (threateningMoves.length >= 2) {
             return threateningMoves;
         }

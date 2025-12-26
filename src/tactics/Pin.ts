@@ -1,14 +1,12 @@
 import { Chess, Move } from "chess.js";
-import { PIECE_VALUES, BaseTactic, SequenceInterpreter } from "@utils";
-import { DefaultTacticContext, FEN, TacticClassifier } from "@types";
-
-const baseTactic = new BaseTactic();
+import { getMoveDiff, invertTurn, PIECE_VALUES, SequenceInterpreter } from "@utils";
+import { DefaultTacticContext, Fen, TacticClassifier } from "@types";
 
 class PinTactics implements TacticClassifier {
     isTactic(context: DefaultTacticContext): any | null {
         const { position, evaluation } = context;
-        const chessCopy = new Chess(position);
-        const currentMove = chessCopy.move(evaluation.move);
+        const chess = new Chess(position);
+        const currentMove = chess.move(evaluation.move);
 
         const cosmeticPins = this.getCosmeticPins(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {
@@ -20,23 +18,24 @@ class PinTactics implements TacticClassifier {
             if (tacticalSequence) {
                 return {
                     type: "pin",
-                    piece: currentMove.piece,
-                    position: position,
-                    sequence: tacticalSequence,
+                    attackingMove: currentMove,
+                    attackedPieces: [],
+                    ...tacticalSequence,
+                    description: "",
                 };
             }
         }
         return null;
     }
 
-    getCosmeticPins(position: FEN, currentMove: Move): Array<Array<Move>> {
+    getCosmeticPins(position: Fen, currentMove: Move): Array<Array<Move>> {
         if (["p", "k", "n"].includes(currentMove.piece)) {
             return [];
         }
         const chess = new Chess(position);
         chess.move(currentMove);
         // On the next turn where can you move this piece
-        baseTactic.invertTurn(chess);
+        invertTurn(chess);
         const possibleNextMoves = chess.moves({ square: currentMove.to, verbose: true });
         const cosmeticPins = [];
         for (const move of possibleNextMoves) {
@@ -48,16 +47,13 @@ class PinTactics implements TacticClassifier {
             chess.load(position);
             chess.move(currentMove);
             chess.remove(move.to);
-            baseTactic.invertTurn(chess);
+            invertTurn(chess);
             // Is a more valuable piece behind the capturable pieces
             const possibleNextMovesWithoutPiece = chess.moves({
                 square: currentMove.to,
                 verbose: true,
             });
-            const newMoves = baseTactic.getMoveDiff(
-                possibleNextMoves,
-                possibleNextMovesWithoutPiece
-            );
+            const newMoves = getMoveDiff(possibleNextMoves, possibleNextMovesWithoutPiece);
 
             // A cosmetic pin is 'did my piece move to a square that pins any lower value piece to a higher value piece'
             for (const m of newMoves) {
@@ -76,7 +72,7 @@ class PinTactics implements TacticClassifier {
     }
 
     movePreventsPawnMobility(
-        position: FEN,
+        position: Fen,
         currentMove: Move,
         moveCapturingPawn: Move,
         moveCapturingBehindPiece: Move
@@ -103,7 +99,7 @@ class PinTactics implements TacticClassifier {
             if (move.to === currentMove.to) {
                 return false;
             }
-            if (baseTactic.canMoveToSquare(chess, moveCapturingBehindPiece.to)) {
+            if (chess.attackers(moveCapturingBehindPiece.to).length > 0) {
                 doesPrevent = true;
             }
         }

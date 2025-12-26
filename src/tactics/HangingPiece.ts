@@ -22,12 +22,13 @@ class HangingPieceTactics {
         chessCopy.load(position);
         const attackers = chessCopy.attackers(currentMove.to);
         const tacticalSequence = si.identifyWinningSequence(attackers, [currentMove.to]);
-        if (tacticalSequence.length > 0) {
+        if (tacticalSequence) {
             return {
                 type: "hanging",
-                piece: currentMove.captured,
-                startFen: position,
-                sequence: tacticalSequence,
+                attackingMove: currentMove,
+                attackedPieces: [],
+                ...tacticalSequence,
+                description: "",
             };
         }
         return null;

@@ -1,5 +1,5 @@
 import { PieceSymbol, Color, Chess, Move } from "chess.js";
-import { FEN } from "@types";
+import { Fen } from "@types";
 
 export const PIECE_VALUES: Record<PieceSymbol, number> = {
     p: 1,
@@ -18,7 +18,22 @@ export function isWhiteToPlay(x: number | string) {
     }
 }
 
-export function fenAtEndOfSequence(startFen: FEN, sequence: string[] | null) {
+// Note: this is needed over chess.setTurn because it allows color change when in check
+export function setTurn(position: Fen, color: Color) {
+    let fenSplit = position.split(" ");
+    fenSplit[1] = color;
+    return fenSplit.join(" ");
+}
+
+export function invertTurn(chess: Chess): void {
+    let fenSplit = chess.fen().split(" ");
+    fenSplit[1] = fenSplit[1] === "w" ? "b" : "w";
+    fenSplit[3] = "-";
+
+    chess.load(fenSplit.join(" "));
+}
+
+export function fenAtEndOfSequence(startFen: Fen, sequence: string[] | null) {
     if (!sequence) return startFen;
     const chess = new Chess(startFen);
     sequence.forEach((m) => {
@@ -33,22 +48,22 @@ export function colorToPlay(x: number | string): Color {
     return isWhite ? "w" : "b";
 }
 
-export function sanToUci(position: FEN, san: string): string {
+export function sanToUci(position: Fen, san: string): string {
     const m = sanToMove(position, san);
     return `${m.from}${m.to}`;
 }
 
-export function uciToSan(position: FEN, uci: string): string {
+export function uciToSan(position: Fen, uci: string): string {
     const m = uciToMove(position, uci);
     return m.san;
 }
 
-export function uciToMove(position: FEN, uci: string): Move {
+export function uciToMove(position: Fen, uci: string): Move {
     const chess = new Chess(position);
     return chess.move(uci);
 }
 
-export function sanToMove(position: FEN, san: string): Move {
+export function sanToMove(position: Fen, san: string): Move {
     const chess = new Chess(position);
     return chess.move(san);
 }
@@ -57,7 +72,7 @@ export function moveToUci(move: Move | { from: string; to: string }) {
     return `${move.from}${move.to}`;
 }
 
-export function materialValueInPosition(position: FEN): Record<Color, number> {
+export function materialValueInPosition(position: Fen): Record<Color, number> {
     const pieceCounts = pieceCountsInPosition(position);
     const values: Record<Color, number> = { w: 0, b: 0 };
 
@@ -71,7 +86,7 @@ export function materialValueInPosition(position: FEN): Record<Color, number> {
     return values;
 }
 
-export function pieceCountsInPosition(position: FEN): Record<Color, Record<PieceSymbol, number>> {
+export function pieceCountsInPosition(position: Fen): Record<Color, Record<PieceSymbol, number>> {
     const counts: Record<Color, Record<PieceSymbol, number>> = {
         w: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
         b: { p: 0, b: 0, n: 0, q: 0, r: 0, k: 0 },
@@ -92,13 +107,19 @@ export function pieceCountsInPosition(position: FEN): Record<Color, Record<Piece
     return counts;
 }
 
-export function materialWasGained(startFen: FEN, endFen: FEN, pieceColor: Color | string): boolean {
+export function materialWasGained(startFen: Fen, endFen: Fen, pieceColor: Color | string): number {
     const startMaterial = materialValueInPosition(startFen);
     const endMaterial = materialValueInPosition(endFen);
-    const startAdvantage = startMaterial.w - startMaterial.b;
-    const endAdvantage = endMaterial.w - endMaterial.b;
+    const startAdvantageWhite = startMaterial.w - startMaterial.b;
+    const endAdvantageWhite = endMaterial.w - endMaterial.b;
     if (pieceColor === "w") {
-        return endAdvantage - startAdvantage > 0;
+        return endAdvantageWhite - startAdvantageWhite;
     }
-    return endAdvantage - startAdvantage < 0;
+    return startAdvantageWhite - endAdvantageWhite;
+}
+
+export function getMoveDiff(originalMoves: Move[], newMoves: Move[]): Move[] {
+    return newMoves.filter(
+        (m) => originalMoves.map((n) => n.to).includes(m.to) === false && m.captured
+    );
 }
