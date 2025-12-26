@@ -1,6 +1,6 @@
 import { TrapTactics } from "@tactics";
 import isTacticJSON from "./trap__is_tactic.json";
-import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { IsTacticTestCase } from "tests/types";
 
 describe("TrapTactics.isTactic", () => {
@@ -11,7 +11,6 @@ describe("TrapTactics.isTactic", () => {
             console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
             logBoardSequence(t.context.position, []);
         }
-
         expect(result !== null).toBe(t.expected);
     });
 });

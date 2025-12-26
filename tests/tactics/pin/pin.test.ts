@@ -2,7 +2,7 @@ import cosmeticPinsJSON from "./pin__get_cosmetic_pins.json";
 import isTacticJSON from "./pin__is_tactic.json";
 import { Chess } from "chess.js";
 import { PinTactics } from "@tactics";
-import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { restoreMoves, logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { IsTacticTestCase } from "tests/types";
 
 describe("PinTactics.getCosmeticPins", () => {

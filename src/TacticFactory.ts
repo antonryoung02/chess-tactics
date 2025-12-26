@@ -21,7 +21,7 @@ export class TacticFactory {
                 return new SacrificeTactics();
             case "trap":
                 return new TrapTactics();
-            case "hangingPiece":
+            case "hanging":
                 return new HangingPieceTactics();
         }
     }

@@ -2,7 +2,7 @@ import { Chess } from "chess.js";
 import { SkewerTactics } from "@tactics";
 import cosmeticSkewersJSON from "./skewer__get_cosmetic_skewers.json";
 import isTacticJSON from "./skewer__is_tactic.json";
-import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { restoreMoves, logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { IsTacticTestCase } from "tests/types";
 
 // Currently if you 'skewer' two pieces but the piece you used is capturable it is still a cosmetic skewer.

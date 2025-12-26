@@ -1,7 +1,7 @@
 import { ForkTactics } from "@tactics";
 import cosmeticForksJSON from "./fork__get_cosmetic_forks.json";
 import isTacticJSON from "./fork__is_tactic.json";
-import { restoreMoves, logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { restoreMoves, logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { IsTacticTestCase } from "tests/types";
 
 describe("ForkTactics.getCosmeticForks", () => {

@@ -26,7 +26,7 @@ export interface TacticClassifier {
     isTactic(context: TacticContext): Tactic | null;
 }
 
-export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hangingPiece";
+export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
 
 export type Tactic = {
     type: TacticKey;

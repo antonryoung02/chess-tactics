@@ -1,6 +1,6 @@
 import isTacticJson from "./sacrifice__is_tactic.json";
 import { SacrificeTactics } from "@tactics";
-import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { IsTacticTestCase } from "tests/types";
 
 describe("SacrificeTactics.isTactic", () => {

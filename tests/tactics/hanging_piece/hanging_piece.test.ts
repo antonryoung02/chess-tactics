@@ -1,6 +1,6 @@
 import { HangingPieceTactics } from "@tactics";
 import isTacticJSON from "./hanging_piece__is_tactic.json";
-import { logBoardSequence } from "../../base_tactic/base_tactic.test";
+import { logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
 import { PositionComparisonTacticContext } from "@types";
 import { IsTacticTestCase } from "tests/types";
 
