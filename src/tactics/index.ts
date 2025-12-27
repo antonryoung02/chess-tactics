@@ -1,3 +1,4 @@
+export { BaseTactic } from "./BaseTactic";
 export { ForkTactics } from "./Fork";
 export { HangingPieceTactics } from "./HangingPiece";
 export { PinTactics } from "./Pin";

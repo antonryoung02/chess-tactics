@@ -1,12 +1,13 @@
-import { Evaluation, Fen } from "@types";
+import { Evaluation, Fen, SequenceInterpretation, TacticContext } from "@types";
 import { Chess, Move, Square } from "chess.js";
-import { fenAtEndOfSequence, materialWasGained, colorToPlay, attackingSquareIsBad } from "@utils";
+import { getMaterialChange, colorToPlay, attackingSquareIsBad } from "@utils";
 
 export class SequenceInterpreter {
     private evaluation: Evaluation;
     private position: Fen;
 
-    constructor(position: Fen, evaluation: Evaluation) {
+    setContext(context: TacticContext) {
+        const { evaluation, position } = context;
         this.evaluation = evaluation;
         this.position = position;
     }
@@ -59,27 +60,31 @@ export class SequenceInterpreter {
     // the separation of tacticalSequence and remainingSequence
     // is to ensure that non-capturing engine intermezzos
     // still allow captures on attackedSquares to be found
-    identifyWinningSequence(attackerSquares: Square[], attackedSquares: Square[]): any {
-        if (attackedSquares.length === 0) return null;
-        let tacticalSequence: string[] = [];
-        const sequence = this.evaluationToMoveList();
+    identifyWinningSequence(
+        attackerSquares: Square[],
+        attackedSquares: Square[]
+    ): SequenceInterpretation | null {
+        if (attackedSquares.length === 0 || attackerSquares.length === 0) return null;
 
+        let tacticalSequence: string[] = [];
         const chess = new Chess(this.position);
-        for (let i = 0; i < sequence.length; i++) {
-            const move = sequence[i];
+        const moves = this.evaluationToMoveList();
+
+        for (let i = 0; i < moves.length; i++) {
+            const move = moves[i];
             tacticalSequence.push(move.san);
             const position = chess.fen();
+            chess.move(move);
             if (
                 this.capturedAttackedPieces(move, attackerSquares, attackedSquares) ||
                 this.isDesparado(position, move)
             ) {
-                chess.move(move);
-                const remainingSequence = sequence.slice(i + 1);
+                const remainingSequence = moves.slice(i + 1);
                 tacticalSequence = tacticalSequence.concat(
                     this.getCaptureSequence(chess.fen(), remainingSequence)
                 );
-                const endPosition = fenAtEndOfSequence(this.position, tacticalSequence);
-                const materialChange = materialWasGained(
+                const endPosition = this.positionAfterSequence(this.position, tacticalSequence);
+                const materialChange = getMaterialChange(
                     position,
                     endPosition,
                     colorToPlay(this.position)
@@ -91,10 +96,10 @@ export class SequenceInterpreter {
                         sequence: tacticalSequence,
                         materialChange: materialChange,
                     };
+                } else {
+                    return null;
                 }
-                return null;
             }
-            chess.move(move);
         }
         return null;
     }
@@ -118,5 +123,14 @@ export class SequenceInterpreter {
     private isDesparado(position: Fen, move: Move): boolean {
         if (!move.captured) return false;
         return attackingSquareIsBad(position, move.to);
+    }
+
+    private positionAfterSequence(position: Fen, sequence: string[] | null) {
+        if (!sequence) return position;
+        const chess = new Chess(position);
+        sequence.forEach((m) => {
+            chess.move(m);
+        });
+        return chess.fen();
     }
 }

@@ -1,23 +1,22 @@
 import { Chess, Move, Square } from "chess.js";
 import {
     PIECE_VALUES,
-    colorToPlay,
-    SequenceInterpreter,
     materialAdvantageAfterTradesAtSquare,
     getEscapeSquares,
     getBlockingMoves,
     invertTurn,
 } from "@utils";
-import { DefaultTacticContext, Fen, TacticClassifier } from "@types";
+import { DefaultTacticContext, Fen } from "@types";
+import { BaseTactic } from "@tactics";
 
-class TrapTactics implements TacticClassifier {
+class TrapTactics extends BaseTactic {
     isTactic(context: DefaultTacticContext): any | null {
+        super.isTactic(context);
         const { position, evaluation } = context;
-        const chessCopy = new Chess(position);
-        const currentMove = chessCopy.move(evaluation.move);
+        const chess = new Chess(position);
+        const currentMove = chess.move(evaluation.move);
         const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
-        const si = new SequenceInterpreter(position, evaluation);
-        const tacticalSequence = si.identifyWinningSequence(
+        const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
             [currentMove.to],
             cosmeticTrap?.trappingSquares ?? []
         );
@@ -25,10 +24,9 @@ class TrapTactics implements TacticClassifier {
             return {
                 type: "trap",
                 attackingMove: currentMove,
-                attackedPieces: [],
-                //piece: cosmeticTrap.trappedPiece,
-                ...tacticalSequence,
+                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
                 description: "",
+                ...tacticalSequence,
             };
         }
         return null;

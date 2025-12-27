@@ -1,10 +1,15 @@
 {
     "name": "chess-tactics",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias"
     },
     "keywords": [],
     "author": "",
@@ -17,6 +22,7 @@
         "@types/jest": "^30.0.0",
         "jest": "^30.2.0",
         "ts-jest": "^29.4.6",
-        "ts-node": "^10.9.2"
+        "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.16"
     }
 }

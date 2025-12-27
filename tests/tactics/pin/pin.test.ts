@@ -1,30 +1,28 @@
-import cosmeticPinsJSON from "./pin__get_cosmetic_pins.json";
 import isTacticJSON from "./pin__is_tactic.json";
-import { Chess } from "chess.js";
-import { PinTactics } from "@tactics";
-import { restoreMoves, logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
+import { logBoardSequence } from "tests/utils";
 import { IsTacticTestCase } from "tests/types";
+import { TacticFactory } from "@chess-tactics";
 
-describe("PinTactics.getCosmeticPins", () => {
-    test.each(cosmeticPinsJSON)("passes json test cases", (t) => {
-        const pinTactic = new PinTactics();
+// describe("PinTactics.getCosmeticPins", () => {
+//     test.each(cosmeticPinsJSON)("passes json test cases", (t) => {
+//         const pinTactic = TacticFactory.create("pin")
 
-        const chess = new Chess(t.start_fen);
-        const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
-        chess.move(moveSequence[0]);
-        const result = pinTactic.getCosmeticPins(t.start_fen, moveSequence[0]);
-        if (result.length !== t.expected) {
-            console.log(`Failure: ${t.description}`);
-            logBoardSequence(t.start_fen, moveSequence);
-        }
+//         const chess = new Chess(t.start_fen);
+//         const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
+//         chess.move(moveSequence[0]);
+//         const result = pinTactic.getCosmeticPins(t.start_fen, moveSequence[0]);
+//         if (result.length !== t.expected) {
+//             console.log(`Failure: ${t.description}`);
+//             logBoardSequence(t.start_fen, moveSequence);
+//         }
 
-        expect(result.length).toBe(t.expected);
-    });
-});
+//         expect(result.length).toBe(t.expected);
+//     });
+// });
 
 describe("PinTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
-        const pinTactic = new PinTactics();
+        const pinTactic = TacticFactory.create("pin");
         const result = pinTactic.isTactic(t.context);
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);

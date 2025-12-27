@@ -1,29 +1,23 @@
 import { Chess, Move } from "chess.js";
-import {
-    PIECE_VALUES,
-    SequenceInterpreter,
-    colorToPlay,
-    materialAdvantageAfterTradesAtSquare,
-} from "@utils";
-import { Fen, TacticClassifier, DefaultTacticContext } from "@types";
+import { PIECE_VALUES, colorToPlay, materialAdvantageAfterTradesAtSquare } from "@utils";
+import { Fen, DefaultTacticContext } from "@types";
+import { BaseTactic } from "@tactics";
 
-class SacrificeTactics implements TacticClassifier {
+class SacrificeTactics extends BaseTactic {
     isTactic(context: DefaultTacticContext): any {
+        super.isTactic(context);
         const { position, evaluation } = context;
-        const chessCopy = new Chess(position);
-        const move = evaluation.move;
+        const chess = new Chess(position);
 
-        const currentMove = chessCopy.move(move);
-        const si = new SequenceInterpreter(position, evaluation);
-        const moveList = si.evaluationToMoveList();
-        const captureSequence = si.getCaptureSequence(position, moveList);
-
+        const currentMove = chess.move(evaluation.move);
+        const moveList = this.sequenceInterpreter.evaluationToMoveList();
+        const captureSequence = this.sequenceInterpreter.getCaptureSequence(position, moveList);
         if (this.sacrificedMaterial(position, currentMove) && captureSequence.length > 0) {
             return {
                 type: "sacrifice",
                 attackingMove: currentMove,
+                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
                 sequence: captureSequence,
-                //TODO
                 description: "",
             };
         }

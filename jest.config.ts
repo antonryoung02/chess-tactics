@@ -5,6 +5,8 @@ module.exports = {
         "^@tactics$": "<rootDir>/src/tactics",
         "^@utils$": "<rootDir>/src/utils",
         "^@types$": "<rootDir>/src/types",
+        "^@chess-tactics": "<rootDir>/src",
+        "^tests/(.*)$": "<rootDir>/tests/$1",
     },
     collectCoverage: true,
     coverageDirectory: "coverage",

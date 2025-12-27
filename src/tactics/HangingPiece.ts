@@ -1,12 +1,14 @@
 import { Chess } from "chess.js";
 import { PositionComparisonTacticContext } from "@types";
-import { PIECE_VALUES, SequenceInterpreter } from "@utils";
+import { PIECE_VALUES } from "@utils";
+import { BaseTactic } from "@tactics";
 
-class HangingPieceTactics {
+class HangingPieceTactics extends BaseTactic {
     isTactic(context: PositionComparisonTacticContext): any | null {
+        super.isTactic(context);
         const { position, evaluation, prevMove } = context;
-        const chessCopy = new Chess(position);
-        const currentMove = chessCopy.move(evaluation.move);
+        const chess = new Chess(position);
+        const currentMove = chess.move(evaluation.move);
 
         if (!currentMove.captured) {
             return null;
@@ -18,17 +20,18 @@ class HangingPieceTactics {
             return null;
         }
 
-        const si = new SequenceInterpreter(position, evaluation);
-        chessCopy.load(position);
-        const attackers = chessCopy.attackers(currentMove.to);
-        const tacticalSequence = si.identifyWinningSequence(attackers, [currentMove.to]);
+        chess.load(position);
+        const attackers = chess.attackers(currentMove.to);
+        const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(attackers, [
+            currentMove.to,
+        ]);
         if (tacticalSequence) {
             return {
                 type: "hanging",
                 attackingMove: currentMove,
-                attackedPieces: [],
-                ...tacticalSequence,
+                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
                 description: "",
+                ...tacticalSequence,
             };
         }
         return null;

@@ -33,16 +33,6 @@ export function invertTurn(chess: Chess): void {
     chess.load(fenSplit.join(" "));
 }
 
-export function fenAtEndOfSequence(startFen: Fen, sequence: string[] | null) {
-    if (!sequence) return startFen;
-    const chess = new Chess(startFen);
-    sequence.forEach((m) => {
-        chess.move(m);
-    });
-
-    return chess.fen();
-}
-
 export function colorToPlay(x: number | string): Color {
     const isWhite = isWhiteToPlay(x);
     return isWhite ? "w" : "b";
@@ -107,7 +97,7 @@ export function pieceCountsInPosition(position: Fen): Record<Color, Record<Piece
     return counts;
 }
 
-export function materialWasGained(startFen: Fen, endFen: Fen, pieceColor: Color | string): number {
+export function getMaterialChange(startFen: Fen, endFen: Fen, pieceColor: Color | string): number {
     const startMaterial = materialValueInPosition(startFen);
     const endMaterial = materialValueInPosition(endFen);
     const startAdvantageWhite = startMaterial.w - startMaterial.b;

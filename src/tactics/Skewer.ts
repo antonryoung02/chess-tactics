@@ -1,23 +1,18 @@
 import { Chess, Move } from "chess.js";
-import {
-    getMoveDiff,
-    invertTurn,
-    isSquareUndefended,
-    PIECE_VALUES,
-    SequenceInterpreter,
-} from "@utils";
-import { DefaultTacticContext, Fen, TacticClassifier } from "@types";
+import { getMoveDiff, invertTurn, isSquareUndefended, PIECE_VALUES } from "@utils";
+import { DefaultTacticContext, Fen } from "@types";
+import { BaseTactic } from "@tactics";
 
-class SkewerTactics implements TacticClassifier {
+class SkewerTactics extends BaseTactic {
     isTactic(context: DefaultTacticContext): any | null {
+        super.isTactic(context);
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.move);
 
         const cosmeticSkewers = this.getCosmeticSkewers(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticSkewers) {
-            const si = new SequenceInterpreter(position, evaluation);
-            const tacticalSequence = si.identifyWinningSequence(
+            const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
                 [currentMove.to],
                 [nextMoveWithPiece.to, nextMoveWithoutPiece.to]
             );
@@ -25,9 +20,15 @@ class SkewerTactics implements TacticClassifier {
                 return {
                     type: "skewer",
                     attackingMove: currentMove,
-                    attackedPieces: [],
-                    ...tacticalSequence,
+                    attackedPieces: [
+                        { square: nextMoveWithPiece.to, piece: chess.get(nextMoveWithPiece.to) },
+                        {
+                            square: nextMoveWithoutPiece.to,
+                            piece: chess.get(nextMoveWithoutPiece.to),
+                        },
+                    ],
                     description: "",
+                    ...tacticalSequence,
                 };
             }
         }

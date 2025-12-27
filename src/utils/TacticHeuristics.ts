@@ -268,6 +268,7 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
     invertTurn(chess);
 
     const possibleMoves = chess.moves({ square: currentMove.to, verbose: true });
+
     const threateningMoves = [];
     for (const m of possibleMoves) {
         if (isPieceThreatened(position, m, currentMove)) {

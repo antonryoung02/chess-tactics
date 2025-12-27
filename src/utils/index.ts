@@ -1,3 +1,3 @@
 export { SequenceInterpreter } from "./SequenceInterpreter";
-export * from "./TacticalHeuristics";
+export * from "./TacticHeuristics";
 export * from "./Utils";

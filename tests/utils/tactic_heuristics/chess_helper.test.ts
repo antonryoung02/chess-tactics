@@ -1,7 +1,7 @@
-import squareDefendersJson from "./chess_helper_get_square_defenders.json";
-import attackingSquareIsGoodJson from "./chess_helper_attacking_square_is_good.json";
-import getEscapeSquaresJson from "./chess_helper_get_escape_squares.json";
-import getBlockingMovesJson from "./chess_helper_get_blocking_moves.json";
+import squareDefendersJson from "./get_square_defenders.json";
+import attackingSquareIsGoodJson from "./attacking_square_is_good.json";
+import getEscapeSquaresJson from "./get_escape_squares.json";
+import getBlockingMovesJson from "./get_blocking_moves.json";
 import { attackingSquareIsGood, getBlockingMoves, getEscapeSquares } from "@utils";
 import { Square } from "chess.js";
 import { getSquareDefenders } from "@utils";

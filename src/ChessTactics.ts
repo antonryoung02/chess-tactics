@@ -7,7 +7,6 @@ export class ChessTactics {
 
     constructor(tactics: TacticKey[]) {
         this.selectedTactics = tactics;
-        this.tacticClassifiers = [];
         this.initializeClassifiers();
     }
 
@@ -19,12 +18,9 @@ export class ChessTactics {
     }
 
     classify(context: TacticContext): Tactic | null {
-        this.initializeClassifiers();
         for (const classifier of this.tacticClassifiers) {
             const tactic = classifier.isTactic(context);
-            if (tactic) {
-                return tactic;
-            }
+            if (tactic) return tactic;
         }
         return null;
     }

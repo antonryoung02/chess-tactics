@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "outDir": "dist",
+    "declaration": true,
+    "rootDir": ".",
     "module": "CommonJS",
     "moduleResolution": "node",
     "baseUrl": ".", 
     "paths": {
+    "@chess-tactics": ["./src"],
       "@tactics": ["./src/tactics/index"] ,
       "@types": ["./src/types"],
       "@utils": ["./src/utils/index"]
@@ -17,4 +21,5 @@
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules"]
+
 }

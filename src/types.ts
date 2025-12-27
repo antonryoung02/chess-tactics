@@ -1,13 +1,10 @@
-import { Color, Move, PieceSymbol, Square } from "chess.js";
+import { Move, Piece, Square } from "chess.js";
 
 export type Fen = string;
 
 export type Evaluation = {
-    type: string;
-    move: Move | { from: string; to: string };
+    move: { from: string; to: string };
     sequence: string;
-    eval: string;
-    fen?: string;
 };
 
 export type DefaultTacticContext = {
@@ -28,13 +25,16 @@ export interface TacticClassifier {
 
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
 
-export type Tactic = {
-    type: TacticKey;
-    attackingMove: Move;
-    attackedPieces: { square: Square; type: PieceSymbol; color: Color }[];
+export type SequenceInterpretation = {
     sequence: string[];
     startPosition: Fen;
     endPosition: Fen;
     materialChange: number;
+};
+
+export type Tactic = SequenceInterpretation & {
+    type: TacticKey;
+    attackingMove: Move;
+    attackedPieces: { square: Square; piece: Piece }[];
     description: string;
 };

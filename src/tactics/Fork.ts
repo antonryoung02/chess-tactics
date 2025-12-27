@@ -1,23 +1,27 @@
 import { Chess, Move } from "chess.js";
-import { getThreateningMoves, SequenceInterpreter } from "@utils";
-import { TacticClassifier, DefaultTacticContext, Fen } from "@types";
+import { getThreateningMoves } from "@utils";
+import { DefaultTacticContext, Fen } from "@types";
+import { BaseTactic } from "@tactics";
 
-class ForkTactics implements TacticClassifier {
+class ForkTactics extends BaseTactic {
     isTactic(context: DefaultTacticContext): any | null {
+        super.isTactic(context);
         const { position, evaluation } = context;
-        const si = new SequenceInterpreter(position, evaluation);
-        const chessCopy = new Chess(position);
-        const currentMove = chessCopy.move(evaluation.move);
+        const chess = new Chess(position);
+        const currentMove = chess.move(evaluation.move);
         const cosmeticForks = this.getCosmeticForks(position, currentMove);
         const attackedSquares = cosmeticForks.map((m) => m.to);
-        const tacticalSequence = si.identifyWinningSequence([currentMove.to], attackedSquares);
+        const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
+            [currentMove.to],
+            attackedSquares
+        );
         if (tacticalSequence) {
             return {
                 type: "fork",
                 attackingMove: currentMove,
-                attackedPieces: [],
-                ...tacticalSequence,
+                attackedPieces: attackedSquares.map((s) => ({ square: s, piece: chess.get(s) })),
                 description: "",
+                ...tacticalSequence,
             };
         }
         return null;

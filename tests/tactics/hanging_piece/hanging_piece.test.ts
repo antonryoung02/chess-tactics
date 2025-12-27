@@ -1,12 +1,12 @@
-import { HangingPieceTactics } from "@tactics";
 import isTacticJSON from "./hanging_piece__is_tactic.json";
-import { logBoardSequence } from "../../tactical_heuristics/base_tactic.test";
+import { logBoardSequence } from "tests/utils";
 import { PositionComparisonTacticContext } from "@types";
 import { IsTacticTestCase } from "tests/types";
+import { TacticFactory } from "@chess-tactics";
 
 describe("HangingPieceTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
-        const hangingPieceTactic = new HangingPieceTactics();
+        const hangingPieceTactic = TacticFactory.create("hanging");
         const context = t.context as PositionComparisonTacticContext;
         const result = hangingPieceTactic.isTactic(context);
         if ((result !== null) !== t.expected) {
