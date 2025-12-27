@@ -7,7 +7,6 @@ describe("ForkTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const forkTactic = TacticFactory.create("fork");
         const result = forkTactic.isTactic(t.context);
-        console.log(JSON.stringify(result));
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. Expected: ${t.expected}. Recieved: ${result}`);
             logBoardSequence(t.context.position, []);
