@@ -7,7 +7,7 @@
                 "eval": "5.6",
                 "type": "cp",
                 "move": { "from": "e3", "to": "f5" },
-                "sequence": "g7f6 f5e7 f6e6 c2b3 e6d6 b3c4 d6e7 c4d5"
+                "followup": "g7f6 f5e7 f6e6 c2b3 e6d6 b3c4 d6e7 c4d5"
             }
         },
         "expected": false
@@ -20,7 +20,7 @@
                 "eval": "-2.47",
                 "type": "cp",
                 "move": { "from": "c8", "to": "d8" },
-                "sequence": "f2e3 d8d5 f1c4 c1c3 d2d3 d5d3 c4d3 e6f5"
+                "followup": "f2e3 d8d5 f1c4 c1c3 d2d3 d5d3 c4d3 e6f5"
             }
         },
         "expected": true
@@ -33,7 +33,7 @@
                 "eval": "3.50",
                 "type": "cp",
                 "move": { "from": "h4", "to": "f3" },
-                "sequence": "e5e7 a4a5 g7g6 a5b6 f6f5 e4f5 e7b7 f5g6"
+                "followup": "e5e7 a4a5 g7g6 a5b6 f6f5 e4f5 e7b7 f5g6"
             }
         },
         "expected": false
@@ -46,7 +46,7 @@
                 "eval": "-2.37",
                 "type": "cp",
                 "move": { "from": "a6", "to": "d6" },
-                "sequence": "d1a1 d6d5 a1a7 g8f8 b2c2 d5d4 h4h5 g6h5"
+                "followup": "d1a1 d6d5 a1a7 g8f8 b2c2 d5d4 h4h5 g6h5"
             }
         },
         "expected": false
@@ -59,7 +59,7 @@
                 "eval": "-2.47",
                 "type": "cp",
                 "move": { "from": "c8", "to": "d8" },
-                "sequence": "f2e3 d8d5 f1c4 c1c3 d2d3 d5d3 c4d3 e6f5"
+                "followup": "f2e3 d8d5 f1c4 c1c3 d2d3 d5d3 c4d3 e6f5"
             }
         },
         "expected": true
@@ -72,7 +72,7 @@
                 "eval": "-0.28",
                 "type": "cp",
                 "move": { "from": "d8", "to": "d4" },
-                "sequence": "c4e2 b6d5 a1d1 e8g8 e1g1 b7b5 e2f3 c8b7"
+                "followup": "c4e2 b6d5 a1d1 e8g8 e1g1 b7b5 e2f3 c8b7"
             }
         },
         "expected": false
@@ -85,7 +85,7 @@
                 "eval": "4.31",
                 "type": "cp",
                 "move": { "from": "d3", "to": "c4" },
-                "sequence": "g8h8 c4e6 c6c5 e6c4 d4c3 b2c3 b8c6 b1b6"
+                "followup": "g8h8 c4e6 c6c5 e6c4 d4c3 b2c3 b8c6 b1b6"
             }
         },
         "expected": true
@@ -98,7 +98,7 @@
                 "eval": "2.37",
                 "type": "cp",
                 "move": { "from": "c2", "to": "d3" },
-                "sequence": "b8a6 a4c3 d5d8 e5e6 d8d6 f1f7 a6c5 g4h4"
+                "followup": "b8a6 a4c3 d5d8 e5e6 d8d6 f1f7 a6c5 g4h4"
             }
         },
         "expected": false
@@ -111,7 +111,7 @@
                 "eval": "-0.06",
                 "type": "cp",
                 "move": { "from": "f8", "to": "g7" },
-                "sequence": "b1c3 e8g8 f1e1 a8c8 c1g5 f8e8 a1c1 c6d5"
+                "followup": "b1c3 e8g8 f1e1 a8c8 c1g5 f8e8 a1c1 c6d5"
             }
         },
         "expected": false
@@ -124,7 +124,7 @@
                 "eval": "-4.92",
                 "type": "cp",
                 "move": { "from": "b8", "to": "d8" },
-                "sequence": "h3h4 c7e5 c4c5 d8d5 d1d5 e5d5 c5e7 h7h6"
+                "followup": "h3h4 c7e5 c4c5 d8d5 d1d5 e5d5 c5e7 h7h6"
             }
         },
         "expected": true
@@ -137,20 +137,20 @@
                 "eval": "1.75",
                 "type": "cp",
                 "move": { "from": "g4", "to": "c8" },
-                "sequence": "b8d7 c8a8 d5d4 c2d3 d4d3 f1a1 b7b5 a4c3"
+                "followup": "b8d7 c8a8 d5d4 c2d3 d4d3 f1a1 b7b5 a4c3"
             }
         },
         "expected": true
     },
     {
-        "description": "bishop captures knight, pinning pawn to rook and winning pawn in the tactical sequence. But the bishop is capturable by that pawn so this should not be a cosmetic pin",
+        "description": "bishop captures knight, pinning pawn to rook and winning pawn in the tactical followup. But the bishop is capturable by that pawn so this should not be a cosmetic pin",
         "context": {
             "position": "r1b2r1k/1ppnb1pp/p1n1Q3/1Bq5/8/P1N2N1P/1P3PP1/R1B2RK1 w - - 1 16",
             "evaluation": {
                 "eval": "2.40",
                 "type": "cp",
                 "move": { "from": "b5", "to": "c6" },
-                "sequence": "d7b8 c3e4 c8e6 e4c5 e7c5 c6b7 a8a7 b7e4"
+                "followup": "d7b8 c3e4 c8e6 e4c5 e7c5 c6b7 a8a7 b7e4"
             }
         },
         "expected": false
@@ -163,7 +163,7 @@
                 "eval": "-0.22",
                 "type": "cp",
                 "move": { "from": "d8", "to": "d5" },
-                "sequence": "f3e5 g7e5 d2c3 d5a2 c3e5 e8e5 d1d8 g8g7 e2g4 a2a5 d8d4 g7g8"
+                "followup": "f3e5 g7e5 d2c3 d5a2 c3e5 e8e5 d1d8 g8g7 e2g4 a2a5 d8d4 g7g8"
             }
         },
         "expected": false

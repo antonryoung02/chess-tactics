@@ -1,7 +1,7 @@
 import isTacticJSON from "./pin__is_tactic.json";
 import { logBoardSequence } from "tests/utils";
 import { IsTacticTestCase } from "tests/types";
-import { TacticFactory } from "@chess-tactics";
+import { ChessTactics } from "@chess-tactics";
 
 // describe("PinTactics.getCosmeticPins", () => {
 //     test.each(cosmeticPinsJSON)("passes json test cases", (t) => {
@@ -22,8 +22,8 @@ import { TacticFactory } from "@chess-tactics";
 
 describe("PinTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
-        const pinTactic = TacticFactory.create("pin");
-        const result = pinTactic.isTactic(t.context);
+        const ct = new ChessTactics(["pin"]);
+        const result = ct.classify(t.context);
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);
             logBoardSequence(t.context.position, []);

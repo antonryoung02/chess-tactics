@@ -1,10 +1,22 @@
 import { Move, Piece, Square } from "chess.js";
+import { _TacticContext } from "./_types";
 
 export type Fen = string;
 
-export type Evaluation = {
-    move: { from: string; to: string };
-    sequence: string;
+export type UciEvaluation = {
+    sequence: string | string[];
+};
+
+export type MoveEvaluation = {
+    move: string | { from: string; to: string } | Move;
+    followup: string | string[];
+};
+
+export type Evaluation = UciEvaluation | MoveEvaluation;
+
+export type CanonicalEvaluation = {
+    move: Move;
+    followup: Move[];
 };
 
 export type DefaultTacticContext = {
@@ -15,12 +27,13 @@ export type DefaultTacticContext = {
 export type PositionComparisonTacticContext = DefaultTacticContext & {
     prevEvaluation: Evaluation;
     prevMove: Move;
+    prevPosition: Fen;
 };
 
 export type TacticContext = DefaultTacticContext | PositionComparisonTacticContext;
 
 export interface TacticClassifier {
-    isTactic(context: TacticContext): Tactic | null;
+    isTactic(context: _TacticContext): Tactic | null;
 }
 
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";

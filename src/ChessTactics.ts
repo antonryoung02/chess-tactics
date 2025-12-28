@@ -1,5 +1,6 @@
 import { Tactic, TacticContext, TacticClassifier, TacticKey } from "@types";
 import { TacticFactory } from "./TacticFactory";
+import { TacticContextParser } from "./utils/TacticContextParser";
 
 export class ChessTactics {
     private tacticClassifiers: TacticClassifier[];
@@ -21,8 +22,9 @@ export class ChessTactics {
     }
 
     classify(context: TacticContext): Tactic | null {
+        const internalContext = TacticContextParser.parse(context);
         for (const classifier of this.tacticClassifiers) {
-            const tactic = classifier.isTactic(context);
+            const tactic = classifier.isTactic(internalContext);
             if (tactic) return tactic;
         }
         return null;

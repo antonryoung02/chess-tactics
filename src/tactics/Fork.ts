@@ -1,10 +1,11 @@
 import { Chess, Move } from "chess.js";
 import { getThreateningMoves } from "@utils";
-import { DefaultTacticContext, Fen } from "@types";
+import { DefaultTacticContext, Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
+import { _DefaultTacticContext } from "src/_types";
 
 class ForkTactics extends BaseTactic {
-    isTactic(context: DefaultTacticContext): any | null {
+    isTactic(context: _DefaultTacticContext): Tactic | null {
         super.isTactic(context);
         const { position, evaluation } = context;
         const chess = new Chess(position);

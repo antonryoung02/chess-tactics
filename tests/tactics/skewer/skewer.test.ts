@@ -1,7 +1,7 @@
 import isTacticJSON from "./skewer__is_tactic.json";
 import { logBoardSequence } from "tests/utils";
 import { IsTacticTestCase } from "tests/types";
-import { TacticFactory } from "@chess-tactics";
+import { ChessTactics } from "@chess-tactics";
 
 // Currently if you 'skewer' two pieces but the piece you used is capturable it is still a cosmetic skewer.
 // May not be a problem if we are checking if the engine plays it (also positive it catches skewers in double checks)
@@ -26,8 +26,8 @@ import { TacticFactory } from "@chess-tactics";
 
 describe("SkewerTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
-        const skewerTactic = TacticFactory.create("skewer");
-        const result = skewerTactic.isTactic(t.context);
+        const ct = new ChessTactics(["skewer"]);
+        const result = ct.classify(t.context);
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
             logBoardSequence(t.context.position, []);

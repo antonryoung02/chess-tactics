@@ -1,5 +1,6 @@
-import { Tactic, TacticClassifier, TacticContext } from "@types";
+import { Tactic, TacticClassifier } from "@types";
 import { SequenceInterpreter } from "@utils";
+import { _TacticContext } from "src/_types";
 
 export class BaseTactic implements TacticClassifier {
     protected sequenceInterpreter: SequenceInterpreter;
@@ -8,7 +9,7 @@ export class BaseTactic implements TacticClassifier {
         this.sequenceInterpreter = sequenceInterpreter;
     }
 
-    isTactic(context: TacticContext): Tactic | null {
+    isTactic(context: _TacticContext): Tactic | null {
         this.sequenceInterpreter.setContext(context);
         return null;
     }

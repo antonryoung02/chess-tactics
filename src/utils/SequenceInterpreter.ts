@@ -1,27 +1,20 @@
-import { Evaluation, Fen, SequenceInterpretation, TacticContext } from "@types";
+import { Fen, SequenceInterpretation } from "@types";
 import { Chess, Move, Square } from "chess.js";
 import { getMaterialChange, colorToPlay, attackingSquareIsBad } from "@utils";
+import { _TacticContext, _Evaluation } from "src/_types";
 
 export class SequenceInterpreter {
-    private evaluation: Evaluation;
+    private evaluation: _Evaluation;
     private position: Fen;
 
-    setContext(context: TacticContext) {
+    setContext(context: _TacticContext) {
         const { evaluation, position } = context;
         this.evaluation = evaluation;
         this.position = position;
     }
 
     evaluationToMoveList(): Move[] {
-        const chess = new Chess(this.position);
-        const m = chess.move(this.evaluation.move);
-
-        const moveList = [m];
-        const sequence = this.evaluation.sequence.split(" ");
-        sequence.forEach((s: any) => {
-            const move = chess.move(s);
-            moveList.push(move);
-        });
+        const moveList = [this.evaluation.move].concat(this.evaluation.followup);
         return this.trimEndCaptures(moveList);
     }
 

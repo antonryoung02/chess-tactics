@@ -1,14 +1,15 @@
 import { Chess, Move } from "chess.js";
 import { getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
-import { DefaultTacticContext, Fen } from "@types";
 import { BaseTactic } from "@tactics";
+import { _DefaultTacticContext } from "src/_types";
+import { Fen } from "@types";
 
 class PinTactics extends BaseTactic {
-    isTactic(context: DefaultTacticContext): any | null {
+    isTactic(context: _DefaultTacticContext): any | null {
         super.isTactic(context);
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.move);
+        const currentMove = evaluation.move;
 
         const cosmeticPins = this.getCosmeticPins(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {

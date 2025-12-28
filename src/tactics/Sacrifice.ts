@@ -1,15 +1,16 @@
 import { Chess, Move } from "chess.js";
 import { PIECE_VALUES, colorToPlay, materialAdvantageAfterTradesAtSquare } from "@utils";
-import { Fen, DefaultTacticContext } from "@types";
+import { Fen } from "@types";
 import { BaseTactic } from "@tactics";
+import { _DefaultTacticContext } from "src/_types";
 
 class SacrificeTactics extends BaseTactic {
-    isTactic(context: DefaultTacticContext): any {
+    isTactic(context: _DefaultTacticContext): any {
         super.isTactic(context);
         const { position, evaluation } = context;
         const chess = new Chess(position);
+        const currentMove = evaluation.move;
 
-        const currentMove = chess.move(evaluation.move);
         const moveList = this.sequenceInterpreter.evaluationToMoveList();
         const captureSequence = this.sequenceInterpreter.getCaptureSequence(position, moveList);
         if (this.sacrificedMaterial(position, currentMove) && captureSequence.length > 0) {

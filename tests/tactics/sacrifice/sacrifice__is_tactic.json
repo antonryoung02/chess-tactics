@@ -7,7 +7,7 @@
                 "eval": "-7.9",
                 "type": "cp",
                 "move": { "from": "a4", "to": "b4" },
-                "sequence": "c3b3 d1d2 b2c1 a8c8 f1c4 c8c4 c1b1 e6f5"
+                "followup": "c3b3 d1d2 b2c1 a8c8 f1c4 c8c4 c1b1 e6f5"
             }
         },
         "expected": true
@@ -20,7 +20,7 @@
                 "eval": "2.35",
                 "type": "cp",
                 "move": { "from": "f5", "to": "f8" },
-                "sequence": "e8f8 b4a3 f8f7 c1e1 f7c7 b3b4 c6b6 c2c4"
+                "followup": "e8f8 b4a3 f8f7 c1e1 f7c7 b3b4 c6b6 c2c4"
             }
         },
         "expected": true
@@ -33,7 +33,7 @@
                 "eval": "1.62",
                 "type": "cp",
                 "move": { "from": "c4", "to": "f7" },
-                "sequence": "e8f7 f3g5 f7e8 d1g4 d8c8 g4d1 h7h6 g5f3 g6g5 e1g1 g8f6 d2d3"
+                "followup": "e8f7 f3g5 f7e8 d1g4 d8c8 g4d1 h7h6 g5f3 g6g5 e1g1 g8f6 d2d3"
             }
         },
         "expected": true
@@ -46,7 +46,7 @@
                 "eval": "0.29",
                 "type": "cp",
                 "move": { "from": "e4", "to": "h7" },
-                "sequence": "f6h7 f3h3 f7f5 h4h7 g8f7 h7h5 e7g6 h3g3 d8f6 h5f3 f8h8 h2h3"
+                "followup": "f6h7 f3h3 f7f5 h4h7 g8f7 h7h5 e7g6 h3g3 d8f6 h5f3 f8h8 h2h3"
             }
         },
         "expected": true
@@ -59,7 +59,7 @@
                 "eval": "0.97",
                 "type": "cp",
                 "move": { "from": "d6", "to": "e5" },
-                "sequence": "g5f5 f3g3 d4d3 e5d4 e6f7 c2d3 c8d7 d4b6 a7b6 g3c7 f7g8 f1e1"
+                "followup": "g5f5 f3g3 d4d3 e5d4 e6f7 c2d3 c8d7 d4b6 a7b6 g3c7 f7g8 f1e1"
             }
         },
         "expected": true
@@ -72,7 +72,7 @@
                 "eval": "0",
                 "type": "cp",
                 "move": { "from": "e5", "to": "f3" },
-                "sequence": "g2f3 e6h3 d1d5 g8h8 c1d2 h3g3 g1f1 g3h2 a1c1 f7h6 e1e2 h2h1"
+                "followup": "g2f3 e6h3 d1d5 g8h8 c1d2 h3g3 g1f1 g3h2 a1c1 f7h6 e1e2 h2h1"
             }
         },
         "expected": true
@@ -85,7 +85,7 @@
                 "eval": "-7.13",
                 "type": "cp",
                 "move": { "from": "b2", "to": "b1", "promotion": "q" },
-                "sequence": "h1h8 b1c2 h8g8 g6f5 g8g7 c2e2 e3d4 d3b5 d4c3"
+                "followup": "h1h8 b1c2 h8g8 g6f5 g8g7 c2e2 e3d4 d3b5 d4c3"
             }
         },
         "expected": false
@@ -98,7 +98,7 @@
                 "eval": "-0.97",
                 "type": "cp",
                 "move": { "from": "e4", "to": "g5" },
-                "sequence": "h6g5 e5e1 h7h6 g2f3 h6h5 e1a1 b4b3 f3e4 h5g6 a1a4 c4e6 e4e5"
+                "followup": "h6g5 e5e1 h7h6 g2f3 h6h5 e1a1 b4b3 f3e4 h5g6 a1a4 c4e6 e4e5"
             }
         },
         "expected": true,
@@ -112,7 +112,7 @@
                 "eval": "-3.08",
                 "type": "cp",
                 "move": { "from": "d4", "to": "f2" },
-                "sequence": "e1f2 f6e7 b2b4 c5b4 f2a7 b4c3 d2c3 f8e8 b1e1 e7h4 e1f1 d8d7"
+                "followup": "e1f2 f6e7 b2b4 c5b4 f2a7 b4c3 d2c3 f8e8 b1e1 e7h4 e1f1 d8d7"
             }
         },
         "expected": true
@@ -125,7 +125,7 @@
                 "eval": "1.72",
                 "type": "cp",
                 "move": { "from": "c1", "to": "c3" },
-                "sequence": "b4c3 b7b6 d8c7 b5d3 c7b6 a5b6 c8c6 f3e1 f8b8 g2g4 b8b6 g1g2"
+                "followup": "b4c3 b7b6 d8c7 b5d3 c7b6 a5b6 c8c6 f3e1 f8b8 g2g4 b8b6 g1g2"
             }
         },
         "expected": true
@@ -138,7 +138,7 @@
                 "eval": "-3.39",
                 "type": "cp",
                 "move": { "from": "e4", "to": "c2" },
-                "sequence": "c8c2 g2g3 d6a3 g1g2 a3e3 b5f1 e3e4 b7c7 c2c7 b6c7 e4c2 f1e1"
+                "followup": "c8c2 g2g3 d6a3 g1g2 a3e3 b5f1 e3e4 b7c7 c2c7 b6c7 e4c2 f1e1"
             }
         },
         "expected": true
@@ -151,7 +151,7 @@
                 "eval": "-4.49",
                 "type": "cp",
                 "move": { "from": "d8", "to": "d3" },
-                "sequence": "c2d3 b6f2 c1c2 f2h4 d3b5 h4e1 g2g4 e1e3 h2h4 e3f3 h4h5 f3g4"
+                "followup": "c2d3 b6f2 c1c2 f2h4 d3b5 h4e1 g2g4 e1e3 h2h4 e3f3 h4h5 f3g4"
             }
         },
         "expected": true
@@ -164,7 +164,7 @@
                 "eval": "0.19",
                 "type": "cp",
                 "move": { "from": "c1", "to": "e3" },
-                "sequence": "c5d4 a3b5 e8c8 b5d4 e6e5 d4c6 d5c6 d1b3 f8c5 e1g1 c5e3 f3e5"
+                "followup": "c5d4 a3b5 e8c8 b5d4 e6e5 d4c6 d5c6 d1b3 f8c5 e1g1 c5e3 f3e5"
             }
         },
         "expected": false
@@ -177,7 +177,7 @@
                 "eval": "2.84",
                 "type": "cp",
                 "move": { "from": "e2", "to": "e7" },
-                "sequence": "e8e7 e1e7 f6e7 c5c6 b7c6 d5c6 e7d8 c3d5 g6f7 f3f4 f7e6 d3d4"
+                "followup": "e8e7 e1e7 f6e7 c5c6 b7c6 d5c6 e7d8 c3d5 g6f7 f3f4 f7e6 d3d4"
             }
         },
         "expected": false
