@@ -1,0 +1,138 @@
+[
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": "f4e5",
+                "followup": "f6g4 e5e6 f7e6 c1g5"
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": {
+                    "from": "f4",
+                    "to": "e5"
+                },
+                "followup": "f6g4 e5e6 f7e6 c1g5"
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": {
+                    "color": "w",
+                    "from": "f4",
+                    "to": "e5",
+                    "piece": "p",
+                    "captured": "p",
+                    "flags": "c",
+                    "san": "fxe5",
+                    "lan": "f4e5",
+                    "before": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+                    "after": "rnbqr1k1/pp3pbp/5np1/2pPP3/8/2N2N2/PP2B1PP/R1BQK2R b KQ - 0 11"
+                },
+                "followup": "f6g4 e5e6 f7e6 c1g5"
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": "f4e5",
+                "followup": ["f6g4", "e5e6", "f7e6", "c1g5"]
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": {
+                    "from": "f4",
+                    "to": "e5"
+                },
+                "followup": ["f6g4", "e5e6", "f7e6", "c1g5"]
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+            "evaluation": {
+                "move": {
+                    "color": "w",
+                    "from": "f4",
+                    "to": "e5",
+                    "piece": "p",
+                    "captured": "p",
+                    "flags": "c",
+                    "san": "fxe5",
+                    "lan": "f4e5",
+                    "before": "rnbqr1k1/pp3pbp/5np1/2pPp3/5P2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 11",
+                    "after": "rnbqr1k1/pp3pbp/5np1/2pPP3/8/2N2N2/PP2B1PP/R1BQK2R b KQ - 0 11"
+                },
+                "followup": ["f6g4", "e5e6", "f7e6", "c1g5"]
+            }
+        },
+        "expected": {
+            "move": { "from": "f4", "to": "e5" },
+            "followup": [
+                { "from": "f6", "to": "g4" },
+                { "from": "e5", "to": "e6" },
+                { "from": "f7", "to": "e6" },
+                { "from": "c1", "to": "g5" }
+            ]
+        }
+    }
+]

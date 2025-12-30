@@ -1,0 +1,38 @@
+[
+    {
+        "context": {
+            "position": "r5k1/pp1nnpbp/3Pb1p1/q5N1/2p5/8/PP2B1PP/R2Q1RK1 w - - 0 20",
+            "evaluation": {
+                "sequence": "g5e6 e7f5 e6g7 a5c5 f1f2 g8g7"
+            }
+        },
+        "expected": {
+            "move": { "from": "g5", "to": "e6" },
+            "followup": [
+                { "from": "e7", "to": "f5" },
+                { "from": "e6", "to": "g7" },
+                { "from": "a5", "to": "c5" },
+                { "from": "f1", "to": "f2" },
+                { "from": "g8", "to": "g7" }
+            ]
+        }
+    },
+    {
+        "context": {
+            "position": "r5k1/pp1nnpbp/3Pb1p1/q5N1/2p5/8/PP2B1PP/R2Q1RK1 w - - 0 20",
+            "evaluation": {
+                "sequence": ["g5e6", "e7f5", "e6g7", "a5c5", "f1f2", "g8g7"]
+            }
+        },
+        "expected": {
+            "move": { "from": "g5", "to": "e6" },
+            "followup": [
+                { "from": "e7", "to": "f5" },
+                { "from": "e6", "to": "g7" },
+                { "from": "a5", "to": "c5" },
+                { "from": "f1", "to": "f2" },
+                { "from": "g8", "to": "g7" }
+            ]
+        }
+    }
+]

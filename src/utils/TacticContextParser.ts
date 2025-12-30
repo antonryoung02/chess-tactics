@@ -1,6 +1,7 @@
 import { Evaluation, Fen, MoveEvaluation, TacticContext, UciEvaluation } from "@types";
 import { _Evaluation, _TacticContext } from "src/_types";
-import { Chess } from "chess.js";
+import { Chess, Move } from "chess.js";
+import { ChessTacticsParserError } from "@chess-tactics";
 
 export class TacticContextParser {
     static parse(context: TacticContext): _TacticContext {
@@ -32,36 +33,83 @@ export class TacticContextParser {
     }
 
     static parseMoveEvaluation(position: Fen, evaluation: MoveEvaluation): _Evaluation {
-        const chess = new Chess(position);
+        let chess: Chess;
+        try {
+            chess = new Chess(position);
+        } catch (error) {
+            throw new ChessTacticsParserError(
+                `Invalid position argument: ${position}`,
+                "INVALID_FEN",
+                { cause: error }
+            );
+        }
         const moveList = [];
 
         const sequence = Array.isArray(evaluation.followup)
             ? evaluation.followup
             : evaluation.followup.split(/\s+/).filter((m) => m);
 
-        const move = chess.move(evaluation.move);
-        sequence.forEach((s) => {
-            moveList.push(chess.move(s));
-        });
+        let firstMove: Move;
+        try {
+            firstMove = chess.move(evaluation.move);
+        } catch (error) {
+            throw new ChessTacticsParserError(
+                `Invalid move: ${evaluation.move} is not playable in ${position}`,
+                "INVALID_MOVE",
+                { cause: error }
+            );
+        }
 
+        let currPos: Fen;
+        sequence.forEach((s) => {
+            try {
+                currPos = chess.fen();
+
+                moveList.push(chess.move(s));
+            } catch (error) {
+                throw new ChessTacticsParserError(
+                    `Invalid followup: ${s} is not playable in ${currPos}`,
+                    "INVALID_FOLLOWUP",
+                    { cause: error }
+                );
+            }
+        });
         return {
-            move: move,
+            move: firstMove,
             followup: moveList,
         };
     }
 
     static parseUciEvaluation(position: Fen, evaluation: UciEvaluation): _Evaluation {
-        const chess = new Chess(position);
+        let chess: Chess;
+        try {
+            chess = new Chess(position);
+        } catch (error) {
+            throw new ChessTacticsParserError(
+                `Invalid position argument: ${position}`,
+                "INVALID_FEN",
+                { cause: error }
+            );
+        }
         const moveList = [];
 
         const sequence = Array.isArray(evaluation.sequence)
             ? evaluation.sequence
             : evaluation.sequence.split(/\s+/).filter((m) => m);
 
+        let currPos: Fen;
         sequence.forEach((s) => {
-            moveList.push(chess.move(s));
+            try {
+                currPos = chess.fen();
+                moveList.push(chess.move(s));
+            } catch (error) {
+                throw new ChessTacticsParserError(
+                    `Invalid sequence: ${s} is not playable in ${currPos}`,
+                    "INVALID_SEQUENCE",
+                    { cause: error }
+                );
+            }
         });
-
         return {
             move: moveList[0],
             followup: moveList.slice(1),
