@@ -6,7 +6,7 @@ import { ChessTactics } from "@chess-tactics";
 describe("ForkTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["fork"]);
-        const result = ct.classify(t.context);
+        const result = ct.classify(t.context, t.options);
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. Expected: ${t.expected}. Recieved: ${result}`);
             logBoardSequence(t.context.position, []);

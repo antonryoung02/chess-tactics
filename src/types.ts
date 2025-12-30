@@ -3,6 +3,10 @@ import { _TacticContext } from "./_types";
 
 export type Fen = string;
 
+export type TacticOptions = {
+    trimEndSequence?: boolean;
+};
+
 export type UciEvaluation = {
     sequence: string | string[];
 };
@@ -13,11 +17,6 @@ export type MoveEvaluation = {
 };
 
 export type Evaluation = UciEvaluation | MoveEvaluation;
-
-export type CanonicalEvaluation = {
-    move: Move;
-    followup: Move[];
-};
 
 export type DefaultTacticContext = {
     position: Fen;
@@ -33,7 +32,7 @@ export type PositionComparisonTacticContext = DefaultTacticContext & {
 export type TacticContext = DefaultTacticContext | PositionComparisonTacticContext;
 
 export interface TacticClassifier {
-    isTactic(context: _TacticContext): Tactic | null;
+    isTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
 }
 
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";

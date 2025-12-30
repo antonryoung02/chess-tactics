@@ -54,7 +54,7 @@ export class TacticContextParser {
             firstMove = chess.move(evaluation.move);
         } catch (error) {
             throw new ChessTacticsParserError(
-                `Invalid move: ${evaluation.move} is not playable in ${position}`,
+                `Invalid move: ${JSON.stringify(evaluation.move)} is not playable in ${position}`,
                 "INVALID_MOVE",
                 { cause: error }
             );
@@ -64,11 +64,10 @@ export class TacticContextParser {
         sequence.forEach((s) => {
             try {
                 currPos = chess.fen();
-
                 moveList.push(chess.move(s));
             } catch (error) {
                 throw new ChessTacticsParserError(
-                    `Invalid followup: ${s} is not playable in ${currPos}`,
+                    `Invalid followup: ${JSON.stringify(s)} is not playable in ${currPos}`,
                     "INVALID_FOLLOWUP",
                     { cause: error }
                 );
@@ -104,7 +103,7 @@ export class TacticContextParser {
                 moveList.push(chess.move(s));
             } catch (error) {
                 throw new ChessTacticsParserError(
-                    `Invalid sequence: ${s} is not playable in ${currPos}`,
+                    `Invalid sequence: ${JSON.stringify(s)} is not playable in ${currPos}`,
                     "INVALID_SEQUENCE",
                     { cause: error }
                 );

@@ -2,10 +2,11 @@ import { Chess } from "chess.js";
 import { PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _PositionComparisonTacticContext } from "src/_types";
+import { Tactic, TacticOptions } from "@types";
 
 class HangingPieceTactics extends BaseTactic {
-    isTactic(context: _PositionComparisonTacticContext): any | null {
-        super.isTactic(context);
+    isTactic(context: _PositionComparisonTacticContext, options: TacticOptions): Tactic | null {
+        super.isTactic(context, options);
         const { position, evaluation, prevMove } = context;
         const chess = new Chess(position);
         const currentMove = evaluation.move;

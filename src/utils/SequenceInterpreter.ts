@@ -1,4 +1,4 @@
-import { Fen, SequenceInterpretation } from "@types";
+import { Fen, SequenceInterpretation, TacticOptions } from "@types";
 import { Chess, Move, Square } from "chess.js";
 import { getMaterialChange, colorToPlay, attackingSquareIsBad } from "@utils";
 import { _TacticContext, _Evaluation } from "src/_types";
@@ -6,6 +6,11 @@ import { _TacticContext, _Evaluation } from "src/_types";
 export class SequenceInterpreter {
     private evaluation: _Evaluation;
     private position: Fen;
+    private options: TacticOptions;
+
+    setOptions(options: TacticOptions) {
+        this.options = options;
+    }
 
     setContext(context: _TacticContext) {
         const { evaluation, position } = context;
@@ -15,7 +20,10 @@ export class SequenceInterpreter {
 
     evaluationToMoveList(): Move[] {
         const moveList = [this.evaluation.move].concat(this.evaluation.followup);
-        return this.trimEndCaptures(moveList);
+        if (this.options.trimEndSequence) {
+            return this.trimEndCaptures(moveList);
+        }
+        return moveList;
     }
 
     // not trimming end captures allows possibility of tactic cutting off in the middle of a capture sequence

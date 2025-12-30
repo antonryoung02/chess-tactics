@@ -150,5 +150,65 @@
             }
         },
         "expected": true
+    },
+    {
+        "id": "000rO",
+        "description": "Bishop forks king and rook",
+        "context": {
+            "position": "3R4/8/8/KB2b3/1p6/1P2k3/3p4/8 b - - 0 58",
+            "evaluation": { "move": "e5c7", "followup": ["a5b4", "c7d8"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "002IE",
+        "description": "Pawn capture forks knight and queen",
+        "context": {
+            "position": "r3brk1/5pp1/p2qpn1p/P2pn3/2pP4/2P1PN2/5PPP/RB1QK2R w KQ - 0 17",
+            "evaluation": { "move": "d4e5", "followup": ["d6e7", "e5f6"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "002Tf",
+        "description": "Queen forks king, bishop, and pawn. Knight blocks check defending bishop. Queen captures pawn",
+        "context": {
+            "position": "r3kbnr/ppp1qppp/2n5/1B1pP3/5B2/4PQ2/PPP2PPP/RN2K2R b KQkq - 2 7",
+            "evaluation": { "move": "e7b4", "followup": ["b1c3", "b4b2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00Feu",
+        "description": "Bishop forks queen and rook",
+        "context": {
+            "position": "4Rrk1/p6p/1pp2rp1/8/5B1q/4QP1P/P1P2PK1/8 w - - 3 29",
+            "evaluation": { "move": "f4g5", "followup": ["h4g5", "e3g5"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00Gz6",
+        "description": "Queen forks king, and knight but king moves to defend",
+        "context": {
+            "position": "r7/p4kp1/1p4p1/2qNn3/Q7/4PP2/PP3K2/6R1 w - - 1 26",
+            "evaluation": { "move": "a4f4", "followup": ["f7e6", "f4e4", "a8f8", "g1g6"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00H2I",
+        "description": "Queen forks king and bishop",
+        "context": {
+            "position": "4rrk1/ppp2pp1/7p/3n4/3P3q/1P2p2P/PB4P1/R2QRBK1 b - - 3 23",
+            "evaluation": { "move": "h4f2", "followup": ["g1h2", "f2b2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
     }
 ]

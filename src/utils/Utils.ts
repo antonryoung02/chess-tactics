@@ -1,14 +1,6 @@
 import { PieceSymbol, Color, Chess, Move } from "chess.js";
 import { Fen } from "@types";
-
-export const PIECE_VALUES: Record<PieceSymbol, number> = {
-    p: 1,
-    n: 3,
-    b: 3,
-    r: 5,
-    q: 9,
-    k: Infinity,
-};
+import { PIECE_VALUES } from "./constants";
 
 export function isWhiteToPlay(x: number | string) {
     if (typeof x === "number") {

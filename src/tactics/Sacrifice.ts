@@ -1,12 +1,12 @@
 import { Chess, Move } from "chess.js";
 import { PIECE_VALUES, colorToPlay, materialAdvantageAfterTradesAtSquare } from "@utils";
-import { Fen } from "@types";
+import { Fen, TacticOptions } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class SacrificeTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): any {
-        super.isTactic(context);
+    isTactic(context: _DefaultTacticContext, options: TacticOptions): any {
+        super.isTactic(context, options);
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = evaluation.move;

@@ -6,13 +6,13 @@ import {
     getBlockingMoves,
     invertTurn,
 } from "@utils";
-import { Fen } from "@types";
+import { Fen, Tactic, TacticOptions } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class TrapTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): any | null {
-        super.isTactic(context);
+    isTactic(context: _DefaultTacticContext, options: TacticOptions): Tactic | null {
+        super.isTactic(context, options);
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.move);
