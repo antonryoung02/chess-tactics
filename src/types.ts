@@ -8,12 +8,12 @@ export type TacticOptions = {
 };
 
 export type UciEvaluation = {
-    sequence: string | string[];
+    sequence: string | string[] | Move[];
 };
 
 export type MoveEvaluation = {
     move: string | { from: string; to: string } | Move;
-    followup: string | string[];
+    followup: string | string[] | Move[];
 };
 
 export type Evaluation = UciEvaluation | MoveEvaluation;
@@ -31,12 +31,12 @@ export type PositionComparisonTacticContext = DefaultTacticContext & {
 
 export type TacticContext = DefaultTacticContext | PositionComparisonTacticContext;
 
+export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
+
 export interface TacticClassifier {
     findTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
     isTactic(context: _TacticContext): Tactic | null;
 }
-
-export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
 
 export type SequenceInterpretation = {
     sequence: string[];

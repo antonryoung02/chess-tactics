@@ -7,11 +7,11 @@ describe("HangingPieceTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["hanging"]);
         const result = ct.classify(t.context);
-        if ((result !== null) !== t.expected) {
+        if (result.length > 0 !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);
             logBoardSequence(t.context.position, []);
         }
 
-        expect(result !== null).toBe(t.expected);
+        expect(result.length > 0).toBe(t.expected);
     });
 });

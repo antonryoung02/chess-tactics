@@ -23,15 +23,13 @@ export class ChessTactics {
         }
     }
 
-    classify(
-        context: TacticContext,
-        options: TacticOptions = DEFAULT_TACTIC_OPTIONS
-    ): Tactic | null {
+    classify(context: TacticContext, options: TacticOptions = DEFAULT_TACTIC_OPTIONS): Tactic[] {
+        const tactics = [];
         const internalContext = TacticContextParser.parse(context);
         for (const classifier of this.tacticClassifiers) {
-            const tactic = classifier.findTactic(internalContext, options);
-            if (tactic) return tactic;
+            const t = classifier.findTactic(internalContext, options);
+            if (t) tactics.push(t);
         }
-        return null;
+        return tactics;
     }
 }
