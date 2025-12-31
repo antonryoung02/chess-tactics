@@ -5,11 +5,10 @@ import { _DefaultTacticContext } from "src/_types";
 import { Fen, Tactic, TacticOptions } from "@types";
 
 class PinTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext, options: TacticOptions): Tactic | null {
-        super.isTactic(context, options);
+    isTactic(context: _DefaultTacticContext): Tactic | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = evaluation.move;
+        const currentMove = evaluation.sequence[0];
 
         const cosmeticPins = this.getCosmeticPins(position, currentMove);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {

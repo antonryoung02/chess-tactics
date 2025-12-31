@@ -15,18 +15,16 @@ describe("parse", () => {
     test.each(moveEvaluationJSON)("Correctly parse MoveEvaluation objects", (t: any) => {
         const context = t.context;
         const result = TacticContextParser.parse(context);
-        expect(movesAreEqual(result.evaluation.move, t.expected.move)).toBe(true);
-        for (let i = 0; i < result.evaluation.followup.length; i++) {
-            expect(movesAreEqual(result.evaluation.followup[i], t.expected.followup[i])).toBe(true);
+        for (let i = 0; i < result.evaluation.sequence.length; i++) {
+            expect(movesAreEqual(result.evaluation.sequence[i], t.expected.sequence[i])).toBe(true);
         }
     });
 
     test.each(uciEvaluationJSON)("Correctly parse UciEvaluation objects", (t: any) => {
         const context = t.context;
         const result = TacticContextParser.parse(context);
-        expect(movesAreEqual(result.evaluation.move, t.expected.move)).toBe(true);
-        for (let i = 0; i < result.evaluation.followup.length; i++) {
-            expect(movesAreEqual(result.evaluation.followup[i], t.expected.followup[i])).toBe(true);
+        for (let i = 0; i < result.evaluation.sequence.length; i++) {
+            expect(movesAreEqual(result.evaluation.sequence[i], t.expected.sequence[i])).toBe(true);
         }
     });
 });

@@ -4,8 +4,6 @@
         "context": {
             "position": "rnbq3r/pp2kBpp/2p4n/8/1b2P3/1Qp2N2/PP4PP/RNB1K2R w KQ - 3 10",
             "evaluation": {
-                "eval": "5.92",
-                "type": "cp",
                 "move": { "from": "c1", "to": "g5" },
                 "followup": "e7d7 f3e5 d7c7 g5d8 c7d8 b3b4 c3b2 b4b2 h8g8"
             }
@@ -17,8 +15,6 @@
         "context": {
             "position": "rnbq2nr/pp2kBpp/2p5/8/1b2P3/2p2N2/PP4PP/RNBQK2R w KQ - 1 9",
             "evaluation": {
-                "eval": "2.00",
-                "type": "cp",
                 "move": { "from": "d1", "to": "b3" },
                 "followup": "g8f6 b3b4 e7f7 b1c3 f7e8 b4c4 b7b5 c4c5"
             }
@@ -30,24 +26,19 @@
         "context": {
             "position": "r2q1rk1/pp2ppbp/3pbNp1/8/2PQP3/2B5/PP2BPPP/R3K2R b KQ - 0 13",
             "evaluation": {
-                "eval": "-0.19",
-                "type": "cp",
                 "move": { "from": "g7", "to": "f6" },
                 "followup": "d4d2 f6c3 d2c3 a8c8 a2a4 a7a6 c3b4 a6a5"
             }
         },
-        "expected": false,
-        "debug": true
+        "expected": false
     },
     {
         "description": "bishop skewers queen and pawn, captures pawn",
         "context": {
             "position": "1rr3k1/p4ppp/2pbpn2/6Bq/3P2b1/3Q1N1P/PPPN1PP1/1R2K2R b K - 8 14",
             "evaluation": {
-                "eval": "-1.86",
-                "type": "cp",
                 "move": { "from": "g4", "to": "f5" },
-                "followup": "d3e2 f5c2 b1c1 h5g6 g5f6"
+                "followup": "d3e2 f5c2 b1c1 h5g6 g5f6, g7f6, b2b3"
             }
         },
         "expected": true
@@ -57,12 +48,230 @@
         "context": {
             "position": "8/2kr2pp/R7/1ppn2B1/8/2P2r2/PPK2P1P/3R4 w - - 0 28",
             "evaluation": {
-                "eval": "4.38",
-                "type": "cp",
                 "move": { "from": "a6", "to": "a7" },
                 "followup": "c7c8 a7d7 f3f2 c2c1 c8d7 d1d5 d7e6 d5d2 f2f5 g5d8 c5c4 b2b3"
             }
         },
+        "expected": true
+    },
+    {
+        "id": "008EC",
+        "description": "Queen eventually skewers king and rook but opponent check returns null early",
+        "context": {
+            "position": "6k1/4rRp1/p6p/7P/q1pP4/2Pb2Q1/P4RP1/6K1 b - - 0 31",
+            "evaluation": {
+                "move": "e7f7",
+                "followup": ["g3b8", "g8h7", "f2f7", "a4d1", "g1f2", "d1f1", "f2g3", "f1f7"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "004Op",
+        "description": "Rook eventually skewers king and queen but initial move is a sacrifice, not a forcing move (check or capture)",
+        "context": {
+            "position": "2kr2r1/1bp4n/1pq1p2p/p1P5/1P3B2/P6P/5RP1/RB3QK1 b - - 4 26",
+            "evaluation": {
+                "move": "d8d1",
+                "followup": ["f1d1", "g8g2", "g1f1", "g2g1", "f1e2", "g1d1"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00DZe",
+        "description": "Pawn checks deflect king from skewered bishop",
+        "context": {
+            "position": "8/5k2/7p/p1P1bPpP/Pp2P3/1P1p1K2/5B2/8 b - - 2 47",
+            "evaluation": { "move": "g5g4", "followup": ["f3e3", "e5d4", "e3d3", "d4f2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00H87",
+        "description": "A sequence of checks eventually forces a king-queen skewer",
+        "context": {
+            "position": "6k1/4pp2/p5pB/2p4n/3pP1Q1/P2P2qP/1r4P1/5RK1 w - - 2 31",
+            "evaluation": {
+                "move": "g4c8",
+                "followup": [
+                    "g8h7",
+                    "f1f7",
+                    "h5g7",
+                    "f7g7",
+                    "h7h6",
+                    "c8h8",
+                    "h6g5",
+                    "g7g6",
+                    "g5g6",
+                    "h8g8",
+                    "g6f6",
+                    "g8g3"
+                ]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00OLF",
+        "description": "Exchange sacrifice forces king-rook skewer",
+        "context": {
+            "position": "k1r5/n1N3p1/Q2p4/P2Pp2p/q3Pp1P/2RK4/5PP1/8 b - - 0 36",
+            "evaluation": {
+                "move": "c8c7",
+                "followup": ["c3c7", "a4d1", "d3c3", "d1c1", "c3b3", "c1c7"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00bQA",
+        "description": "Rook captures knight, king attacks both rooks, and rook captures knight skewering king and knight and threatening king-knight fork. Skewer is played",
+        "context": {
+            "position": "r7/4n1k1/2b1R1n1/1p4R1/1P1p3p/3P1PpP/2N3P1/6K1 w - - 1 41",
+            "evaluation": {
+                "move": "e6e7",
+                "followup": ["g7f6", "g5g6", "f6e7", "g6c6", "e7d7", "c6c5"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00baa",
+        "description": "Bishop skewers queen and bishop, captures after trade",
+        "context": {
+            "position": "1r1qr1k1/p1p2ppp/1p1b1n2/3N4/3Q4/1P4P1/PBP1PPKP/R3R3 b - - 2 15",
+            "evaluation": { "move": "d6e5", "followup": ["d5f6", "d8f6", "d4c4", "e5b2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00h95",
+        "description": "Rook check opens up queen's king-rook skewer",
+        "context": {
+            "position": "7k/2p3p1/5p1p/2Qq4/3Pr3/4P3/P4P1P/1R4K1 b - - 3 26",
+            "evaluation": { "move": "e4g4", "followup": ["g1f1", "d5h1", "f1e2", "h1b1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00l0K",
+        "description": "Queen checks force king onto skewer square",
+        "context": {
+            "position": "2b5/2Q2p2/k7/1q2P3/1p6/1N3P2/1PP5/2K5 b - - 0 38",
+            "evaluation": {
+                "move": "b5f1",
+                "followup": ["c1d2", "f1f2", "d2d3", "c8f5", "d3c4", "f2c2", "c4b4", "c2c7"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00z9K",
+        "description": "Simple king-bishop skewer",
+        "context": {
+            "position": "4B3/1b4kp/p7/3p3R/6P1/1P6/KPrn1r2/7R w - - 3 35",
+            "evaluation": { "move": "h5h7", "followup": ["g7f8", "h7b7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "0109Y",
+        "description": "Bishop skewers king and rook. Bishop captures, then rook trade",
+        "context": {
+            "position": "r3r2Q/p2k1pn1/5q2/3p4/1p5P/3B1PR1/PPP2nP1/1K2R3 w - - 7 28",
+            "evaluation": { "move": "d3b5", "followup": ["d7d6", "b5e8", "a8e8", "e1e8"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "010Sa",
+        "description": "Skewer is eventually found but first move is not forcing",
+        "context": {
+            "position": "3r2k1/pb2q1r1/4p3/2p2p1Q/3p4/3R3R/PPP2P1P/5K2 w - - 2 27",
+            "evaluation": {
+                "move": "d3g3",
+                "followup": ["e7f6", "g3g7", "g8g7", "h5h7", "g7f8", "h7b7"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "01243",
+        "description": "Queen skewers king and queen",
+        "context": {
+            "position": "r7/pp1Qp1B1/3b4/3k4/4q3/8/PP3PP1/5K2 w - - 5 35",
+            "evaluation": { "move": "d7b7", "followup": ["d5e6", "b7e4"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "015pp",
+        "description": "Simple king-rook endgame skewer",
+        "context": {
+            "position": "8/8/8/3p4/5p1R/r3k3/6K1/8 w - - 0 52",
+            "evaluation": { "move": "h4h3", "followup": ["e3e2", "h3a3", "d5d4", "a3a2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "017u3",
+        "description": "Knight threat capture forces queen-rook skewer, but threats are not forcing",
+        "context": {
+            "position": "r2q1rk1/4bppp/p3bn2/1p2N3/5B2/2N5/PP3PPP/R2QR1K1 w - - 2 20",
+            "evaluation": {
+                "move": "e5c6",
+                "followup": ["d8e8", "c6e7", "e8e7", "f4d6", "e7d8", "d6f8"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "01CmR",
+        "description": "Rook sacrifice forces king-queen skewer",
+        "context": {
+            "position": "5r1k/2p3p1/p1pp3p/8/Pb1PP3/1Q2KP2/1P2R2q/R1B5 b - - 4 25",
+            "evaluation": { "move": "f8f3", "followup": ["e3f3", "h2h3", "f3f2", "h3b3"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "01kfz",
+        "description": "Rook trade, then queen-rook skewer",
+        "context": {
+            "position": "1r2q1k1/1rR2pp1/1p1np2p/3pN3/3P4/P3P2P/1PQ2PP1/2R3K1 b - - 0 27",
+            "evaluation": { "move": "b7c7", "followup": ["c2c7", "b8c8", "c7d6", "c8c1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "02Chp",
+        "description": "Rook sacrifice to force king-rook skewer and win material",
+        "context": {
+            "position": "r4rk1/p4pp1/4b2p/2bp4/5B1Q/6R1/PP2qPPP/5RK1 w - - 0 22",
+            "evaluation": {
+                "move": "g3g7",
+                "followup": ["g8g7", "f4h6", "g7h7", "h6f8", "h7g8", "f8c5"]
+            }
+        },
+        "options": { "trimEndSequence": false },
         "expected": true
     }
 ]

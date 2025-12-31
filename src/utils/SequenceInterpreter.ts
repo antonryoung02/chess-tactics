@@ -19,11 +19,10 @@ export class SequenceInterpreter {
     }
 
     evaluationToMoveList(): Move[] {
-        const moveList = [this.evaluation.move].concat(this.evaluation.followup);
         if (this.options.trimEndSequence) {
-            return this.trimEndCaptures(moveList);
+            return this.trimEndCaptures(this.evaluation.sequence);
         }
-        return moveList;
+        return this.evaluation.sequence;
     }
 
     // not trimming end captures allows possibility of tactic cutting off in the middle of a capture sequence
@@ -112,11 +111,7 @@ export class SequenceInterpreter {
     ): boolean {
         const capturedSquares = attackedSquares.filter((s) => {
             // move came from an attacker square, to an attackedSquare, and captured a piece
-            return (
-                attackerSquares.filter((s) => s === move.from).length > 0 &&
-                s === move.to &&
-                move.captured
-            );
+            return s === move.to && move.captured;
         });
         return capturedSquares.length > 0;
     }
@@ -126,7 +121,7 @@ export class SequenceInterpreter {
         return attackingSquareIsBad(position, move.to);
     }
 
-    private positionAfterSequence(position: Fen, sequence: string[] | null) {
+    positionAfterSequence(position: Fen, sequence: string[] | null) {
         if (!sequence) return position;
         const chess = new Chess(position);
         sequence.forEach((m) => {

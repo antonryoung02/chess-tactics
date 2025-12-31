@@ -43,7 +43,6 @@ export class TacticContextParser {
                 { cause: error }
             );
         }
-        const moveList = [];
 
         const sequence = Array.isArray(evaluation.followup)
             ? evaluation.followup
@@ -59,7 +58,7 @@ export class TacticContextParser {
                 { cause: error }
             );
         }
-
+        const moveList = [firstMove];
         let currPos: Fen;
         sequence.forEach((s) => {
             try {
@@ -74,8 +73,7 @@ export class TacticContextParser {
             }
         });
         return {
-            move: firstMove,
-            followup: moveList,
+            sequence: moveList,
         };
     }
 
@@ -110,8 +108,7 @@ export class TacticContextParser {
             }
         });
         return {
-            move: moveList[0],
-            followup: moveList.slice(1),
+            sequence: moveList,
         };
     }
 }

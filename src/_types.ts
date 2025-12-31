@@ -2,8 +2,7 @@ import { Move } from "chess.js";
 import { Fen } from "@types";
 
 export type _Evaluation = {
-    move: Move;
-    followup: Move[];
+    sequence: Move[];
 };
 
 export type _DefaultTacticContext = {

@@ -8,8 +8,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },
@@ -29,8 +29,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },
@@ -58,8 +58,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },
@@ -76,8 +76,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },
@@ -97,8 +97,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },
@@ -126,8 +126,8 @@
             }
         },
         "expected": {
-            "move": { "from": "f4", "to": "e5" },
-            "followup": [
+            "sequence": [
+                { "from": "f4", "to": "e5" },
                 { "from": "f6", "to": "g4" },
                 { "from": "e5", "to": "e6" },
                 { "from": "f7", "to": "e6" },

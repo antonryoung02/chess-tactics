@@ -210,5 +210,201 @@
         },
         "options": { "trimEndSequence": false },
         "expected": true
+    },
+    {
+        "id": "00Hpe",
+        "description": "Forced rook trade allows fork on next turn",
+        "context": {
+            "position": "1rr3k1/4Qppp/q3p3/p2pn3/3N4/4P2P/5PP1/RR4K1 w - - 0 30",
+            "evaluation": { "move": "b1b8", "followup": ["c8b8", "e7c7", "b8c8", "c7e5"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00IUT",
+        "description": "Pawn forks Queen and Rook, pawn captures rook, queen trade",
+        "context": {
+            "position": "1r2r1k1/ppp1q1pp/4b3/4P3/1Q1R1P2/8/P5PP/R1B3K1 b - - 0 19",
+            "evaluation": { "move": "c7c5", "followup": ["b4a3", "c5d4", "a3e7", "e8e7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00KNK",
+        "description": "Initial knight fork, but advantage only realized after bishop fork on next turn",
+        "context": {
+            "position": "r3r1k1/p1p4p/3b4/6qN/4p3/1P1b1Q2/P2P1PP1/B5KR w - - 0 23",
+            "evaluation": {
+                "move": "h5f6",
+                "followup": ["g8f8", "f6h7", "f8e7", "a1f6", "g5f6", "f3f6"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00Kia",
+        "description": "Queen attacks king and pawn, but material is won with discovery ",
+        "context": {
+            "position": "5r1k/4n2p/1p4p1/pP5Q/P2pB2K/6P1/2P4P/4q3 w - - 0 38",
+            "evaluation": { "move": "h5e5", "followup": ["h8g8", "e4d5", "e7d5", "e5e1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00LRv",
+        "description": "Queen forks king and bishop, only captures bishop after intermezzo check",
+        "context": {
+            "position": "5r1k/7p/p2pB3/3Pb1p1/4pP1q/1P2B3/P1Q5/2R3K1 b - f3 0 31",
+            "evaluation": { "move": "h4g3", "followup": ["g1h1", "g3f3", "c2g2", "f3e3"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00LZf",
+        "description": "Knight forks queen and rook but queen escapes with check",
+        "context": {
+            "position": "r1b1kb1r/pppp1ppp/2n1p3/4N3/3P2q1/4n3/PPP1BPPP/RN1Q1RK1 w kq - 0 9",
+            "evaluation": { "move": "f2e3", "followup": ["g4g5", "e5f7", "g5e3", "g1h1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00LZl",
+        "description": "Knight trade, queen attacks bishop with check, knight returns to block and defend",
+        "context": {
+            "position": "r2qk2r/ppp2ppp/2n5/3pPb2/1b1n1B2/2NB1N2/PP3PPP/R2QK2R w KQkq - 4 10",
+            "evaluation": { "move": "f3d4", "followup": ["c6d4", "d1a4", "d4c6", "d3f5"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00Lyc",
+        "description": "Queen forks king and rook",
+        "context": {
+            "position": "4R3/1p4k1/1q3bpp/3B4/4Np1P/p4P2/3RK1P1/8 b - - 5 42",
+            "evaluation": { "move": "b6b5", "followup": ["d2d3", "b5e8"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00MwU",
+        "description": "Sacrifice exchange to win rook with fork",
+        "context": {
+            "position": "3r1b1R/1pq3p1/p1k3P1/3p4/1P1Q4/4PP2/P1P5/2K5 w - - 0 27",
+            "evaluation": { "move": "h8f8", "followup": ["d8f8", "d4c5", "c6d7", "c5f8"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00NHK",
+        "description": "Sacrifice rook, queen fork king and knight, then checkmate",
+        "context": {
+            "position": "r1b2rk1/1p2b1p1/pq2p1P1/3pn3/1P1P4/P1N1P3/6P1/R2QK2R w KQ - 0 18",
+            "evaluation": { "move": "h1h8", "followup": ["g8h8", "d1h5", "h8g8", "h5h7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00O9Z",
+        "description": "Queen check sacrifice for mate",
+        "context": {
+            "position": "5Q1R/5p1p/1b3qp1/p6k/P2P4/8/1P2rPPP/5RK1 b - - 8 32",
+            "evaluation": {
+                "move": "f6f2",
+                "followup": ["f1f2", "e2e1", "f2f1", "b6d4", "g1h1", "e1f1"]
+            }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00OPc",
+        "description": "Knight forks king and rook, queen sacrifices for knight, trades",
+        "context": {
+            "position": "1k1rr3/ppp1q3/8/4nQ1p/8/2P2N1P/PP4P1/2K1R2R b - - 1 25",
+            "evaluation": { "move": "e5d3", "followup": ["f5d3", "d8d3", "e1e7", "e8e7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00QN3",
+        "description": "Bishop was hanging, but check first to force queen off attacking square",
+        "context": {
+            "position": "r1b1B2k/pp4pp/2pb4/4q3/8/6P1/PPP4P/R2Q1R1K b - - 0 17",
+            "evaluation": { "move": "e5e4", "followup": ["d1f3", "e4e8"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00Rue",
+        "description": "Bishop for knight trade, then queen forks king and bishop",
+        "context": {
+            "position": "r2qkb1r/pp1nppp1/2p2n1p/3p1b2/2PP4/BP2PN2/P4PPP/RN1QKB1R b KQkq - 0 7",
+            "evaluation": { "move": "f5b1", "followup": ["a1b1", "d8a5", "b3b4", "a5a3"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00SCA",
+        "description": "Rook check to force king onto forking square",
+        "context": {
+            "position": "8/2Q5/2p2nk1/4K3/2r5/8/8/8 b - - 5 71",
+            "evaluation": { "move": "c4e4", "followup": ["e5d6", "f6e8", "d6d7", "e8c7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00SU7",
+        "description": "Rook trade to put undefended rook on forking square",
+        "context": {
+            "position": "2rqr1k1/B2b1ppp/5n2/8/7Q/3B4/P1P2PPP/R3R1K1 b - - 4 22",
+            "evaluation": { "move": "e8e1", "followup": ["a1e1", "d8a5", "e1a1", "a5a7"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00TV2",
+        "description": "Queen check to fork on next move",
+        "context": {
+            "position": "6k1/p1Q2p1p/4p1p1/3p4/1r6/7P/q4PP1/5RK1 w - - 0 27",
+            "evaluation": { "move": "c7c8", "followup": ["g8g7", "c8c3", "d5d4", "c3b4"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "00Ty2",
+        "description": "Rook skewer (rook does fork knight, but irrelevant), then deflection check, then queen capture",
+        "context": {
+            "position": "r5k1/ppp4p/2P3r1/8/4P3/B1P5/P1Q1K3/6N1 b - - 0 31",
+            "evaluation": { "move": "g6g2", "followup": ["e2d3", "a8d8", "d3c4", "g2c2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "00UyQ",
+        "description": "Rook trade then queen forks king and rook",
+        "context": {
+            "position": "4r1k1/p1Q2pp1/1p5p/4P3/5r1q/5R2/P3B1PP/R5K1 b - - 0 22",
+            "evaluation": { "move": "f4f3", "followup": ["g2f3", "h4d4", "g1g2", "d4a1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
     }
 ]

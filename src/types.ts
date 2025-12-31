@@ -32,7 +32,8 @@ export type PositionComparisonTacticContext = DefaultTacticContext & {
 export type TacticContext = DefaultTacticContext | PositionComparisonTacticContext;
 
 export interface TacticClassifier {
-    isTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
+    findTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
+    isTactic(context: _TacticContext): Tactic | null;
 }
 
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";

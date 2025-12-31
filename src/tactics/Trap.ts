@@ -6,16 +6,15 @@ import {
     getBlockingMoves,
     invertTurn,
 } from "@utils";
-import { Fen, Tactic, TacticOptions } from "@types";
+import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class TrapTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext, options: TacticOptions): Tactic | null {
-        super.isTactic(context, options);
+    isTactic(context: _DefaultTacticContext): Tactic | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.move);
+        const currentMove = chess.move(evaluation.sequence[0]);
         const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
             [currentMove.to],
@@ -50,7 +49,10 @@ class TrapTactics extends BaseTactic {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
                     return {
                         trappedPiece: m.captured,
-                        trappingSquares: capturingMoves.map((m) => m.to),
+                        trappingSquares: chess
+                            .moves({ square: m.to, verbose: true })
+                            .map((s) => s.to)
+                            .concat(m.to),
                     };
                 } else {
                     const chessCopy = new Chess(chess.fen());
@@ -64,7 +66,10 @@ class TrapTactics extends BaseTactic {
                     ) {
                         return {
                             trappedPiece: m.captured,
-                            trappingSquares: capturingMoves.map((m) => m.to),
+                            trappingSquares: chess
+                                .moves({ square: m.to, verbose: true })
+                                .map((s) => s.to)
+                                .concat(m.to),
                         };
                     }
                 }

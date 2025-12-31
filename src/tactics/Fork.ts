@@ -5,11 +5,10 @@ import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class ForkTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext, options: TacticOptions): Tactic | null {
-        super.isTactic(context, options);
+    isTactic(context: _DefaultTacticContext): Tactic | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.move);
+        const currentMove = chess.move(evaluation.sequence[0]);
         const cosmeticForks = this.getCosmeticForks(position, currentMove);
         const attackedSquares = cosmeticForks.map((m) => m.to);
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(

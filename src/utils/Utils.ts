@@ -14,6 +14,7 @@ export function isWhiteToPlay(x: number | string) {
 export function setTurn(position: Fen, color: Color) {
     let fenSplit = position.split(" ");
     fenSplit[1] = color;
+    fenSplit[3] = "-";
     return fenSplit.join(" ");
 }
 

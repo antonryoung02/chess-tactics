@@ -13,4 +13,5 @@ module.exports = {
     coverageProvider: "v8",
     clearMocks: true,
     verbose: true,
+    coveragePathIgnorePatterns: ["<rootDir>/tests/", "<rootDir>/node_modules/"],
 };

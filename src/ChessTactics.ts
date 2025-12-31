@@ -29,7 +29,7 @@ export class ChessTactics {
     ): Tactic | null {
         const internalContext = TacticContextParser.parse(context);
         for (const classifier of this.tacticClassifiers) {
-            const tactic = classifier.isTactic(internalContext, options);
+            const tactic = classifier.findTactic(internalContext, options);
             if (tactic) return tactic;
         }
         return null;

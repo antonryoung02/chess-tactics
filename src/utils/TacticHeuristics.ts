@@ -15,7 +15,7 @@ export function attackingSquareIsBad(fen: Fen, square: Square): boolean {
 export function materialAdvantageAfterTradesAtSquare(
     fen: Fen,
     square: Square,
-    attackerColorIfSquareIsUnoccupied: Color
+    attackerColorIfSquareIsUnoccupied: Color = null
 ): number {
     const chess = new Chess(fen);
     const piece = chess.get(square);
@@ -179,6 +179,9 @@ export function getEscapeSquares(fen: Fen, square: Square) {
 }
 
 export function getBlockingMoves(fen: Fen, attackingSquare: Square, threatenedSquare: Square) {
+    if (squaresAreNeighbors(attackingSquare, threatenedSquare)) {
+        return [];
+    }
     const chess = new Chess(fen);
     const attackingPiece = chess.get(attackingSquare);
     const threatenedPiece = chess.get(threatenedSquare);
@@ -237,6 +240,17 @@ export function getBlockingMoves(fen: Fen, attackingSquare: Square, threatenedSq
     return blockingMoves;
 }
 
+function squaresAreNeighbors(sq1: Square, sq2: Square): boolean {
+    if (sq1 === sq2) return false;
+    const x1 = sq1.charCodeAt(0);
+    const y1 = parseInt(sq1[1], 10);
+    const x2 = sq2.charCodeAt(0);
+    const y2 = parseInt(sq2[1], 10);
+    const deltaX = Math.abs(x1 - x2);
+    const deltaY = Math.abs(y1 - y2);
+    return deltaX <= 1 && deltaY <= 1;
+}
+
 export function getMovesToSquare(fen: Fen, square: Square): Move[] {
     const chess = new Chess(fen, { skipValidation: true });
     const piece = chess.get(square);
@@ -271,55 +285,9 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
 
     const threateningMoves = [];
     for (const m of possibleMoves) {
-        if (isPieceThreatened(position, m, currentMove)) {
+        if (m.captured && materialAdvantageAfterTradesAtSquare(chess.fen(), m.to) > 0) {
             threateningMoves.push(m);
         }
     }
     return threateningMoves;
-}
-
-export function isPieceThreatened(
-    initialPosition: Fen,
-    threateningMove: Move,
-    currentMove: Move
-): boolean {
-    // in order for a piece to be threatened by another piece, it can't be of same type, and it can either be worth more material or undefended
-    // Structure:
-    // initialPosition must be on the board
-    const chess = new Chess(initialPosition);
-    let piece = chess.get(threateningMove.to);
-    if (!piece || piece.type === currentMove.piece) return false;
-    if (PIECE_VALUES[piece.type] > PIECE_VALUES[currentMove.piece]) return true;
-
-    chess.move(currentMove);
-
-    const opponentResponses = chess.moves({ verbose: true }).filter((e) => e.to === currentMove.to);
-    for (let i = 0; i < opponentResponses.length; i++) {
-        const m = opponentResponses[i];
-        if (PIECE_VALUES[m.piece] <= PIECE_VALUES[currentMove.piece]) {
-            return false;
-        }
-        if (isSquareUndefended(chess, m.to, m)) {
-            return false;
-        }
-        chess.remove(m.from);
-    }
-    if (chess.inCheck()) {
-        invertTurn(chess);
-        return isSquareUndefended(chess, threateningMove.to, threateningMove);
-    } else {
-        invertTurn(chess);
-        return isSquareUndefended(chess, threateningMove.to, threateningMove);
-    }
-}
-
-export function isSquareUndefended(chess: Chess, square: Square, move: Move): boolean {
-    try {
-        const chessCopy = new Chess(chess.fen());
-        chessCopy.move(move);
-        return chessCopy.attackers(square).length === 0;
-    } catch (e) {
-        console.error("Error in isSquareUndefended: ", e);
-    }
-    return false;
 }

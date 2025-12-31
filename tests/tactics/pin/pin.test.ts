@@ -24,6 +24,7 @@ describe("PinTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["pin"]);
         const result = ct.classify(t.context);
+
         if ((result !== null) !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);
             logBoardSequence(t.context.position, []);

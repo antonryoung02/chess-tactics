@@ -5,11 +5,10 @@ import { _PositionComparisonTacticContext } from "src/_types";
 import { Tactic, TacticOptions } from "@types";
 
 class HangingPieceTactics extends BaseTactic {
-    isTactic(context: _PositionComparisonTacticContext, options: TacticOptions): Tactic | null {
-        super.isTactic(context, options);
+    isTactic(context: _PositionComparisonTacticContext): Tactic | null {
         const { position, evaluation, prevMove } = context;
         const chess = new Chess(position);
-        const currentMove = evaluation.move;
+        const currentMove = evaluation.sequence[0];
 
         if (!currentMove.captured) {
             return null;

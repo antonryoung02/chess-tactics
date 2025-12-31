@@ -1,17 +1,22 @@
 import { Chess, Move } from "chess.js";
-import { getMoveDiff, invertTurn, isSquareUndefended, PIECE_VALUES } from "@utils";
-import { Fen, Tactic, TacticOptions } from "@types";
+import {
+    colorToPlay,
+    getMoveDiff,
+    invertTurn,
+    materialAdvantageAfterTradesAtSquare,
+    PIECE_VALUES,
+} from "@utils";
+import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
-import { _DefaultTacticContext } from "src/_types";
+import { _DefaultTacticContext, _TacticContext } from "src/_types";
 
 class SkewerTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext, options: TacticOptions): Tactic | null {
-        super.isTactic(context, options);
+    isTactic(context: _DefaultTacticContext): Tactic | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.move);
+        const currentMove = chess.move(evaluation.sequence[0]);
 
-        const cosmeticSkewers = this.getCosmeticSkewers(position, currentMove);
+        const cosmeticSkewers = this.getCosmeticSkewers(context);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticSkewers) {
             const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
                 [currentMove.to],
@@ -36,7 +41,9 @@ class SkewerTactics extends BaseTactic {
         return null;
     }
 
-    getCosmeticSkewers(position: Fen, currentMove: Move): Move[][] {
+    getCosmeticSkewers(context: _TacticContext): Move[][] {
+        const { evaluation, position } = context;
+        const currentMove = evaluation.sequence[0];
         if (["p", "k", "n"].includes(currentMove.piece)) {
             return [];
         }
@@ -55,12 +62,14 @@ class SkewerTactics extends BaseTactic {
             chess.load(position);
             chess.move(currentMove);
             if (move.captured === "k") {
-                if (chess.isGameOver()) {
+                if (evaluation.sequence.length === 1) {
                     return [];
                 }
-                const responses = chess.moves({ square: move.to, verbose: true });
-                if (responses.length === 0) continue;
-                chess.move(responses[0]);
+                const response = evaluation.sequence[1];
+                if (response.piece !== "k") {
+                    return [];
+                }
+                chess.move(response);
             } else {
                 chess.remove(move.to);
                 invertTurn(chess);
@@ -76,8 +85,11 @@ class SkewerTactics extends BaseTactic {
                 if (
                     m.captured &&
                     PIECE_VALUES[move.captured] > PIECE_VALUES[m.captured] &&
-                    (isSquareUndefended(chess, m.to, m) ||
-                        PIECE_VALUES[currentMove.piece] <= PIECE_VALUES[m.captured])
+                    materialAdvantageAfterTradesAtSquare(
+                        chess.fen(),
+                        m.to,
+                        colorToPlay(chess.fen())
+                    ) >= 0
                 ) {
                     cosmeticSkewers.push([move, m]);
                 }
