@@ -5,6 +5,7 @@ import {
     getBlockingMoves,
     invertTurn,
     attackingSquareIsGood,
+    getMoveDiff,
 } from "@utils";
 import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
@@ -84,13 +85,17 @@ class TrapTactics extends BaseTactic {
     private getCapturablePieces(currentMove: Move, position: Fen): Array<Move> {
         // A capturable piece is one that can be taken. No other assumptions
         // game must be the initial position
+        const chess = new Chess(position);
+        const originalMoves = chess.moves({ verbose: true });
         const chessCopy = new Chess(position);
         chessCopy.move(currentMove);
         invertTurn(chessCopy);
 
         const possibleMoves = chessCopy.moves({ verbose: true });
+        // moveDiff ensures the move you made is responsible for revealing the trap, either directly or indirectly
+        const moveDiff = getMoveDiff(originalMoves, possibleMoves);
         let targetedPieces: Array<Move> = [];
-        for (const m of possibleMoves) {
+        for (const m of moveDiff) {
             if (m.captured) {
                 targetedPieces.push(m);
             }

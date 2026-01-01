@@ -10,13 +10,10 @@ class HangingPieceTactics extends BaseTactic {
         const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
 
-        if (!currentMove.captured) {
+        if (!currentMove.captured || currentMove.captured === "p") {
             return null;
         }
-        if (
-            prevMove.captured &&
-            PIECE_VALUES[prevMove.captured] >= PIECE_VALUES[currentMove.captured]
-        ) {
+        if (prevMove.captured && prevMove.captured !== "p") {
             return null;
         }
 
@@ -25,7 +22,18 @@ class HangingPieceTactics extends BaseTactic {
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(attackers, [
             currentMove.to,
         ]);
-        if (tacticalSequence) {
+        this.sequenceInterpreter.setContext({
+            evaluation: context.prevEvaluation,
+            position: context.prevPosition,
+        });
+        const prevSequence = this.sequenceInterpreter.identifyWinningSequence(attackers, [
+            currentMove.to,
+        ]);
+        if (
+            tacticalSequence &&
+            tacticalSequence.materialChange >= PIECE_VALUES[currentMove.captured] &&
+            (!prevSequence || prevSequence.materialChange < PIECE_VALUES[currentMove.captured])
+        ) {
             return {
                 type: "hanging",
                 attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],

@@ -34,39 +34,6 @@
         "expected": false
     },
     {
-        "description": "Bishop captures free pawn in only good move",
-        "context": {
-            "position": "1k2r3/3RBppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 b - - 6 26",
-            "prevEvaluation": {
-                "move": {
-                    "from": "a2",
-                    "to": "a3"
-                },
-                "followup": "g7g6 h4h5 h7h6 g1h2 g6g5 c7d7 d5a2 d7d2 e4d2 e7d6 b8a7 c1c7"
-            },
-            "evaluation": {
-                "move": {
-                    "from": "d5",
-                    "to": "a2"
-                },
-                "followup": "d7c7 a2d5 g1h2 a5a4 h4h5 h7h6 f3e4 d5e4 e7h4 d2d5 h4g3 b8a8"
-            },
-            "prevMove": {
-                "color": "b",
-                "from": "d8",
-                "to": "e8",
-                "piece": "r",
-                "flags": "n",
-                "san": "Re8",
-                "lan": "d8e8",
-                "before": "1k1r4/2R1Bppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 b - - 4 25",
-                "after": "1k2r3/2R1Bppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 w - - 5 26"
-            },
-            "prevPosition": "1k1r4/2R1Bppp/8/p2b4/4n2P/5B2/P2r1PP1/2R3K1 w - - 4 25"
-        },
-        "expected": true
-    },
-    {
         "description": "Opponent hangs a bishop in one move",
         "context": {
             "position": "3r4/5pk1/p3b2p/1pb1P1p1/2p1N1p1/P7/1P2KPP1/2B4R w - - 2 33",
@@ -98,5 +65,62 @@
             "prevPosition": "2r5/5pk1/p3b2p/1pb1P1p1/2p1N1p1/P7/1P2KPP1/2B4R b - - 0 1"
         },
         "expected": true
+    },
+    {
+        "description": "Winning a pawn after a bishop trade is not a free bishop",
+        "context": {
+            "position": "r5k1/q3bppp/4p1n1/2NpP3/2nP4/r3BN1P/4QPP1/1R3RK1 b - - 0 22",
+            "evaluation": {
+                "eval": "-2.06",
+                "type": "cp",
+                "move": {
+                    "from": "e7",
+                    "to": "c5"
+                },
+                "followup": "d4c5 c4e3 f2e3 a7c5 f3g5 a3e3 e2f2 a8f8 b1c1 c5a7 c1a1 a7b6"
+            },
+            "prevPosition": "r5k1/q3bppp/4p1n1/2NpP3/2nP4/r3BN2/4QPPP/1R3RK1 w - - 5 22",
+            "prevMove": {
+                "from": "a6",
+                "to": "a7"
+            },
+            "prevEvaluation": {
+                "move": {
+                    "from": "c5",
+                    "to": "d3"
+                },
+                "followup": "a3a2 e2d1 h7h6 g2g3 e7d8 d3b4 a2a4 b4c6 a7d7 c6d8 d7d8 g1g2"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "After trades, wins a piece that was already lost",
+        "context": {
+            "position": "4k2r/4bpp1/1q5p/1n6/2PP1n2/4Nb2/3B1PPP/1Q3RK1 w k - 0 22",
+            "evaluation": {
+                "move": {
+                    "from": "g2",
+                    "to": "f3"
+                },
+                "followup": "e8g8 c4b5 b6d4 b1e4 f4h3 g1g2 h3f4 g2h1 d4d2 e4e7 f4e6 b5b6"
+            },
+            "prevPosition": "b3k2r/4bpp1/1q5p/1n6/2PP1n2/4NN2/3B1PPP/1Q3RK1 b k - 0 21",
+            "prevMove": {
+                "from": "a8",
+                "to": "f3",
+                "captured": "n"
+            },
+
+            "prevEvaluation": {
+                "move": {
+                    "from": "f4",
+                    "to": "g2"
+                },
+                "followup": "d4d5 g2e3 d2e3 b6b7 b1b5 b7b5 c4b5 e8g8 f3e5 a8d5 f1d1 d5a8"
+            }
+        },
+        "expected": false,
+        "debug": true
     }
 ]

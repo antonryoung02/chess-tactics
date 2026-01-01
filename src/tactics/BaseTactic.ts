@@ -17,11 +17,14 @@ export class BaseTactic implements TacticClassifier {
         let isForcing = true;
 
         let i = 0;
-        while (isForcing && i < sequence.length - 2) {
+        while (isForcing && i < Math.min(sequence.length - 2, 4)) {
             const newContext = this.contextAtState(context, chess.fen(), sequence, i);
             this.sequenceInterpreter.setContext(newContext);
             const tactic = this.isTactic(newContext);
             if (tactic) {
+                if (tactic.type === "hanging" && i > 0) {
+                    return null;
+                }
                 return this.wrapTactic(tactic, context, sequence, i);
             }
             // Play your move and opponent's response

@@ -317,5 +317,20 @@
         },
         "options": { "trimEndSequence": false },
         "expected": true
+    },
+    {
+        "description": "Rook attacks queen. Engine sacrifices queen but queen does have escape squares",
+        "context": {
+            "position": "r1b2rk1/pp1pnpbp/4p1p1/2BP4/2B1P3/P1q2N2/5PPP/R2Q1RK1 w - - 0 13",
+            "evaluation": {
+                "move": {
+                    "from": "a1",
+                    "to": "c1"
+                },
+                "followup": "e7d5 e4d5 c3f6 c5f8 g7f8 d1a4 e6e5 c4e2 b7b6 h2h4 c8b7 a4d7"
+            }
+        },
+        "expected": false,
+        "debug": true
     }
 ]

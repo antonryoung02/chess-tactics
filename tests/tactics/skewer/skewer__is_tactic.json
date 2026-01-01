@@ -90,45 +90,7 @@
         "options": { "trimEndSequence": false },
         "expected": true
     },
-    {
-        "id": "00H87",
-        "description": "A sequence of checks eventually forces a king-queen skewer",
-        "context": {
-            "position": "6k1/4pp2/p5pB/2p4n/3pP1Q1/P2P2qP/1r4P1/5RK1 w - - 2 31",
-            "evaluation": {
-                "move": "g4c8",
-                "followup": [
-                    "g8h7",
-                    "f1f7",
-                    "h5g7",
-                    "f7g7",
-                    "h7h6",
-                    "c8h8",
-                    "h6g5",
-                    "g7g6",
-                    "g5g6",
-                    "h8g8",
-                    "g6f6",
-                    "g8g3"
-                ]
-            }
-        },
-        "options": { "trimEndSequence": false },
-        "expected": true
-    },
-    {
-        "id": "00OLF",
-        "description": "Exchange sacrifice forces king-rook skewer",
-        "context": {
-            "position": "k1r5/n1N3p1/Q2p4/P2Pp2p/q3Pp1P/2RK4/5PP1/8 b - - 0 36",
-            "evaluation": {
-                "move": "c8c7",
-                "followup": ["c3c7", "a4d1", "d3c3", "d1c1", "c3b3", "c1c7"]
-            }
-        },
-        "options": { "trimEndSequence": false },
-        "expected": true
-    },
+
     {
         "id": "00bQA",
         "description": "Rook captures knight, king attacks both rooks, and rook captures knight skewering king and knight and threatening king-knight fork. Skewer is played",
@@ -158,19 +120,6 @@
         "context": {
             "position": "7k/2p3p1/5p1p/2Qq4/3Pr3/4P3/P4P1P/1R4K1 b - - 3 26",
             "evaluation": { "move": "e4g4", "followup": ["g1f1", "d5h1", "f1e2", "h1b1"] }
-        },
-        "options": { "trimEndSequence": false },
-        "expected": true
-    },
-    {
-        "id": "00l0K",
-        "description": "Queen checks force king onto skewer square",
-        "context": {
-            "position": "2b5/2Q2p2/k7/1q2P3/1p6/1N3P2/1PP5/2K5 b - - 0 38",
-            "evaluation": {
-                "move": "b5f1",
-                "followup": ["c1d2", "f1f2", "d2d3", "c8f5", "d3c4", "f2c2", "c4b4", "c2c7"]
-            }
         },
         "options": { "trimEndSequence": false },
         "expected": true

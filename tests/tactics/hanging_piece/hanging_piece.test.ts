@@ -6,6 +6,7 @@ import { ChessTactics } from "@chess-tactics";
 describe("HangingPieceTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["hanging"]);
+        if (t.debug) debugger;
         const result = ct.classify(t.context);
 
         const foundTactic = result.length === 1;
