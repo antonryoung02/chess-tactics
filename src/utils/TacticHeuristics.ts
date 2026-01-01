@@ -2,34 +2,76 @@ import { Fen } from "@types";
 import { Chess, Move, PieceSymbol, Color, Square } from "chess.js";
 import { PIECE_VALUES, colorToPlay, setTurn, invertTurn } from "@utils";
 
-export function attackingSquareIsGood(fen: Fen, square: Square): boolean {
-    const advantage = materialAdvantageAfterTradesAtSquare(fen, square, colorToPlay(fen));
-    return advantage > 0;
-}
-
-export function attackingSquareIsBad(fen: Fen, square: Square): boolean {
-    const advantage = materialAdvantageAfterTradesAtSquare(fen, square, colorToPlay(fen));
+export function attackingSquareIsGood(
+    fen: Fen,
+    square: Square,
+    startingMove: Move = null
+): boolean {
+    const advantage = materialAdvantageAfterTradesAtSquare(fen, square, startingMove);
+    const color = colorToPlay(fen);
+    if (color === "w") {
+        return advantage > 0;
+    }
     return advantage < 0;
 }
 
+export function attackingSquareIsBad(fen: Fen, square: Square, startingMove: Move = null): boolean {
+    const advantage = materialAdvantageAfterTradesAtSquare(fen, square, startingMove);
+    const color = colorToPlay(fen);
+    if (color === "w") {
+        return advantage < 0;
+    }
+    return advantage > 0;
+}
 export function materialAdvantageAfterTradesAtSquare(
-    fen: Fen,
+    position: Fen,
     square: Square,
-    attackerColorIfSquareIsUnoccupied: Color = null
+    startingMove: Move = null
 ): number {
+    const chess = new Chess(position);
+    let score = 0;
+    if (startingMove) {
+        chess.move(startingMove);
+        if (startingMove.captured) {
+            if (chess.turn() === "w") {
+                score -= PIECE_VALUES[startingMove.captured];
+            } else {
+                score += PIECE_VALUES[startingMove.captured];
+            }
+        }
+    }
+    return helper(chess, square, score);
+}
+
+function helper(chess: Chess, square: Square, score: number): number {
+    if (chess.turn() === "w" && score > 0) return score;
+    if (chess.turn() === "b" && score < 0) return score;
+
+    const possibleMoves = chess.moves({ verbose: true }).filter((m) => m.to === square);
+    if (possibleMoves.length === 0) return score;
+
+    const leastMaterialMove = possibleMoves.sort(
+        (a, b) => PIECE_VALUES[a.piece] - PIECE_VALUES[b.piece]
+    );
+    const move = chess.move(leastMaterialMove[0]);
+    if (chess.turn() === "w") {
+        score -= PIECE_VALUES[move.captured];
+    } else {
+        score += PIECE_VALUES[move.captured];
+    }
+    return helper(chess, square, score);
+}
+
+export function materialAdvantage(fen: Fen, square: Square): number {
     const chess = new Chess(fen);
     const piece = chess.get(square);
     if (piece?.type === "k") {
         return PIECE_VALUES["k"];
     }
-    if (!piece && !attackerColorIfSquareIsUnoccupied) {
+    if (!piece) {
         throw new Error("function called on a square that is unoccupied!");
     }
-    const attackingColor = piece
-        ? piece.color === "w"
-            ? "b"
-            : "w"
-        : attackerColorIfSquareIsUnoccupied;
+    const attackingColor = piece.color === "w" ? "b" : "w";
     const defendingColor = attackingColor === "w" ? "b" : "w";
 
     if (chess.turn() !== attackingColor) {
@@ -153,24 +195,10 @@ export function getEscapeSquares(fen: Fen, square: Square) {
     if (!piece) {
         throw new Error("function called on a square that is unoccupied!");
     }
-
     const moves = chess.moves({ square, verbose: true });
     const escapeSquares = [];
     for (let i = 0; i < moves.length; i++) {
-        chess.load(fen);
-        chess.move(moves[i]);
-        let initialAdvantage = 0;
-        const captured = moves[i].captured;
-        if (captured) {
-            initialAdvantage = PIECE_VALUES[captured];
-        }
-        const nextFen = chess.fen();
-        const opponentAdvantage = materialAdvantageAfterTradesAtSquare(
-            nextFen,
-            moves[i].to,
-            colorToPlay(nextFen)
-        );
-        if (initialAdvantage - opponentAdvantage >= 0) {
+        if (!attackingSquareIsBad(fen, moves[i].to, moves[i])) {
             escapeSquares.push(moves[i].to);
         }
     }
@@ -230,8 +258,7 @@ export function getBlockingMoves(fen: Fen, attackingSquare: Square, threatenedSq
         }
         const opponentAdvantage = materialAdvantageAfterTradesAtSquare(
             chess.fen(),
-            candidateMoves[i].to,
-            chess.turn()
+            candidateMoves[i].to
         );
         if (initialAdvantage - opponentAdvantage >= 0) {
             blockingMoves.push({ from: candidateMoves[i].from, to: candidateMoves[i].to });
@@ -282,12 +309,18 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
     invertTurn(chess);
 
     const possibleMoves = chess.moves({ square: currentMove.to, verbose: true });
-
     const threateningMoves = [];
     for (const m of possibleMoves) {
-        if (m.captured && materialAdvantageAfterTradesAtSquare(chess.fen(), m.to) > 0) {
+        for (const n of possibleMoves) {
+            if (n.captured !== "k" && n.to !== m.to) chess.remove(n.to);
+        }
+        if (m.captured && attackingSquareIsGood(chess.fen(), m.to, m)) {
             threateningMoves.push(m);
         }
+        chess.load(position);
+        chess.move(currentMove);
+        invertTurn(chess);
     }
+
     return threateningMoves;
 }

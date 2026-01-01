@@ -1,10 +1,11 @@
 import { Chess, Move, Square } from "chess.js";
 import {
     PIECE_VALUES,
-    materialAdvantageAfterTradesAtSquare,
     getEscapeSquares,
     getBlockingMoves,
     invertTurn,
+    attackingSquareIsGood,
+    materialAdvantageAfterTradesAtSquare,
 } from "@utils";
 import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
@@ -55,15 +56,10 @@ class TrapTactics extends BaseTactic {
                             .concat(m.to),
                     };
                 } else {
+                    // piece doesn't move. can we capture it?
                     const chessCopy = new Chess(chess.fen());
                     invertTurn(chessCopy);
-                    if (
-                        materialAdvantageAfterTradesAtSquare(
-                            chessCopy.fen(),
-                            m.to,
-                            chessCopy.turn()
-                        ) > 0
-                    ) {
+                    if (attackingSquareIsGood(chessCopy.fen(), m.to)) {
                         return {
                             trappedPiece: m.captured,
                             trappingSquares: chess

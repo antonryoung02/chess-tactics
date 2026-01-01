@@ -1,6 +1,7 @@
 import { Chess, Move } from "chess.js";
 import {
     PIECE_VALUES,
+    attackingSquareIsBad,
     colorToPlay,
     getMaterialChange,
     materialAdvantageAfterTradesAtSquare,
@@ -16,7 +17,11 @@ class SacrificeTactics extends BaseTactic {
         const currentMove = evaluation.sequence[0];
 
         const moveList = this.sequenceInterpreter.evaluationToMoveList();
-        const captureSequence = this.sequenceInterpreter.getCaptureSequence(position, moveList);
+        chess.move(currentMove);
+        const captureSequence = [currentMove.san].concat(
+            this.sequenceInterpreter.getCaptureSequence(chess.fen(), moveList.slice(1))
+        );
+        chess.undo();
         if (this.sacrificedMaterial(position, currentMove) && captureSequence.length > 0) {
             const endPosition = this.sequenceInterpreter.positionAfterSequence(
                 position,
@@ -41,8 +46,7 @@ class SacrificeTactics extends BaseTactic {
         if (currentMove.promotion || currentMove.piece === "p") {
             return false;
         }
-        const attackingColor = colorToPlay(position);
-        if (materialAdvantageAfterTradesAtSquare(position, currentMove.to, attackingColor) < 0) {
+        if (attackingSquareIsBad(position, currentMove.to, currentMove)) {
             const materialGained = currentMove.captured ? PIECE_VALUES[currentMove.captured] : 0;
             const materialLost = PIECE_VALUES[currentMove.piece];
             return materialGained - materialLost < 0;

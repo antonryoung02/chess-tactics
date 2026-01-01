@@ -50,6 +50,7 @@ describe("getEscapeSquares", () => {
     test.each(getEscapeSquaresJson)(
         "should return escape squares for $square in position $start_fen",
         (s) => {
+            if (s.debug) debugger;
             const square = s.square as Square;
             const escapeSquares = getEscapeSquares(s.start_fen, square);
             expect(escapeSquares).toEqual(s.expected);

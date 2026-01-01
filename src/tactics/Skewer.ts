@@ -1,5 +1,6 @@
 import { Chess, Move } from "chess.js";
 import {
+    attackingSquareIsBad,
     colorToPlay,
     getMoveDiff,
     invertTurn,
@@ -85,11 +86,7 @@ class SkewerTactics extends BaseTactic {
                 if (
                     m.captured &&
                     PIECE_VALUES[move.captured] > PIECE_VALUES[m.captured] &&
-                    materialAdvantageAfterTradesAtSquare(
-                        chess.fen(),
-                        m.to,
-                        colorToPlay(chess.fen())
-                    ) >= 0
+                    !attackingSquareIsBad(chess.fen(), m.to)
                 ) {
                     cosmeticSkewers.push([move, m]);
                 }

@@ -7,7 +7,8 @@
     {
         "start_fen": "8/6qk/5ppp/8/8/6P1/1Q3P2/1KR3b1 b - - 0 1",
         "square": "g1",
-        "expected": ["h2"]
+        "expected": ["h2"],
+        "debug": true
     },
     {
         "start_fen": "q6R/1p6/8/8/8/5k2/RQ6/1K6 w - - 0 1",

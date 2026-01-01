@@ -52,8 +52,7 @@
                 "followup": "e3d3 c4b2 d3e3 b2d1 e2d1 f8f1 h3h4 f1e1"
             }
         },
-        "expected": true,
-        "debug": true
+        "expected": true
     },
     {
         "description": "queen forks king and pawn to capture pawn on next move",
@@ -199,7 +198,8 @@
             "evaluation": { "move": "a4f4", "followup": ["f7e6", "f4e4", "a8f8", "g1g6"] }
         },
         "options": { "trimEndSequence": false },
-        "expected": false
+        "expected": false,
+        "debug": true
     },
     {
         "id": "00H2I",
