@@ -5,14 +5,13 @@ import {
     getBlockingMoves,
     invertTurn,
     attackingSquareIsGood,
-    materialAdvantageAfterTradesAtSquare,
 } from "@utils";
 import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class TrapTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Tactic | null {
+    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.sequence[0]);
@@ -24,9 +23,7 @@ class TrapTactics extends BaseTactic {
         if (tacticalSequence) {
             return {
                 type: "trap",
-                attackingMove: currentMove,
                 attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
-                description: "",
                 ...tacticalSequence,
             };
         }

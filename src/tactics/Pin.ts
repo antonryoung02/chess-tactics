@@ -2,10 +2,10 @@ import { Chess, Move } from "chess.js";
 import { getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
-import { Fen, Tactic, TacticOptions } from "@types";
+import { Fen, Tactic } from "@types";
 
 class PinTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Tactic | null {
+    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
@@ -19,7 +19,6 @@ class PinTactics extends BaseTactic {
             if (tacticalSequence) {
                 return {
                     type: "pin",
-                    attackingMove: currentMove,
                     attackedPieces: [
                         { square: nextMoveWithPiece.to, piece: chess.get(nextMoveWithPiece.to) },
                         {
@@ -27,7 +26,6 @@ class PinTactics extends BaseTactic {
                             piece: chess.get(nextMoveWithoutPiece.to),
                         },
                     ],
-                    description: "",
                     ...tacticalSequence,
                 };
             }

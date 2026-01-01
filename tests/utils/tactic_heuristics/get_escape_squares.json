@@ -7,8 +7,7 @@
     {
         "start_fen": "8/6qk/5ppp/8/8/6P1/1Q3P2/1KR3b1 b - - 0 1",
         "square": "g1",
-        "expected": ["h2"],
-        "debug": true
+        "expected": ["h2"]
     },
     {
         "start_fen": "q6R/1p6/8/8/8/5k2/RQ6/1K6 w - - 0 1",
@@ -43,7 +42,6 @@
     {
         "start_fen": "r1q2rk1/pRb2ppp/1n2p3/3n4/P2P4/5N2/2QBBPPP/3R2K1 w - - 1 20",
         "square": "b7",
-        "expected": [],
-        "debug": true
+        "expected": []
     }
 ]

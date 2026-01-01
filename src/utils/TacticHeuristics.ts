@@ -1,5 +1,5 @@
 import { Fen } from "@types";
-import { Chess, Move, PieceSymbol, Color, Square } from "chess.js";
+import { Chess, Move, Color, Square } from "chess.js";
 import { PIECE_VALUES, colorToPlay, setTurn, invertTurn } from "@utils";
 
 export function attackingSquareIsGood(
@@ -23,6 +23,7 @@ export function attackingSquareIsBad(fen: Fen, square: Square, startingMove: Mov
     }
     return advantage > 0;
 }
+
 export function materialAdvantageAfterTradesAtSquare(
     position: Fen,
     square: Square,
@@ -60,133 +61,6 @@ function helper(chess: Chess, square: Square, score: number): number {
         score += PIECE_VALUES[move.captured];
     }
     return helper(chess, square, score);
-}
-
-export function materialAdvantage(fen: Fen, square: Square): number {
-    const chess = new Chess(fen);
-    const piece = chess.get(square);
-    if (piece?.type === "k") {
-        return PIECE_VALUES["k"];
-    }
-    if (!piece) {
-        throw new Error("function called on a square that is unoccupied!");
-    }
-    const attackingColor = piece.color === "w" ? "b" : "w";
-    const defendingColor = attackingColor === "w" ? "b" : "w";
-
-    if (chess.turn() !== attackingColor) {
-        throw new Error("function called with defender to move");
-    }
-    const defenders: any = getSquareDefenders(fen, square, defendingColor, true);
-    const attackers: any = getSquareDefenders(fen, square, attackingColor, true);
-    let advantage = 0;
-    let i = 0;
-    if (attackers.length > 0 && piece) {
-        advantage = PIECE_VALUES[piece.type];
-    }
-    let prevAdv = advantage;
-    while (i < defenders.length && i < attackers.length) {
-        if (advantage < 0) {
-            if (
-                prevAdv >
-                prevAdv - PIECE_VALUES[attackers[i].piece] + PIECE_VALUES[defenders[i].piece]
-            ) {
-                return prevAdv;
-            }
-            return advantage;
-        }
-        prevAdv = advantage;
-        advantage -= PIECE_VALUES[attackers[i].piece];
-        if (advantage > 0) {
-            if (i + 1 >= attackers.length) {
-                return advantage;
-            }
-            if (
-                prevAdv <
-                prevAdv - PIECE_VALUES[attackers[i].piece] + PIECE_VALUES[defenders[i].piece]
-            ) {
-                return prevAdv;
-            }
-            return advantage;
-        }
-        if (i + 1 < attackers.length) {
-            prevAdv = advantage;
-            advantage += PIECE_VALUES[defenders[i].piece];
-        }
-
-        i += 1;
-    }
-    return advantage;
-}
-
-export function getSquareDefenders(
-    fen: Fen,
-    square: Square,
-    color: "w" | "b",
-    verbose: boolean = false
-): Record<string, number> | Record<string, any>[] {
-    const chess = new Chess(setTurn(fen, color));
-    let defenders: any[] = [];
-    const piece = chess.remove(square);
-
-    if (piece && piece.type === "k") {
-        if (verbose) return [];
-        return { p: 0, n: 0, b: 0, r: 0, q: 0, k: 0, total: 0 };
-    }
-    let moves = getMovesToSquare(chess.fen(), square);
-    while (moves.length > 0) {
-        const nextDefenderLayer: any[] = [];
-        const movesWithValue = moves.map((m) => ({
-            value: PIECE_VALUES[m.piece],
-            piece: m.piece,
-            from: m.from,
-        }));
-        movesWithValue.sort((a, b) => a.value - b.value);
-        movesWithValue.forEach((m) => {
-            chess.remove(m.from);
-            nextDefenderLayer.push(m);
-        });
-        defenders = defenders.concat(nextDefenderLayer);
-        const currPosition = chess.fen();
-        moves = getMovesToSquare(currPosition, square);
-        chess.load(currPosition, { skipValidation: true });
-    }
-    if (kingNextToSquare(fen, square, color)) {
-        defenders.push({
-            value: PIECE_VALUES.k,
-            piece: "k",
-            from: chess.findPiece({ type: "k", color })[0],
-        });
-    }
-    if (verbose) {
-        return defenders.map((d) => ({ piece: d.piece, from: d.from }));
-    }
-    const counts = { p: 0, n: 0, b: 0, r: 0, q: 0, k: 0, total: 0 };
-    defenders.forEach((m) => {
-        const p = m.piece as PieceSymbol;
-        counts[p] += 1;
-        counts.total += 1;
-    });
-    return counts;
-}
-
-function kingNextToSquare(fen: Fen, square: Square, color: Color | null) {
-    const chess = new Chess(fen);
-    if (!color) {
-        color = chess.turn();
-    }
-    const kingSquare = chess.findPiece({ type: "k", color })[0];
-
-    const kingFile = String(kingSquare).charCodeAt(0) - "a".charCodeAt(0);
-    const kingRank = parseInt(kingSquare[1]) - 1;
-
-    const targetFile = square.charCodeAt(0) - "a".charCodeAt(0);
-    const targetRank = parseInt(square[1]) - 1;
-
-    const fileDiff = Math.abs(kingFile - targetFile);
-    const rankDiff = Math.abs(kingRank - targetRank);
-    const result = fileDiff <= 1 && rankDiff <= 1;
-    return result;
 }
 
 export function getEscapeSquares(fen: Fen, square: Square) {

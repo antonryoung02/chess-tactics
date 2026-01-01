@@ -25,9 +25,10 @@ export class ChessTactics {
 
     classify(context: TacticContext, options: TacticOptions = DEFAULT_TACTIC_OPTIONS): Tactic[] {
         const tactics = [];
-        const internalContext = TacticContextParser.parse(context);
+        const mergedOptions = { ...DEFAULT_TACTIC_OPTIONS, ...options };
+        const internalContext = TacticContextParser.parse(context, mergedOptions);
         for (const classifier of this.tacticClassifiers) {
-            const t = classifier.findTactic(internalContext, options);
+            const t = classifier.findTactic(internalContext);
             if (t) tactics.push(t);
         }
         return tactics;

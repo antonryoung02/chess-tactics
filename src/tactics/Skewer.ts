@@ -1,18 +1,11 @@
 import { Chess, Move } from "chess.js";
-import {
-    attackingSquareIsBad,
-    colorToPlay,
-    getMoveDiff,
-    invertTurn,
-    materialAdvantageAfterTradesAtSquare,
-    PIECE_VALUES,
-} from "@utils";
-import { Fen, Tactic } from "@types";
+import { attackingSquareIsBad, getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
+import { Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext, _TacticContext } from "src/_types";
 
 class SkewerTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Tactic | null {
+    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
         const { position, evaluation } = context;
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.sequence[0]);
@@ -26,7 +19,6 @@ class SkewerTactics extends BaseTactic {
             if (tacticalSequence) {
                 return {
                     type: "skewer",
-                    attackingMove: currentMove,
                     attackedPieces: [
                         { square: nextMoveWithPiece.to, piece: chess.get(nextMoveWithPiece.to) },
                         {
@@ -34,7 +26,6 @@ class SkewerTactics extends BaseTactic {
                             piece: chess.get(nextMoveWithoutPiece.to),
                         },
                     ],
-                    description: "",
                     ...tacticalSequence,
                 };
             }

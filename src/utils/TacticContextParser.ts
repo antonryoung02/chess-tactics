@@ -1,15 +1,23 @@
-import { Evaluation, Fen, MoveEvaluation, TacticContext, UciEvaluation } from "@types";
+import {
+    Evaluation,
+    Fen,
+    MoveEvaluation,
+    TacticContext,
+    TacticOptions,
+    UciEvaluation,
+} from "@types";
 import { _Evaluation, _TacticContext } from "src/_types";
 import { Chess, Move } from "chess.js";
 import { ChessTacticsParserError } from "@chess-tactics";
 
 export class TacticContextParser {
-    static parse(context: TacticContext): _TacticContext {
-        const evaluation = this.parseEvaluation(context.position, context.evaluation);
+    static parse(context: TacticContext, options: TacticOptions): _TacticContext {
+        const evaluation = this.parseEvaluation(context.position, context.evaluation, options);
         if ("prevEvaluation" in context) {
             const prevEvaluation = this.parseEvaluation(
                 context.prevPosition,
-                context.prevEvaluation
+                context.prevEvaluation,
+                options
             );
             return {
                 evaluation: evaluation,
@@ -25,11 +33,33 @@ export class TacticContextParser {
         };
     }
 
-    static parseEvaluation(position: Fen, evaluation: Evaluation): _Evaluation {
+    static parseEvaluation(
+        position: Fen,
+        evaluation: Evaluation,
+        options: TacticOptions
+    ): _Evaluation {
+        let parsedEvaluation: _Evaluation;
         if ("sequence" in evaluation) {
-            return this.parseUciEvaluation(position, evaluation);
+            parsedEvaluation = this.parseUciEvaluation(position, evaluation);
+        } else {
+            parsedEvaluation = this.parseMoveEvaluation(position, evaluation);
         }
-        return this.parseMoveEvaluation(position, evaluation);
+        if (options.trimEndSequence) {
+            parsedEvaluation.sequence = this.trimEndCaptures(parsedEvaluation.sequence);
+        }
+        return parsedEvaluation;
+    }
+
+    private static trimEndCaptures(moveList: Move[]): Move[] {
+        let i = moveList.length - 1;
+        while (i >= 0) {
+            if (moveList[i].captured) {
+                i -= 1;
+            } else {
+                break;
+            }
+        }
+        return moveList.slice(0, i + 1);
     }
 
     static parseMoveEvaluation(position: Fen, evaluation: MoveEvaluation): _Evaluation {

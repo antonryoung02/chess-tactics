@@ -288,7 +288,6 @@
                 "followup": "c6b5 e4e2 a7a5 e6c4 b5b7 d2f3 a5a4 g2f2"
             }
         },
-        "expected": false,
-        "debug": true
+        "expected": false
     }
 ]

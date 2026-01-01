@@ -1,4 +1,4 @@
-import { Fen, SequenceInterpretation, TacticOptions } from "@types";
+import { Fen, SequenceInterpretation } from "@types";
 import { Chess, Move, Square } from "chess.js";
 import { getMaterialChange, colorToPlay, attackingSquareIsBad } from "@utils";
 import { _TacticContext, _Evaluation } from "src/_types";
@@ -6,37 +6,11 @@ import { _TacticContext, _Evaluation } from "src/_types";
 export class SequenceInterpreter {
     private evaluation: _Evaluation;
     private position: Fen;
-    private options: TacticOptions;
-
-    setOptions(options: TacticOptions) {
-        this.options = options;
-    }
 
     setContext(context: _TacticContext) {
         const { evaluation, position } = context;
         this.evaluation = evaluation;
         this.position = position;
-    }
-
-    evaluationToMoveList(): Move[] {
-        if (this.options.trimEndSequence) {
-            return this.trimEndCaptures(this.evaluation.sequence);
-        }
-        return this.evaluation.sequence;
-    }
-
-    // not trimming end captures allows possibility of tactic cutting off in the middle of a capture sequence
-    // and incorrectly reading material advantage
-    private trimEndCaptures(moveList: Move[]): Move[] {
-        let i = moveList.length - 1;
-        while (i >= 0) {
-            if (moveList[i].captured) {
-                i -= 1;
-            } else {
-                break;
-            }
-        }
-        return moveList.slice(0, i + 1);
     }
 
     getCaptureSequence(position: Fen, sequence: Move[]) {
@@ -66,13 +40,13 @@ export class SequenceInterpreter {
     ): SequenceInterpretation | null {
         if (attackedSquares.length === 0 || attackerSquares.length === 0) return null;
 
-        let tacticalSequence: string[] = [];
+        let tacticalSequence = [];
         const chess = new Chess(this.position);
-        const moves = this.evaluationToMoveList();
+        const moves = this.evaluation.sequence;
 
         for (let i = 0; i < moves.length; i++) {
             const move = moves[i];
-            tacticalSequence.push(move.san);
+            tacticalSequence.push(move);
             const position = chess.fen();
             chess.move(move);
             if (
@@ -121,7 +95,7 @@ export class SequenceInterpreter {
         return attackingSquareIsBad(position, move.to);
     }
 
-    positionAfterSequence(position: Fen, sequence: string[] | null) {
+    positionAfterSequence(position: Fen, sequence: string[] | Move[] | null) {
         if (!sequence) return position;
         const chess = new Chess(position);
         sequence.forEach((m) => {

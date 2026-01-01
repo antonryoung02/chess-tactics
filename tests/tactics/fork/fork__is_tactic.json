@@ -198,8 +198,7 @@
             "evaluation": { "move": "a4f4", "followup": ["f7e6", "f4e4", "a8f8", "g1g6"] }
         },
         "options": { "trimEndSequence": false },
-        "expected": false,
-        "debug": true
+        "expected": false
     },
     {
         "id": "00H2I",
@@ -403,6 +402,36 @@
         "context": {
             "position": "4r1k1/p1Q2pp1/1p5p/4P3/5r1q/5R2/P3B1PP/R5K1 b - - 0 22",
             "evaluation": { "move": "f4f3", "followup": ["g2f3", "h4d4", "g1g2", "d4a1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "01DBx",
+        "description": "Queen forks rooks, opponent trades queens and then loses rook",
+        "context": {
+            "position": "3r2k1/1q4p1/p2p2p1/1pp5/6Q1/2P5/PP1r2PP/1R2R2K w - - 0 26",
+            "evaluation": { "move": "g4g5", "followup": ["b7g2", "g5g2", "d2g2", "h1g2"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": true
+    },
+    {
+        "id": "01K6c",
+        "description": "Bishop sacrifice then rook trade for positional advantage",
+        "context": {
+            "position": "1r2r1k1/Q1p3pp/6q1/2nb4/8/5P2/PPP3PP/RNB2RK1 b - - 0 19",
+            "evaluation": { "move": "d5f3", "followup": ["f1f3", "e8e1", "f3f1", "e1f1"] }
+        },
+        "options": { "trimEndSequence": false },
+        "expected": false
+    },
+    {
+        "id": "01P1X",
+        "description": "Knight sacrifice allows knight to fork king, rook, opponent loses queen",
+        "context": {
+            "position": "r1b2rk1/pp2ppbp/5np1/2qP4/1n2P3/P1N2N2/1P1B1PPP/R2QKB1R b KQ - 0 11",
+            "evaluation": { "move": "f6e4", "followup": ["c3e4", "b4c2", "d1c2", "c5c2"] }
         },
         "options": { "trimEndSequence": false },
         "expected": true

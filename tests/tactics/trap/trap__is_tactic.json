@@ -233,8 +233,7 @@
             "evaluation": { "move": "a5c7", "followup": ["b8a8", "b5c6", "a8c6", "a6c6"] }
         },
         "options": { "trimEndSequence": false },
-        "expected": false,
-        "debug": true
+        "expected": false
     },
     {
         "id": "01iqw",

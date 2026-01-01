@@ -3,33 +3,23 @@ import { logBoardSequence } from "tests/utils";
 import { IsTacticTestCase } from "tests/types";
 import { ChessTactics } from "@chess-tactics";
 
-// describe("PinTactics.getCosmeticPins", () => {
-//     test.each(cosmeticPinsJSON)("passes json test cases", (t) => {
-//         const pinTactic = TacticFactory.create("pin")
-
-//         const chess = new Chess(t.start_fen);
-//         const moveSequence = restoreMoves(t.start_fen, t.move_sequence);
-//         chess.move(moveSequence[0]);
-//         const result = pinTactic.getCosmeticPins(t.start_fen, moveSequence[0]);
-//         if (result.length !== t.expected) {
-//             console.log(`Failure: ${t.description}`);
-//             logBoardSequence(t.start_fen, moveSequence);
-//         }
-
-//         expect(result.length).toBe(t.expected);
-//     });
-// });
-
 describe("PinTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["pin"]);
         const result = ct.classify(t.context);
 
-        if (result.length > 0 !== t.expected) {
+        const foundTactic = result.length === 1;
+        if (foundTactic !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);
             logBoardSequence(t.context.position, []);
         }
 
-        expect(result.length > 0).toBe(t.expected);
+        expect(foundTactic).toBe(t.expected);
+        if (foundTactic) {
+            expect(result[0].attackedPieces.length).toBe(2);
+            expect(result[0].sequence.length).toBeGreaterThanOrEqual(3);
+            expect(result[0].materialChange).toBeGreaterThanOrEqual(1);
+            expect(result[0].startPosition).toBe(t.context.position);
+        }
     });
 });

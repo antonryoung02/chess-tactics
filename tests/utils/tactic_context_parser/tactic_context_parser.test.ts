@@ -1,4 +1,4 @@
-import { TacticContextParser } from "@utils";
+import { DEFAULT_TACTIC_OPTIONS, TacticContextParser } from "@utils";
 import moveEvaluationJSON from "./moveEvaluation.json";
 import uciEvaluationJSON from "./uciEvaluation.json";
 import { Move } from "chess.js";
@@ -14,7 +14,7 @@ function movesAreEqual(
 describe("parse", () => {
     test.each(moveEvaluationJSON)("Correctly parse MoveEvaluation objects", (t: any) => {
         const context = t.context;
-        const result = TacticContextParser.parse(context);
+        const result = TacticContextParser.parse(context, DEFAULT_TACTIC_OPTIONS);
         for (let i = 0; i < result.evaluation.sequence.length; i++) {
             expect(movesAreEqual(result.evaluation.sequence[i], t.expected.sequence[i])).toBe(true);
         }
@@ -22,7 +22,7 @@ describe("parse", () => {
 
     test.each(uciEvaluationJSON)("Correctly parse UciEvaluation objects", (t: any) => {
         const context = t.context;
-        const result = TacticContextParser.parse(context);
+        const result = TacticContextParser.parse(context, DEFAULT_TACTIC_OPTIONS);
         for (let i = 0; i < result.evaluation.sequence.length; i++) {
             expect(movesAreEqual(result.evaluation.sequence[i], t.expected.sequence[i])).toBe(true);
         }

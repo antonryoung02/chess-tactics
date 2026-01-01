@@ -34,12 +34,12 @@ export type TacticContext = DefaultTacticContext | PositionComparisonTacticConte
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
 
 export interface TacticClassifier {
-    findTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
-    isTactic(context: _TacticContext): Tactic | null;
+    findTactic(context: _TacticContext): Tactic | null;
+    isTactic(context: _TacticContext): Partial<Tactic> | null;
 }
 
 export type SequenceInterpretation = {
-    sequence: string[];
+    sequence: Move[];
     startPosition: Fen;
     endPosition: Fen;
     materialChange: number;
@@ -47,7 +47,6 @@ export type SequenceInterpretation = {
 
 export type Tactic = SequenceInterpretation & {
     type: TacticKey;
-    attackingMove: Move;
+    triggerIndex: number;
     attackedPieces: { square: Square; piece: Piece }[];
-    description: string;
 };

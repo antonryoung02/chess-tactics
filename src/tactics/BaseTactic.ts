@@ -1,8 +1,7 @@
-import { Tactic, TacticClassifier, TacticOptions } from "@types";
+import { Fen, Tactic, TacticClassifier } from "@types";
 import { colorToPlay, getMaterialChange, SequenceInterpreter } from "@utils";
 import { _TacticContext } from "src/_types";
-import { DEFAULT_TACTIC_OPTIONS } from "@utils";
-import { Chess } from "chess.js";
+import { Chess, Move } from "chess.js";
 
 export class BaseTactic implements TacticClassifier {
     protected sequenceInterpreter: SequenceInterpreter;
@@ -11,57 +10,79 @@ export class BaseTactic implements TacticClassifier {
         this.sequenceInterpreter = sequenceInterpreter;
     }
 
-    findTactic(context: _TacticContext, options: TacticOptions): Tactic | null {
+    // Detects non-immediate tactics by iteratively calling isTactic on the position as long as the previous attacker move was 'forcing'
+    findTactic(context: _TacticContext): Tactic | null {
         let sequence = context.evaluation.sequence;
-        let index = 0;
         const chess = new Chess(context.position);
-        const mergedOptions = { ...DEFAULT_TACTIC_OPTIONS, ...options };
         let isForcing = true;
 
-        while (isForcing && index < sequence.length - 2) {
-            let newContext: _TacticContext = {
-                ...context,
-                position: chess.fen(),
-                evaluation: { sequence: sequence.slice(index) },
-            };
-            if ("prevEvaluation" in context && index > 0) {
-                chess.undo();
-                newContext = {
-                    ...newContext,
-                    prevPosition: chess.fen(),
-                    prevMove: sequence[index - 1],
-                    prevEvaluation: { sequence: sequence.slice(index - 1) },
-                };
-                chess.move(sequence[index - 1]);
-            }
+        let i = 0;
+        while (isForcing && i < sequence.length - 2) {
+            const newContext = this.contextAtState(context, chess.fen(), sequence, i);
             this.sequenceInterpreter.setContext(newContext);
-            this.sequenceInterpreter.setOptions(mergedOptions);
             const tactic = this.isTactic(newContext);
             if (tactic) {
-                return {
-                    ...tactic,
-                    startPosition: context.position,
-                    materialChange: getMaterialChange(
-                        context.position,
-                        tactic.endPosition,
-                        colorToPlay(context.position)
-                    ),
-                    sequence: sequence
-                        .slice(0, index)
-                        .map((s) => s.san)
-                        .concat(tactic.sequence),
-                };
+                return this.wrapTactic(tactic, context, sequence, i);
             }
-            const currMove = chess.move(sequence[index]);
-            // could try adding 'madeThreat' to the isForcing if needed
-            isForcing = currMove.captured !== undefined || chess.inCheck();
-            chess.move(sequence[index + 1]);
-            index += 2;
+            // Play your move and opponent's response
+            const currMove = chess.move(sequence[i]);
+            isForcing = this.isForcingPosition(chess, currMove);
+            chess.move(sequence[i + 1]);
+            i += 2;
         }
         return null;
     }
 
-    isTactic(context: _TacticContext): Tactic | null {
+    isTactic(context: _TacticContext): Partial<Tactic> | null {
         throw new Error("BaseTactic.isTactic must be overridden in subclass");
+    }
+
+    wrapTactic(
+        tactic: Partial<Tactic>,
+        context: _TacticContext,
+        sequence: Move[],
+        sequenceIndex: number
+    ): Tactic {
+        return {
+            type: tactic.type,
+            endPosition: tactic.endPosition,
+            attackedPieces: tactic.attackedPieces,
+            startPosition: context.position,
+            materialChange: getMaterialChange(
+                context.position,
+                tactic.endPosition,
+                colorToPlay(context.position)
+            ),
+            triggerIndex: sequenceIndex,
+            sequence: sequence.slice(0, sequenceIndex).concat(tactic.sequence),
+        };
+    }
+
+    // could try adding 'madeThreat' to the isForcing if needed
+    // most likely would require a multipv > 1 engine evaluation for anything better than this
+    private isForcingPosition(chess: Chess, move: Move): boolean {
+        return move.captured !== undefined || chess.inCheck();
+    }
+
+    private contextAtState(
+        context: _TacticContext,
+        position: Fen,
+        sequence: Move[],
+        sequenceIndex: number
+    ) {
+        let newContext: _TacticContext = {
+            ...context,
+            position: position,
+            evaluation: { sequence: sequence.slice(sequenceIndex) },
+        };
+        if ("prevEvaluation" in context && sequenceIndex > 0) {
+            newContext = {
+                ...newContext,
+                prevPosition: context.position,
+                prevMove: sequence[sequenceIndex - 1],
+                prevEvaluation: context.evaluation,
+            };
+        }
+        return newContext;
     }
 }

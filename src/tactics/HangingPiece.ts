@@ -2,10 +2,10 @@ import { Chess } from "chess.js";
 import { PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _PositionComparisonTacticContext } from "src/_types";
-import { Tactic, TacticOptions } from "@types";
+import { Tactic } from "@types";
 
 class HangingPieceTactics extends BaseTactic {
-    isTactic(context: _PositionComparisonTacticContext): Tactic | null {
+    isTactic(context: _PositionComparisonTacticContext): Partial<Tactic> | null {
         const { position, evaluation, prevMove } = context;
         const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
@@ -28,9 +28,7 @@ class HangingPieceTactics extends BaseTactic {
         if (tacticalSequence) {
             return {
                 type: "hanging",
-                attackingMove: currentMove,
                 attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
-                description: "",
                 ...tacticalSequence,
             };
         }
