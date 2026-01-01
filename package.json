@@ -1,6 +1,11 @@
 {
     "name": "chess-tactics",
-    "version": "0.0.1",
+    "version": "0.0.2",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/antonryoung02/chess-tactics.git"
+    },
+    "homepage": "https://github.com/antonryoung02/chess-tactics#readme",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "files": [
@@ -11,8 +16,13 @@
         "test:watch": "jest --watch",
         "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "chess",
+        "tactics",
+        "stockfish",
+        "puzzle"
+    ],
+    "author": "Anton Young antonryoung02@gmail.com (https://github.com/antonryoung02)",
     "license": "GPL-3.0-or-later",
     "description": "",
     "dependencies": {
