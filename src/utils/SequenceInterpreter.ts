@@ -78,14 +78,18 @@ export class SequenceInterpreter {
         return null;
     }
 
-    private capturedAttackedPieces(
+    protected capturedAttackedPieces(
         move: Move,
         attackerSquares: Square[],
         attackedSquares: Square[]
     ): boolean {
         const capturedSquares = attackedSquares.filter((s) => {
             // move came from an attacker square, to an attackedSquare, and captured a piece
-            return s === move.to && move.captured;
+            return (
+                attackerSquares.filter((t) => t === move.from).length > 0 &&
+                s === move.to &&
+                move.captured
+            );
         });
         return capturedSquares.length > 0;
     }
@@ -102,5 +106,19 @@ export class SequenceInterpreter {
             chess.move(m);
         });
         return chess.fen();
+    }
+}
+
+export class TrapTacticsSequenceInterpreter extends SequenceInterpreter {
+    protected capturedAttackedPieces(
+        move: Move,
+        attackerSquares: Square[],
+        attackedSquares: Square[]
+    ): boolean {
+        const capturedSquares = attackedSquares.filter((s) => {
+            // move came from an attacker square, to an attackedSquare, and captured a piece
+            return s === move.to && move.captured;
+        });
+        return capturedSquares.length > 0;
     }
 }

@@ -435,5 +435,34 @@
         },
         "options": { "trimEndSequence": false },
         "expected": true
+    },
+    {
+        "description": "Knight forks king and rook on pinned square",
+        "context": {
+            "position": "8/1R3pkp/6pn/p1r5/1pN2NP1/1P3P2/P1n2K1P/8 w - - 6 35",
+            "evaluation": {
+                "move": {
+                    "from": "f4",
+                    "to": "e6"
+                },
+                "followup": "g7f6 e6c5 f6g5 f2g3 g5f6 c5e4 f6e6 c4a5 c2d4 g3f2 f7f5 b7b4"
+            }
+        },
+        "expected": true
+    },
+    {
+        "description": "Knight trade and recapture marked as queen fork",
+        "context": {
+            "position": "N3r1k1/pp1n1pbp/3Pb1p1/q3n1B1/2p5/5N2/PP2B1PP/R2Q1RK1 b - - 0 17",
+            "evaluation": {
+                "move": {
+                    "from": "e8",
+                    "to": "a8"
+                },
+                "followup": "d1d2 e5f3 f1f3 a5d2 g5d2 e6d5 f3g3 g7b2 a1d1 b2e5 d2g5 e5g3"
+            }
+        },
+        "expected": false,
+        "debug": true
     }
 ]

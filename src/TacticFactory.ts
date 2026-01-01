@@ -8,6 +8,7 @@ import {
     HangingPieceTactics,
 } from "@tactics";
 import { SequenceInterpreter } from "@utils";
+import { TrapTacticsSequenceInterpreter } from "./utils/SequenceInterpreter";
 
 export class TacticFactory {
     static create(type: TacticKey): TacticClassifier {
@@ -22,7 +23,8 @@ export class TacticFactory {
             case "sacrifice":
                 return new SacrificeTactics(sequenceInterpreter);
             case "trap":
-                return new TrapTactics(sequenceInterpreter);
+                const trapInterpreter = new TrapTacticsSequenceInterpreter();
+                return new TrapTactics(trapInterpreter);
             case "hanging":
                 return new HangingPieceTactics(sequenceInterpreter);
         }
