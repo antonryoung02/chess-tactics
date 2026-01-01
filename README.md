@@ -100,14 +100,14 @@ The engine evaluation of a position, separated into a type union for convenience
 
 #### `UciEvaluation`
 
--   **`sequence`**: `string` | `string[]` | `Move[]`
+-   **`sequence`**: `string` | `string[]` | [`Move[]`](#external-types-chessjs)
     -   The evaluation sequence
 
 #### `MoveEvaluation`
 
 -   **`move`**: `string` | `{ from: string; to: string }` | `Move`
     -   The first move in the evaluation sequence.
--   **`followup`**: `string` | `string[]` | `Move[]`
+-   **`followup`**: `string` | `string[]` | [`Move[]`](#external-types-chessjs)
     -   The expected sequence of moves following the initial move.
 
 ---
@@ -117,16 +117,15 @@ The engine evaluation of a position, separated into a type union for convenience
 <a id="tactic"></a>
 The final object returned by the classification engine. It contains the identified tactical theme along with the board state changes.
 
-| Property         | Type                      | Description                                                    |
-| :--------------- | :------------------------ | :------------------------------------------------------------- |
-| `type`           | [`TacticKey`](#tactickey) | The category of tactic (e.g., fork, pin).                      |
-| `description`    | `string`                  | A human-readable summary of the tactic.                        |
-| `attackingMove`  | `Move`                    | The specific move that initiates the tactic.                   |
-| `triggerIndex`   | `number`                  | The `sequence` index of the tactical move                      |
-| `sequence`       | `string[]`                | The array of moves consisting of the entire tactical sequence. |
-| `startPosition`  | `Fen`                     | The FEN string of the position before the sequence.            |
-| `endPosition`    | `Fen`                     | The FEN string of the position after the sequence.             |
-| `materialChange` | `number`                  | The net material difference (e.g., `3` or `-5`).               |
+| Property         | Type                                                        | Description                                                             |
+| :--------------- | :---------------------------------------------------------- | :---------------------------------------------------------------------- |
+| `type`           | [`TacticKey`](#tactickey)                                   | The category of tactic (e.g., fork, pin).                               |
+| `attackedPieces` | [`{piece:Piece, square:Square}[]`](#external-types-chessjs) | The pieces involved on the recieving end of the tactic                  |
+| `sequence`       | [`Move[]`](#external-types-chessjs)                         | The array of moves consisting of the entire tactical sequence.          |
+| `triggerIndex`   | `number`                                                    | The `sequence` index of the tactical move                               |
+| `startPosition`  | `Fen`                                                       | The FEN string of the position before the sequence.                     |
+| `endPosition`    | `Fen`                                                       | The FEN string of the position after the sequence.                      |
+| `materialChange` | `number`                                                    | The net material gain for the player of the tactic (e.g., `3` or `-5`). |
 
 ---
 
@@ -135,11 +134,11 @@ The final object returned by the classification engine. It contains the identifi
 <a id="chessjs-types"></a>
 This library accepts and returns types from [chess.js](https://github.com/jhlywa/chess.js) for board representation:
 
-**`Square`**: A string literal representing a square on the board (e.g., `'a1'`, `'h8'`).
+**`Square`**: A string representing a square on the board (e.g., `'a1'`, `'h8'`).
 
-**`Piece`**: An object containing `{ type: 'p' | 'n' | 'b' | 'r' | 'q' | 'k', color: 'w' | 'b' }`.
+**`Piece`**: `{ type: 'p' | 'n' | 'b' | 'r' | 'q' | 'k', color: 'w' | 'b' }`.
 
-**`Move`**: A verbose move object containing `from`, `to`, `promotion`, and `san`
+**`Move`**: A move object containing `from`, `to`, `promotion`, and `san`
 
 ### Dependencies
 
