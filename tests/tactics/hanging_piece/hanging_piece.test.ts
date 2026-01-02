@@ -11,10 +11,9 @@ describe("HangingPieceTactics.isTactic", () => {
 
         const foundTactic = result.length === 1;
         if (foundTactic !== t.expected) {
-            console.log(`Failure: ${t.description}. ${t.expected}`);
+            console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
             logBoardSequence(t.context.position, []);
         }
-
         expect(foundTactic).toBe(t.expected);
         if (foundTactic) {
             expect(result[0].attackedPieces.length).toBe(1);

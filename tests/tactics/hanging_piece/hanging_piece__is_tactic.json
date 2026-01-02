@@ -67,34 +67,6 @@
         "expected": true
     },
     {
-        "description": "Winning a pawn after a bishop trade is not a free bishop",
-        "context": {
-            "position": "r5k1/q3bppp/4p1n1/2NpP3/2nP4/r3BN1P/4QPP1/1R3RK1 b - - 0 22",
-            "evaluation": {
-                "eval": "-2.06",
-                "type": "cp",
-                "move": {
-                    "from": "e7",
-                    "to": "c5"
-                },
-                "followup": "d4c5 c4e3 f2e3 a7c5 f3g5 a3e3 e2f2 a8f8 b1c1 c5a7 c1a1 a7b6"
-            },
-            "prevPosition": "r5k1/q3bppp/4p1n1/2NpP3/2nP4/r3BN2/4QPPP/1R3RK1 w - - 5 22",
-            "prevMove": {
-                "from": "a6",
-                "to": "a7"
-            },
-            "prevEvaluation": {
-                "move": {
-                    "from": "c5",
-                    "to": "d3"
-                },
-                "followup": "a3a2 e2d1 h7h6 g2g3 e7d8 d3b4 a2a4 b4c6 a7d7 c6d8 d7d8 g1g2"
-            }
-        },
-        "expected": false
-    },
-    {
         "description": "After trades, wins a piece that was already lost",
         "context": {
             "position": "4k2r/4bpp1/1q5p/1n6/2PP1n2/4Nb2/3B1PPP/1Q3RK1 w k - 0 22",
@@ -120,7 +92,119 @@
                 "followup": "d4d5 g2e3 d2e3 b6b7 b1b5 b7b5 c4b5 e8g8 f3e5 a8d5 f1d1 d5a8"
             }
         },
-        "expected": false,
-        "debug": true
+        "expected": false
+    },
+    {
+        "description": "Rook move blunders pawn in one move",
+        "context": {
+            "position": "r4rk1/1p2bppp/1q2p1n1/1N1pP3/P1nP4/3QBN2/5PPP/1R3RK1 b - - 4 17",
+            "prevMove": {
+                "color": "w",
+                "from": "a1",
+                "to": "b1",
+                "piece": "r",
+                "flags": "n",
+                "san": "Rab1",
+                "lan": "a1b1",
+                "before": "r4rk1/1p2bppp/1q2p1n1/1N1pP3/P1nP4/3QBN2/5PPP/R4RK1 w - - 3 17",
+                "after": "r4rk1/1p2bppp/1q2p1n1/1N1pP3/P1nP4/3QBN2/5PPP/1R3RK1 b - - 4 17"
+            },
+            "evaluation": {
+                "eval": "-1.39",
+                "type": "cp",
+                "move": {
+                    "from": "a8",
+                    "to": "a4"
+                },
+                "followup": "b5c3 a4b4 b1b4 b6b4 g2g3 b4a3"
+            },
+            "prevPosition": "r4rk1/1p2bppp/1q2p1n1/1N1pP3/P1nP4/3QBN2/5PPP/R4RK1 w - - 3 17",
+            "prevEvaluation": {
+                "eval": "0.12",
+                "type": "cp",
+                "move": {
+                    "from": "f1",
+                    "to": "b1"
+                },
+                "followup": "b6c6 g2g3 a8a5 f3d2 f8c8 d2c4 d5c4 d3c2"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Rook sacrifices exchange. Capture of rook should not be 'free'",
+        "context": {
+            "position": "r5k1/5ppp/4p1n1/q2pP3/1R1P4/4P2P/2rN2P1/2N1QRK1 b - - 0 29",
+            "prevMove": {
+                "color": "w",
+                "from": "b3",
+                "to": "b4",
+                "piece": "r",
+                "captured": "b",
+                "flags": "c",
+                "san": "Rxb4",
+                "lan": "b3b4",
+                "before": "r5k1/5ppp/4p1n1/q2pP3/1b1P4/1R2P2P/2rN2P1/2N1QRK1 w - - 3 29",
+                "after": "r5k1/5ppp/4p1n1/q2pP3/1R1P4/4P2P/2rN2P1/2N1QRK1 b - - 0 29"
+            },
+            "evaluation": {
+                "eval": "-3.47",
+                "type": "cp",
+                "move": {
+                    "from": "a5",
+                    "to": "b4"
+                },
+                "followup": "c1b3 c2b2 e1d1 a8f8 b3c5 b4d2 d1d2"
+            },
+            "prevPosition": "r5k1/5ppp/4p1n1/q2pP3/1b1P4/1R2P2P/2rN2P1/2N1QRK1 w - - 3 29",
+            "prevEvaluation": {
+                "eval": "-2.67",
+                "type": "cp",
+                "move": {
+                    "from": "e1",
+                    "to": "f2"
+                },
+                "followup": "b4d2 f2f7 g8h8 b3b7 d2e3 g1h2 e3h6 c1b3 a5d8"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Rook sacrifices exchange. Even though it is a bad move it is not free",
+        "context": {
+            "position": "3r4/pp4p1/2p3k1/6Np/1n1P4/4r1P1/PPPK3P/R3R3 w - - 0 21",
+            "prevMove": {
+                "color": "b",
+                "from": "e8",
+                "to": "e3",
+                "piece": "r",
+                "captured": "b",
+                "flags": "c",
+                "san": "Rxe3",
+                "lan": "e8e3",
+                "before": "3rr3/pp4p1/2p3k1/6Np/1n1P4/4B1P1/PPPK3P/R3R3 b - - 4 20",
+                "after": "3r4/pp4p1/2p3k1/6Np/1n1P4/4r1P1/PPPK3P/R3R3 w - - 0 21"
+            },
+            "evaluation": {
+                "eval": "4.45",
+                "type": "cp",
+                "move": {
+                    "from": "e1",
+                    "to": "e3"
+                },
+                "followup": "d8d4 d2c3 c6c5 e3e5 d4g4 g5e4 b7b6 e4c5 b4c2"
+            },
+            "prevPosition": "3rr3/pp4p1/2p3k1/6Np/1n1P4/4B1P1/PPPK3P/R3R3 b - - 4 20",
+            "prevEvaluation": {
+                "eval": "4.38",
+                "type": "cp",
+                "move": {
+                    "from": "e8",
+                    "to": "e3"
+                },
+                "followup": "e1e3 d8d4 d2c3 c6c5 e3e5 b4d5 e5d5 d4d5 g5f3 g6f5 f3g1 f5g4"
+            }
+        },
+        "expected": false
     }
 ]

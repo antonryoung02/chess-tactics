@@ -6,14 +6,15 @@ import { Tactic } from "@types";
 
 class HangingPieceTactics extends BaseTactic {
     isTactic(context: _PositionComparisonTacticContext): Partial<Tactic> | null {
-        const { position, evaluation, prevMove } = context;
+        const { position, evaluation, prevMove, prevPosition } = context;
+        const prevChess = new Chess(prevPosition);
         const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
 
         if (!currentMove.captured || currentMove.captured === "p") {
             return null;
         }
-        if (prevMove.captured && prevMove.captured !== "p") {
+        if (prevChess.inCheck() || (prevMove.captured && prevMove.captured !== "p")) {
             return null;
         }
 

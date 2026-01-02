@@ -14,6 +14,16 @@ export class TacticContextParser {
     static parse(context: TacticContext, options: TacticOptions): _TacticContext {
         const evaluation = this.parseEvaluation(context.position, context.evaluation, options);
         if ("prevEvaluation" in context) {
+            const prevChess = new Chess(context.prevPosition);
+            try {
+                prevChess.move(context.prevMove);
+            } catch (e) {
+                throw new ChessTacticsParserError(
+                    `prevMove ${context.prevMove.san} is not playable in prevPosition ${context.prevPosition}`,
+                    "INVALID_MOVE",
+                    { cause: e }
+                );
+            }
             const prevEvaluation = this.parseEvaluation(
                 context.prevPosition,
                 context.prevEvaluation,

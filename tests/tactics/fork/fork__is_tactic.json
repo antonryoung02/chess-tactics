@@ -464,5 +464,21 @@
         },
         "expected": false,
         "debug": true
+    },
+    {
+        "description": "Bishop moves to expose pin, winning knight. Only attacks one piece",
+        "context": {
+            "evaluation": {
+                "eval": "4.77",
+                "type": "cp",
+                "move": {
+                    "from": "d4",
+                    "to": "e5"
+                },
+                "followup": "e8c8 e5f6 c6e5 f3e4 e5c4 e4c4 g7g5 g2g3"
+            },
+            "position": "r3kb1r/1ppq1pp1/p1n2n1p/4p3/2BP4/2N1BQ2/PP3PPP/R3R1K1 w kq - 0 13"
+        },
+        "expected": false
     }
 ]
