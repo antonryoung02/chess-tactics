@@ -52,7 +52,10 @@ class TrapTactics extends BaseTactic {
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
                     return {
-                        trappedPiece: { square: m.to, piece: m.captured },
+                        trappedPiece: {
+                            square: m.to,
+                            piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
+                        },
                         trappingSquares: chess
                             .moves({ square: m.to, verbose: true })
                             .map((s) => s.to)
@@ -64,7 +67,10 @@ class TrapTactics extends BaseTactic {
                     invertTurn(chessCopy);
                     if (attackingSquareIsGood(chessCopy.fen(), m.to)) {
                         return {
-                            trappedPiece: { square: m.to, piece: m.captured },
+                            trappedPiece: {
+                                square: m.to,
+                                piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
+                            },
                             trappingSquares: chess
                                 .moves({ square: m.to, verbose: true })
                                 .map((s) => s.to)
