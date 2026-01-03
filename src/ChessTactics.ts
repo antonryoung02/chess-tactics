@@ -28,7 +28,7 @@ export class ChessTactics {
         const mergedOptions = { ...DEFAULT_TACTIC_OPTIONS, ...options };
         const internalContext = TacticContextParser.parse(context, mergedOptions);
         for (const classifier of this.tacticClassifiers) {
-            const t = classifier.findTactic(internalContext);
+            const t = classifier.findTactic(internalContext, mergedOptions);
             if (t) tactics.push(t);
         }
         return tactics;

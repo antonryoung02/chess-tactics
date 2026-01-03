@@ -5,6 +5,7 @@ export type Fen = string;
 
 export type TacticOptions = {
     trimEndSequence?: boolean;
+    maxLookaheadMoves?: number;
 };
 
 export type UciEvaluation = {
@@ -34,7 +35,7 @@ export type TacticContext = DefaultTacticContext | PositionComparisonTacticConte
 export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hanging";
 
 export interface TacticClassifier {
-    findTactic(context: _TacticContext): Tactic | null;
+    findTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
     isTactic(context: _TacticContext): Partial<Tactic> | null;
 }
 

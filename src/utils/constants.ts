@@ -12,6 +12,7 @@ export const PIECE_VALUES: Record<PieceSymbol, number> = {
 
 export const DEFAULT_TACTIC_OPTIONS: TacticOptions = {
     trimEndSequence: false,
+    maxLookaheadMoves: 5,
 };
 
 export const DEFAULT_TACTIC_CLASSIFIERS: TacticKey[] = [

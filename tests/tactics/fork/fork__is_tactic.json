@@ -480,5 +480,21 @@
             "position": "r3kb1r/1ppq1pp1/p1n2n1p/4p3/2BP4/2N1BQ2/PP3PPP/R3R1K1 w kq - 0 13"
         },
         "expected": false
+    },
+    {
+        "description": "Pawn capture wins but a fork shouldn't be able to fork a piece of the same type",
+        "context": {
+            "position": "r4rk1/7p/p2p2p1/2pPq3/4Pp2/1P2nPPb/4BR1P/R1QN2K1 b - - 1 25",
+            "evaluation": {
+                "eval": "-4.48",
+                "type": "cp",
+                "move": {
+                    "from": "f4",
+                    "to": "g3"
+                },
+                "followup": "d1e3 g3f2 g1f2 e5e4 f2g3 e4f4 g3h3 a8e8 a1a4 f4e3 c1e3 e8e3"
+            }
+        },
+        "expected": false
     }
 ]

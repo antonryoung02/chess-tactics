@@ -13,6 +13,7 @@ describe("TrapTactics.isTactic", () => {
         if (foundTactic !== t.expected) {
             console.log(`Failure: ${t.description}. Expected: ${t.expected}`);
             logBoardSequence(t.context.position, []);
+            console.log(JSON.stringify(result));
         }
         expect(foundTactic).toBe(t.expected);
         if (foundTactic) {

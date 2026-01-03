@@ -24,7 +24,9 @@ class TrapTactics extends BaseTactic {
         if (tacticalSequence) {
             return {
                 type: "trap",
-                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
+                attackedPieces: [
+                    { square: cosmeticTrap.trappedPiece.square, piece: chess.get(currentMove.to) },
+                ],
                 ...tacticalSequence,
             };
         }
@@ -43,11 +45,11 @@ class TrapTactics extends BaseTactic {
             chess.move(currentMove);
             const m = capturingMoves[i];
             const fen = chess.fen();
-
+            // TODO
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
                     return {
-                        trappedPiece: m.captured,
+                        trappedPiece: { square: m.to, piece: m.captured },
                         trappingSquares: chess
                             .moves({ square: m.to, verbose: true })
                             .map((s) => s.to)
@@ -59,7 +61,7 @@ class TrapTactics extends BaseTactic {
                     invertTurn(chessCopy);
                     if (attackingSquareIsGood(chessCopy.fen(), m.to)) {
                         return {
-                            trappedPiece: m.captured,
+                            trappedPiece: { square: m.to, piece: m.captured },
                             trappingSquares: chess
                                 .moves({ square: m.to, verbose: true })
                                 .map((s) => s.to)

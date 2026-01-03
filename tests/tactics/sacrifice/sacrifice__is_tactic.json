@@ -289,5 +289,21 @@
             }
         },
         "expected": false
+    },
+    {
+        "description": "Bishop sac to win back knight in opening",
+        "context": {
+            "position": "r2qk1nr/pp2ppbp/2np2p1/2p5/2B1PPb1/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 2 7",
+            "evaluation": {
+                "eval": "2.00",
+                "type": "cp",
+                "move": {
+                    "from": "c4",
+                    "to": "f7"
+                },
+                "followup": "e8f7 f3g5 f7e8 d1g4 d8d7 g4d7 e8d7 g5f7 c6b4 d2d3 b4c2 a1b1"
+            }
+        },
+        "expected": true
     }
 ]

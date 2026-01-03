@@ -1,4 +1,4 @@
-import { Fen, Tactic, TacticClassifier } from "@types";
+import { Fen, Tactic, TacticClassifier, TacticOptions } from "@types";
 import { colorToPlay, getMaterialChange, SequenceInterpreter } from "@utils";
 import { _TacticContext } from "src/_types";
 import { Chess, Move } from "chess.js";
@@ -11,13 +11,13 @@ export class BaseTactic implements TacticClassifier {
     }
 
     // Detects non-immediate tactics by iteratively calling isTactic on the position as long as the previous attacker move was 'forcing'
-    findTactic(context: _TacticContext): Tactic | null {
+    findTactic(context: _TacticContext, options: TacticOptions): Tactic | null {
         let sequence = context.evaluation.sequence;
         const chess = new Chess(context.position);
         let isForcing = true;
 
         let i = 0;
-        while (isForcing && i < Math.min(sequence.length - 2, 4)) {
+        while (isForcing && i <= Math.min(sequence.length - 3, options.maxLookaheadMoves)) {
             const newContext = this.contextAtState(context, chess.fen(), sequence, i);
             this.sequenceInterpreter.setContext(newContext);
             const tactic = this.isTactic(newContext);

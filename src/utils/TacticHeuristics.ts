@@ -188,7 +188,7 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
         for (const n of possibleMoves) {
             if (n.captured !== "k" && n.to !== m.to) chess.remove(n.to);
         }
-        if (m.captured && attackingSquareIsGood(chess.fen(), m.to, m)) {
+        if (m.captured && attackingSquareIsGood(chess.fen(), m.to, m) && m.captured !== m.piece) {
             threateningMoves.push(m);
         }
         chess.load(position);
