@@ -23,6 +23,9 @@ describe("SkewerTactics.isTactic", () => {
             expect(result[0].sequence.length).toBeGreaterThanOrEqual(3);
             expect(result[0].materialChange).toBeGreaterThanOrEqual(1);
             expect(result[0].startPosition).toBe(t.context.position);
+            result[0].sequence.forEach((item, index) => {
+                expect(item).not.toBeNull();
+            });
         }
     });
 });

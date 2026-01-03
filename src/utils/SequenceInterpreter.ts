@@ -20,7 +20,7 @@ export class SequenceInterpreter {
             const prevChess = new Chess(chess.fen());
             const m = chess.move(s);
             if (m.captured || chess.inCheck() || prevChess.inCheck()) {
-                matches.push(m.san);
+                matches.push(m);
             } else {
                 break;
             }
@@ -40,7 +40,7 @@ export class SequenceInterpreter {
     ): SequenceInterpretation | null {
         if (attackedSquares.length === 0 || attackerSquares.length === 0) return null;
 
-        let tacticalSequence = [];
+        let tacticalSequence: Move[] = [];
         const chess = new Chess(this.position);
         const moves = this.evaluation.sequence;
 

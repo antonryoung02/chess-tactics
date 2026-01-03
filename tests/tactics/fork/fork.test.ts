@@ -20,6 +20,10 @@ describe("ForkTactics.isTactic", () => {
             expect(result[0].sequence.length).toBeGreaterThanOrEqual(3);
             expect(result[0].materialChange).toBeGreaterThanOrEqual(1);
             expect(result[0].startPosition).toBe(t.context.position);
+            expect(result[0].sequence);
+            result[0].sequence.forEach((item, index) => {
+                expect(item).not.toBeNull();
+            });
         }
     });
 });
