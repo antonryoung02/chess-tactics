@@ -1,6 +1,6 @@
 {
     "name": "chess-tactics",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/antonryoung02/chess-tactics.git"
