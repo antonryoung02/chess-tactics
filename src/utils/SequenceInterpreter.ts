@@ -44,7 +44,7 @@ export class SequenceInterpreter {
         const chess = new Chess(this.position);
         const moves = this.evaluation.sequence;
 
-        for (let i = 0; i < Math.min(5, moves.length - 1); i++) {
+        for (let i = 0; i < moves.length; i++) {
             const move = moves[i];
             tacticalSequence.push(move);
             const position = chess.fen();

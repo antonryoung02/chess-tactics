@@ -25,7 +25,10 @@ class TrapTactics extends BaseTactic {
             return {
                 type: "trap",
                 attackedPieces: [
-                    { square: cosmeticTrap.trappedPiece.square, piece: chess.get(currentMove.to) },
+                    {
+                        square: cosmeticTrap.trappedPiece.square,
+                        piece: cosmeticTrap.trappedPiece.piece,
+                    },
                 ],
                 ...tacticalSequence,
             };
