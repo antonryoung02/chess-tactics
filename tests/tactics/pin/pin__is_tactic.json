@@ -154,5 +154,19 @@
         },
         "options": { "trimEndSequence": false },
         "expected": true
+    },
+    {
+        "description": "Bishop moves backwards to 'pin' pawn it was already attacking",
+        "context": {
+            "position": "r2r2k1/pp3p1p/1qn3p1/5b2/3b4/Q4NP1/PP2PPBP/R1B2RK1 b - - 2 14",
+            "evaluation": {
+                "move": {
+                    "from": "d4",
+                    "to": "g7"
+                },
+                "followup": "c1e3 b6b2 a3b2 g7b2 a1d1 a7a5 a2a4 b2g7 d1d2 a8c8 f1c1 d8d2"
+            }
+        },
+        "expected": false
     }
 ]

@@ -186,7 +186,8 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
     const threateningMoves = [];
     for (const m of possibleMoves) {
         for (const n of possibleMoves) {
-            if (n.captured !== "k" && n.to !== m.to) chess.remove(n.to);
+            // we remove the pieces to avoid the scenario where one of the forked pieces 'defends' the other through the attacking piece and nullifies the tactic
+            if (n.captured !== "k" && n.captured !== "p" && n.to !== m.to) chess.remove(n.to);
         }
         if (m.captured && attackingSquareIsGood(chess.fen(), m.to, m) && m.captured !== m.piece) {
             threateningMoves.push(m);
@@ -197,4 +198,18 @@ export function getThreateningMoves(position: Fen, currentMove: Move): Move[] {
     }
 
     return threateningMoves;
+}
+
+export function filterOutInitiallyAttackedSquares(
+    position: Fen,
+    currentMove: Move,
+    attackedSquares: Square[]
+): Square[] {
+    const chess = new Chess(position);
+    const attackingPieceInitialMoves = chess
+
+        .moves({ square: currentMove.from, verbose: true })
+        .map((m) => m.to);
+
+    return attackedSquares.filter((s) => !attackingPieceInitialMoves.includes(s));
 }

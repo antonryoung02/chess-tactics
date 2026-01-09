@@ -222,5 +222,19 @@
         },
         "options": { "trimEndSequence": false },
         "expected": true
+    },
+    {
+        "description": "Queen does skewer the rook and pawn, but neither is captured. The position forces opponent to lose their queen elsewhere",
+        "context": {
+            "position": "4k3/pp1bbpp1/4p1p1/3pP3/3r4/nN1Q4/1q2RPPP/R3B1K1 w - - 0 23",
+            "evaluation": {
+                "move": {
+                    "from": "d3",
+                    "to": "e3"
+                },
+                "followup": "b2a1 b3a1 d4e4 e3d2 e4a4 d2c1 a4c4 c1b2 b7b5 a1b3 e8f8 b3a5"
+            }
+        },
+        "expected": false
     }
 ]

@@ -1,5 +1,5 @@
 import { Chess, Move } from "chess.js";
-import { getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
+import { filterOutInitiallyAttackedSquares, getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 import { Fen, Tactic } from "@types";
@@ -10,8 +10,17 @@ class PinTactics extends BaseTactic {
         const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
 
-        const cosmeticPins = this.getCosmeticPins(position, currentMove);
+        let cosmeticPins = this.getCosmeticPins(position, currentMove);
+
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {
+            if (
+                filterOutInitiallyAttackedSquares(position, currentMove, [
+                    nextMoveWithPiece.to,
+                    nextMoveWithoutPiece.to,
+                ]).length < 2
+            ) {
+                continue;
+            }
             const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
                 [currentMove.to],
                 [nextMoveWithPiece.to, nextMoveWithoutPiece.to]

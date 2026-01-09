@@ -22,6 +22,8 @@ export class BaseTactic implements TacticClassifier {
             this.sequenceInterpreter.setContext(newContext);
             const tactic = this.isTactic(newContext);
             if (tactic) {
+                // TODO
+                // Why the hardcode? Could we find even some subset of behavior that allows for "two attackers vs one defender" free pieces?
                 if (tactic.type === "hanging" && i > 0) {
                     return null;
                 }

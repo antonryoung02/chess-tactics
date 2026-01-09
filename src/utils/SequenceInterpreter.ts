@@ -28,18 +28,15 @@ export class SequenceInterpreter {
         return matches;
     }
 
-    // either the pieces on attackedSquares are captured for material gain
-    // or defender desparados on attackerSquare for a loss of material
-
-    // the separation of tacticalSequence and remainingSequence
-    // is to ensure that non-capturing engine intermezzos
-    // still allow captures on attackedSquares to be found
+    // Tactic is returned if the pieces on attackerSquares capture any of the pieces on attackedSquares
+    // AND the resulting position after checks and captures won material
+    // TODO
+    // The isDesparado case handles 6 of 170 tests. It's probably too broad, try only desparados
     identifyWinningSequence(
         attackerSquares: Square[],
         attackedSquares: Square[]
     ): SequenceInterpretation | null {
         if (attackedSquares.length === 0 || attackerSquares.length === 0) return null;
-
         let tacticalSequence: Move[] = [];
         const chess = new Chess(this.position);
         const moves = this.evaluation.sequence;
@@ -73,6 +70,11 @@ export class SequenceInterpreter {
                 } else {
                     return null;
                 }
+            }
+            // Track the attackers movements through the sequence
+            const attackerIdx = attackerSquares.indexOf(move.from);
+            if (attackerIdx !== -1) {
+                attackerSquares[attackerIdx] = move.to;
             }
         }
         return null;

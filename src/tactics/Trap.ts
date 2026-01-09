@@ -48,7 +48,10 @@ class TrapTactics extends BaseTactic {
             chess.move(currentMove);
             const m = capturingMoves[i];
             const fen = chess.fen();
+            // There are cases where previously trapped pieces are classified on the next move.
+            // The current move should reveal or directly attack the piece of interest
             // TODO
+            // Add testcases where piece is trapped, and moving away from an opponent's one check threat triggers the 'trap' on the unrelated piece
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
                     return {

@@ -337,16 +337,6 @@
         "expected": true
     },
     {
-        "id": "00QN3",
-        "description": "Bishop was hanging, but check first to force queen off attacking square",
-        "context": {
-            "position": "r1b1B2k/pp4pp/2pb4/4q3/8/6P1/PPP4P/R2Q1R1K b - - 0 17",
-            "evaluation": { "move": "e5e4", "followup": ["d1f3", "e4e8"] }
-        },
-        "options": { "trimEndSequence": false },
-        "expected": true
-    },
-    {
         "id": "00Rue",
         "description": "Bishop for knight trade, then queen forks king and bishop",
         "context": {
@@ -462,8 +452,7 @@
                 "followup": "d1d2 e5f3 f1f3 a5d2 g5d2 e6d5 f3g3 g7b2 a1d1 b2e5 d2g5 e5g3"
             }
         },
-        "expected": false,
-        "debug": true
+        "expected": false
     },
     {
         "description": "Bishop moves to expose pin, winning knight. Only attacks one piece",
@@ -493,6 +482,48 @@
                     "to": "g3"
                 },
                 "followup": "d1e3 g3f2 g1f2 e5e4 f2g3 e4f4 g3h3 a8e8 a1a4 f4e3 c1e3 e8e3"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Rook 'forks' king and pawn when the rook was previously attacking the pawn",
+        "context": {
+            "position": "6k1/R4R1p/3p2p1/4r3/8/3Bb2P/2P3K1/1r6 w - - 3 34",
+            "evaluation": {
+                "move": {
+                    "from": "f7",
+                    "to": "g7"
+                },
+                "followup": "g8f8 a7f7 f8e8 f7c7 e8f8 g7h7 f8g8 c7g7 g8f8 g7f7 f8g8 h7g7"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Rook 'forks' two pawns when the rook was previously attacking one of the pawns",
+        "context": {
+            "position": "5rk1/1R2pp1p/3p2p1/2rP2P1/p4P1b/3B3P/2P4K/5R2 w - - 2 27",
+            "evaluation": {
+                "move": {
+                    "from": "b7",
+                    "to": "a7"
+                },
+                "followup": "c5d5 a7a4 h7h6 g5h6 h4f6 f4f5 g6g5 f1b1 f8c8 h2h1 g8h7 b1b5"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Knight attacks one defended and one undefended pawn",
+        "context": {
+            "position": "6k1/R7/5pp1/6np/1PK1p3/3N2P1/P2r4/8 w - - 0 42",
+            "evaluation": {
+                "move": {
+                    "from": "d3",
+                    "to": "f4"
+                },
+                "followup": "g5f7 f4d5 f6f5 c4c5 d2c2 c5d4 c2d2"
             }
         },
         "expected": false

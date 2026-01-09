@@ -1,5 +1,5 @@
 import { Chess, Move } from "chess.js";
-import { getThreateningMoves } from "@utils";
+import { filterOutInitiallyAttackedSquares, getThreateningMoves } from "@utils";
 import { Fen, Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
@@ -10,7 +10,9 @@ class ForkTactics extends BaseTactic {
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.sequence[0]);
         const cosmeticForks = this.getCosmeticForks(position, currentMove);
-        const attackedSquares = cosmeticForks.map((m) => m.to);
+        let attackedSquares = cosmeticForks.map((m) => m.to);
+        attackedSquares = filterOutInitiallyAttackedSquares(position, currentMove, attackedSquares);
+        if (attackedSquares.length < 2) return null;
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
             [currentMove.to],
             attackedSquares

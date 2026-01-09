@@ -1,5 +1,11 @@
 import { Chess, Move } from "chess.js";
-import { attackingSquareIsBad, getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
+import {
+    attackingSquareIsBad,
+    filterOutInitiallyAttackedSquares,
+    getMoveDiff,
+    invertTurn,
+    PIECE_VALUES,
+} from "@utils";
 import { Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext, _TacticContext } from "src/_types";
@@ -12,6 +18,14 @@ class SkewerTactics extends BaseTactic {
 
         const cosmeticSkewers = this.getCosmeticSkewers(context);
         for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticSkewers) {
+            if (
+                filterOutInitiallyAttackedSquares(position, currentMove, [
+                    nextMoveWithPiece.to,
+                    nextMoveWithoutPiece.to,
+                ]).length < 2
+            ) {
+                continue;
+            }
             const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
                 [currentMove.to],
                 [nextMoveWithPiece.to, nextMoveWithoutPiece.to]
