@@ -424,7 +424,8 @@
             "evaluation": { "move": "f6e4", "followup": ["c3e4", "b4c2", "d1c2", "c5c2"] }
         },
         "options": { "trimEndSequence": false },
-        "expected": true
+        "expected": true,
+        "debug": true
     },
     {
         "description": "Knight forks king and rook on pinned square",

@@ -1,6 +1,6 @@
 # chess-tactics
 
-chess-tactics is a tactic detection library that returns verbose tactic descriptions given a position and an engine move continuation.
+chess-tactics is an opinionated tactic detection library that finds a tactic, the pieces involved, and the tactical sequence given a position and its engine evaluation.
 
 Supported Tactics:
 
@@ -37,7 +37,6 @@ const tactics = chessTactics.classify(context); // [{type:"fork", ... }]
 Creates a new instance of the tactics classifier.
 
 -   **`tacticKeys`** (optional): An array of which tactics to include. Defaults to all available tactics
--   **Returns**: An instance of `ChessTactics`.
 
 ---
 
@@ -46,8 +45,8 @@ Creates a new instance of the tactics classifier.
 Analyzes a board position and the sequence of moves to determine if a specific tactic has occurred.
 
 -   **`context`** (TacticContext): An object containing the position & evaluation
--   **`options`** (TacticOptions): An object to set class behavior
--   **Returns**: [`Tactic[]`](#tactic).
+-   **`options`** [`TacticOptions`](#tactic-options): An object to modify class behavior
+-   **Returns**: [`Tactic[]`](#tactic). An array of tactics found in the position
 
 ---
 
@@ -61,7 +60,7 @@ Supported tactical patterns:
 
 ### `TacticContext`
 
-Context required for the tactic algorithms. Provide the type that supports all patterns passed to constructor
+Context required for the tactic algorithms
 
 | Type                              | Supported Tactic Keys                                   | Description                                                           |
 | :-------------------------------- | :------------------------------------------------------ | :-------------------------------------------------------------------- |
@@ -84,6 +83,17 @@ Context required for the tactic algorithms. Provide the type that supports all p
 -   **`prevMove`**: `Move`
 
 ---
+
+### `TacticOptions`
+
+Options to modify behavior
+
+<a id="tactic-options"></a>
+
+| Type                | Type                       | Description                                                                                                                                                                                                                                                                                                                  |
+| :------------------ | :------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `trimEndSequence`   | `boolean` (default:`True`) | Preprocessing step that if true, trims the end of the evaluation sequence while it contains captures or checks. If you are providing a raw engine string, this should be True to avoid miscalculation of sequence material change. (Ex. Set to false if you provide puzzle evaluations that end at the puzzle's completion). |
+| `maxLookaheadMoves` | `number` (default: 5)      | Specifies the maximum number of half-moves (ply) that can contain checks or captures before the tactical move is played. (Ex. If set to zero, a trade preceeding a fork will not be found because the first move is not a forking move)                                                                                      |
 
 ### `Evaluation`
 
