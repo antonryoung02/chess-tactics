@@ -17,17 +17,18 @@ class TrapTactics extends BaseTactic {
         const chess = new Chess(position);
         const currentMove = chess.move(evaluation.sequence[0]);
         const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
+        if (!cosmeticTrap) return null;
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
             [currentMove.to],
-            cosmeticTrap?.trappingSquares ?? []
+            [cosmeticTrap.square],
         );
         if (tacticalSequence) {
             return {
                 type: "trap",
                 attackedPieces: [
                     {
-                        square: cosmeticTrap.trappedPiece.square,
-                        piece: cosmeticTrap.trappedPiece.piece,
+                        square: cosmeticTrap.square,
+                        piece: cosmeticTrap.piece,
                     },
                 ],
                 ...tacticalSequence,
@@ -55,14 +56,8 @@ class TrapTactics extends BaseTactic {
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
                     return {
-                        trappedPiece: {
-                            square: m.to,
-                            piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
-                        },
-                        trappingSquares: chess
-                            .moves({ square: m.to, verbose: true })
-                            .map((s) => s.to)
-                            .concat(m.to),
+                        square: m.to,
+                        piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
                     };
                 } else {
                     // piece doesn't move. can we capture it?
@@ -70,14 +65,8 @@ class TrapTactics extends BaseTactic {
                     invertTurn(chessCopy);
                     if (attackingSquareIsGood(chessCopy.fen(), m.to)) {
                         return {
-                            trappedPiece: {
-                                square: m.to,
-                                piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
-                            },
-                            trappingSquares: chess
-                                .moves({ square: m.to, verbose: true })
-                                .map((s) => s.to)
-                                .concat(m.to),
+                            square: m.to,
+                            piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
                         };
                     }
                 }

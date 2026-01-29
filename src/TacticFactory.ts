@@ -1,4 +1,4 @@
-import { TacticClassifier, TacticKey } from "@types";
+import { SequenceInterpreter, TacticClassifier, TacticKey } from "@types";
 import {
     ForkTactics,
     PinTactics,
@@ -7,26 +7,37 @@ import {
     TrapTactics,
     HangingPieceTactics,
 } from "@tactics";
-import { SequenceInterpreter } from "@utils";
-import { TrapTacticsSequenceInterpreter } from "./utils/SequenceInterpreter";
+import { DefaultSequenceInterpreter, TrapTacticsSequenceInterpreter } from "@utils";
 
 export class TacticFactory {
     static create(type: TacticKey): TacticClassifier {
-        const sequenceInterpreter = new SequenceInterpreter();
+        const interpreter = this.createSequenceInterpreter(type);
+        return this.createTactic(type, interpreter);
+    }
+
+    static createSequenceInterpreter(type: TacticKey): SequenceInterpreter {
+        switch (type) {
+            case "trap":
+                return new TrapTacticsSequenceInterpreter();
+            default:
+                return new DefaultSequenceInterpreter();
+        }
+    }
+
+    static createTactic(type: TacticKey, interpreter: SequenceInterpreter): TacticClassifier {
         switch (type) {
             case "fork":
-                return new ForkTactics(sequenceInterpreter);
+                return new ForkTactics(interpreter);
             case "pin":
-                return new PinTactics(sequenceInterpreter);
+                return new PinTactics(interpreter);
             case "skewer":
-                return new SkewerTactics(sequenceInterpreter);
+                return new SkewerTactics(interpreter);
             case "sacrifice":
-                return new SacrificeTactics(sequenceInterpreter);
+                return new SacrificeTactics(interpreter);
             case "trap":
-                const trapInterpreter = new TrapTacticsSequenceInterpreter();
-                return new TrapTactics(trapInterpreter);
+                return new TrapTactics(interpreter);
             case "hanging":
-                return new HangingPieceTactics(sequenceInterpreter);
+                return new HangingPieceTactics(interpreter);
         }
     }
 }

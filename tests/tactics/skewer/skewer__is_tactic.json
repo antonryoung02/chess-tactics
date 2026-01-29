@@ -236,5 +236,19 @@
             }
         },
         "expected": false
+    },
+    {
+        "description": "Rook skewers king and rook, captures rook to win a knight afterwards",
+        "context": {
+            "position": "8/1p3pkN/p3p1p1/b7/4P3/4PP2/P1Pr4/5K1R b - - 2 28",
+            "evaluation": {
+                "move": {
+                    "from": "d2",
+                    "to": "d1"
+                },
+                "followup": "f1g2 d1h1 h7g5 h1c1 g2h3 c1c2 f3f4 a5e1 e4e5 c2a2 g5e4 b7b5"
+            }
+        },
+        "expected": true
     }
 ]

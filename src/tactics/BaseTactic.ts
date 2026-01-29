@@ -1,5 +1,6 @@
 import { Fen, Tactic, TacticClassifier, TacticOptions } from "@types";
-import { colorToPlay, getMaterialChange, SequenceInterpreter } from "@utils";
+import { colorToPlay, getMaterialChange } from "@utils";
+import { SequenceInterpreter } from "@types";
 import { _TacticContext } from "src/_types";
 import { Chess, Move } from "chess.js";
 
@@ -46,7 +47,7 @@ export class BaseTactic implements TacticClassifier {
         tactic: Partial<Tactic>,
         context: _TacticContext,
         sequence: Move[],
-        sequenceIndex: number
+        sequenceIndex: number,
     ): Tactic {
         return {
             type: tactic.type,
@@ -56,7 +57,7 @@ export class BaseTactic implements TacticClassifier {
             materialChange: getMaterialChange(
                 context.position,
                 tactic.endPosition,
-                colorToPlay(context.position)
+                colorToPlay(context.position),
             ),
             triggerIndex: sequenceIndex,
             sequence: sequence.slice(0, sequenceIndex).concat(tactic.sequence),
@@ -73,7 +74,7 @@ export class BaseTactic implements TacticClassifier {
         context: _TacticContext,
         position: Fen,
         sequence: Move[],
-        sequenceIndex: number
+        sequenceIndex: number,
     ) {
         let newContext: _TacticContext = {
             ...context,

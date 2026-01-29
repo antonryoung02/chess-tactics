@@ -46,6 +46,14 @@ export type SequenceInterpretation = {
     materialChange: number;
 };
 
+export interface SequenceInterpreter {
+    setContext(context: _TacticContext): void;
+    identifyWinningSequence(
+        attackerSquares: Square[],
+        attackedSquares: Square[],
+    ): SequenceInterpretation | null;
+}
+
 export type Tactic = SequenceInterpretation & {
     type: TacticKey;
     triggerIndex: number;

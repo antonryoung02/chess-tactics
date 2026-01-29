@@ -1,4 +1,7 @@
-export { SequenceInterpreter } from "./SequenceInterpreter";
+export {
+    DefaultSequenceInterpreter,
+    TrapTacticsSequenceInterpreter,
+} from "./DefaultSequenceInterpreter";
 export * from "./TacticHeuristics";
 export * from "./Utils";
 export { TacticContextParser } from "./TacticContextParser";

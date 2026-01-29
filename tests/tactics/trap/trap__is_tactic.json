@@ -293,7 +293,8 @@
             "evaluation": { "move": "b5e8", "followup": ["e7d5", "e6d5"] }
         },
         "options": { "trimEndSequence": false },
-        "expected": true
+        "expected": true,
+        "debug": true
     },
     {
         "id": "02f60",

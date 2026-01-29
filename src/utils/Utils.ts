@@ -103,6 +103,15 @@ export function getMaterialChange(startFen: Fen, endFen: Fen, pieceColor: Color 
 
 export function getMoveDiff(originalMoves: Move[], newMoves: Move[]): Move[] {
     return newMoves.filter(
-        (m) => originalMoves.map((n) => n.to).includes(m.to) === false && m.captured
+        (m) => originalMoves.map((n) => n.to).includes(m.to) === false && m.captured,
     );
+}
+
+export function positionAfterSequence(position: Fen, sequence: string[] | Move[] | null) {
+    if (!sequence) return position;
+    const chess = new Chess(position);
+    sequence.forEach((m: any) => {
+        chess.move(m);
+    });
+    return chess.fen();
 }
