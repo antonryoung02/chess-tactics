@@ -2,10 +2,9 @@ import { Chess } from "chess.js";
 import { PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _PositionComparisonTacticContext } from "src/_types";
-import { Tactic } from "@types";
 
 class HangingPieceTactics extends BaseTactic {
-    isTactic(context: _PositionComparisonTacticContext): Partial<Tactic> | null {
+    isTactic(context: _PositionComparisonTacticContext): boolean {
         const { position, evaluation, prevMove, prevPosition } = context;
         const prevChess = new Chess(prevPosition);
         const chess = new Chess(position);
@@ -35,13 +34,13 @@ class HangingPieceTactics extends BaseTactic {
             tacticalSequence.materialChange >= PIECE_VALUES[currentMove.captured] &&
             (!prevSequence || prevSequence.materialChange < PIECE_VALUES[currentMove.captured])
         ) {
-            return {
-                type: "hanging",
-                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
-                ...tacticalSequence,
-            };
+            this.tacticBuilder
+                .type("hanging")
+                .attackedPieces([{ square: currentMove.to, piece: chess.get(currentMove.to) }])
+                .sequence(tacticalSequence);
+            return true;
         }
-        return null;
+        return false;
     }
 }
 

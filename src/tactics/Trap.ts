@@ -7,42 +7,44 @@ import {
     attackingSquareIsGood,
     getMoveDiff,
 } from "@utils";
-import { Fen, Tactic } from "@types";
+import { Fen } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class TrapTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
+    isTactic(context: _DefaultTacticContext): boolean {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.sequence[0]);
-        const cosmeticTrap = this.getCosmeticTrap(position, currentMove);
-        if (!cosmeticTrap) return null;
+        const currentMove = evaluation.sequence[0];
+        chess.move(currentMove);
+
+        const attackerSquares = [currentMove.to];
+        const attackedSquares = this.getCosmeticTrap(position, currentMove);
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
-            [currentMove.to],
-            [cosmeticTrap.square],
+            attackerSquares,
+            attackedSquares,
         );
         if (tacticalSequence) {
-            return {
-                type: "trap",
-                attackedPieces: [
-                    {
-                        square: cosmeticTrap.square,
-                        piece: cosmeticTrap.piece,
-                    },
-                ],
-                ...tacticalSequence,
-            };
+            this.tacticBuilder
+                .type("trap")
+                .attackedPieces(
+                    attackedSquares.map((s) => ({
+                        square: s,
+                        piece: chess.get(s),
+                    })),
+                )
+                .sequence(tacticalSequence);
+            return true;
         }
-        return null;
+        return false;
     }
 
-    getCosmeticTrap(position: Fen, currentMove: Move): any | null {
+    private getCosmeticTrap(position: Fen, currentMove: Move): Square[] {
         const chess = new Chess(position);
         const capturingMoves = this.getCapturablePieces(currentMove, position);
 
         // the position after currentMove is a check
-        if (capturingMoves.filter((m) => m.captured === "k").length > 0) return null;
+        if (capturingMoves.filter((m) => m.captured === "k").length > 0) return [];
 
         for (let i = 0; i < capturingMoves.length; i++) {
             chess.load(position);
@@ -55,24 +57,18 @@ class TrapTactics extends BaseTactic {
             // Add testcases where piece is trapped, and moving away from an opponent's one check threat triggers the 'trap' on the unrelated piece
             if (this.pieceIsTrapped(fen, m)) {
                 if (m.captured && PIECE_VALUES[m.piece] < PIECE_VALUES[m.captured]) {
-                    return {
-                        square: m.to,
-                        piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
-                    };
+                    return [m.to];
                 } else {
                     // piece doesn't move. can we capture it?
                     const chessCopy = new Chess(chess.fen());
                     invertTurn(chessCopy);
                     if (attackingSquareIsGood(chessCopy.fen(), m.to)) {
-                        return {
-                            square: m.to,
-                            piece: { type: m.captured, color: m.color === "w" ? "b" : "w" },
-                        };
+                        return [m.to];
                     }
                 }
             }
         }
-        return null;
+        return [];
     }
 
     private pieceIsTrapped(position: Fen, move: Move): boolean {

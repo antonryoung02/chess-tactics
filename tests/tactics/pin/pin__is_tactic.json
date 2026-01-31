@@ -168,5 +168,48 @@
             }
         },
         "expected": false
+    },
+    {
+        "description": "Rook attacks pawn behind king, indirectly captures bishop",
+        "context": {
+            "position": "b2r3r/4Rp1p/p2q1np1/1p1P4/kP1Q4/P4PPB/2P4P/1K6 w - - 1 28",
+            "evaluation": {
+                "move": {
+                    "from": "e7",
+                    "to": "a7"
+                },
+                "followup": "a8b7 a7b7 d6d5 b7b6 a6a5 b6a6 d8a8 d4e3 a8a6"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Queen cosmetically pins knight to defended rook but captures never happen",
+        "context": {
+            "position": "b2r3r/4Rp1p/pk1q1np1/Np1P4/3p1Q2/P4PPB/1PP4P/1K6 w - - 2 26",
+            "evaluation": {
+                "move": {
+                    "from": "f4",
+                    "to": "d4"
+                },
+                "followup": "b6a5 b2b4 a5a4 e7a7 a8b7 a7b7 h8e8 b7b6 f6d5 b6d6 d8d6 h3f1"
+            }
+        },
+        "expected": false
+    },
+    {
+        "description": "Rook attacks pawn behind king, material is won but not due to the cosmetic pin",
+        "context": {
+            "position": "b2r3r/4Rp1p/p4np1/1p1q4/kP6/P1Q2PPB/2P4P/1K6 w - - 0 29",
+            "evaluation": {
+                "move": {
+                    "from": "e7",
+                    "to": "a7"
+                },
+                "followup": "a8b7 a7b7 d5c4 c3f6 a4a3 f6a6 a3b4 h3d7 d8d7 b7d7 h8c8 a6d6"
+            }
+        },
+        "expected": false,
+        "debug": true
     }
 ]

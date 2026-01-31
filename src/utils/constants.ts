@@ -23,3 +23,6 @@ export const DEFAULT_TACTIC_CLASSIFIERS: TacticKey[] = [
     "trap",
     "hanging",
 ];
+
+// This can be added to tactic options eventually. For now it cuts off any excessively long 'moves till capture' sequences to pass tests
+export const MAX_TACTIC_LENGTH = 7;

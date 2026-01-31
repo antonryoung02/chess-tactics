@@ -6,8 +6,8 @@ import { ChessTactics } from "@chess-tactics";
 describe("PinTactics.isTactic", () => {
     test.each(isTacticJSON)("passes json test cases", (t: IsTacticTestCase) => {
         const ct = new ChessTactics(["pin"]);
+        if (t.debug) debugger;
         const result = ct.classify(t.context);
-
         const foundTactic = result.length === 1;
         if (foundTactic !== t.expected) {
             console.log(`Failure: ${t.description}. ${t.expected}`);

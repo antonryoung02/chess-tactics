@@ -36,7 +36,7 @@ export type TacticKey = "fork" | "pin" | "skewer" | "sacrifice" | "trap" | "hang
 
 export interface TacticClassifier {
     findTactic(context: _TacticContext, options: TacticOptions): Tactic | null;
-    isTactic(context: _TacticContext): Partial<Tactic> | null;
+    isTactic(context: _TacticContext): boolean;
 }
 
 export type SequenceInterpretation = {

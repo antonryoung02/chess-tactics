@@ -332,5 +332,19 @@
             }
         },
         "expected": false
+    },
+    {
+        "description": "Simple bishop trap",
+        "context": {
+            "position": "r1bq1rk1/1p2npbp/p1n3p1/3p4/B1p5/2N2N2/PPPPQPPP/R1BR2K1 b - - 1 12",
+            "evaluation": {
+                "move": {
+                    "from": "b7",
+                    "to": "b5"
+                },
+                "followup": "c3b5 a6b5 a4b5 a8a5 b5c6 e7c6 d2d4 f8e8 e2f1 c8g4 c2c3 g4f3"
+            }
+        },
+        "expected": true
     }
 ]

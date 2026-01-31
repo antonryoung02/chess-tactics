@@ -1,36 +1,41 @@
-import { Chess, Move } from "chess.js";
+import { Chess, Move, Square } from "chess.js";
 import { filterOutInitiallyAttackedSquares, getThreateningMoves } from "@utils";
-import { Fen, Tactic } from "@types";
+import { Fen } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class ForkTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
+    isTactic(context: _DefaultTacticContext): boolean {
         const { position, evaluation } = context;
+        const currentMove = evaluation.sequence[0];
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.sequence[0]);
-        const cosmeticForks = this.getCosmeticForks(position, currentMove);
-        let attackedSquares = cosmeticForks.map((m) => m.to);
-        attackedSquares = filterOutInitiallyAttackedSquares(position, currentMove, attackedSquares);
-        if (attackedSquares.length < 2) return null;
+        chess.move(currentMove);
+
+        const attackerSquares = [currentMove.to];
+        const attackedSquares = this.getCosmeticForks(position, currentMove);
         const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
-            [currentMove.to],
-            attackedSquares
+            attackerSquares,
+            attackedSquares,
         );
         if (tacticalSequence) {
-            return {
-                type: "fork",
-                attackedPieces: attackedSquares.map((s) => ({ square: s, piece: chess.get(s) })),
-                ...tacticalSequence,
-            };
+            this.tacticBuilder
+                .type("fork")
+                .attackedPieces(attackedSquares.map((s) => ({ square: s, piece: chess.get(s) })))
+                .sequence(tacticalSequence);
+            return true;
         }
-        return null;
+        return false;
     }
 
-    getCosmeticForks(position: Fen, currentMove: Move): Move[] {
-        const threateningMoves = getThreateningMoves(position, currentMove);
-        if (threateningMoves.length >= 2) {
-            return threateningMoves;
+    private getCosmeticForks(position: Fen, currentMove: Move): Square[] {
+        let threatenedSquares = getThreateningMoves(position, currentMove).map((m) => m.to);
+        threatenedSquares = filterOutInitiallyAttackedSquares(
+            position,
+            currentMove,
+            threatenedSquares,
+        );
+        if (threatenedSquares.length >= 2) {
+            return threatenedSquares;
         }
         return [];
     }

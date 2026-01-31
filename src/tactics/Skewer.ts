@@ -1,4 +1,4 @@
-import { Chess, Move } from "chess.js";
+import { Chess, Square } from "chess.js";
 import {
     attackingSquareIsBad,
     filterOutInitiallyAttackedSquares,
@@ -6,48 +6,40 @@ import {
     invertTurn,
     PIECE_VALUES,
 } from "@utils";
-import { Tactic } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext, _TacticContext } from "src/_types";
 
 class SkewerTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
+    isTactic(context: _DefaultTacticContext): boolean {
         const { position, evaluation } = context;
         const chess = new Chess(position);
-        const currentMove = chess.move(evaluation.sequence[0]);
+        const currentMove = evaluation.sequence[0];
+        chess.move(currentMove);
 
         const cosmeticSkewers = this.getCosmeticSkewers(context);
-        for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticSkewers) {
-            if (
-                filterOutInitiallyAttackedSquares(position, currentMove, [
-                    nextMoveWithPiece.to,
-                    nextMoveWithoutPiece.to,
-                ]).length < 2
-            ) {
-                continue;
-            }
+        for (const attackedSquares of cosmeticSkewers) {
+            const attackerSquares = [currentMove.to];
             const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
-                [currentMove.to],
-                [nextMoveWithPiece.to, nextMoveWithoutPiece.to]
+                attackerSquares,
+                attackedSquares,
             );
             if (tacticalSequence) {
-                return {
-                    type: "skewer",
-                    attackedPieces: [
-                        { square: nextMoveWithPiece.to, piece: chess.get(nextMoveWithPiece.to) },
-                        {
-                            square: nextMoveWithoutPiece.to,
-                            piece: chess.get(nextMoveWithoutPiece.to),
-                        },
-                    ],
-                    ...tacticalSequence,
-                };
+                this.tacticBuilder
+                    .type("skewer")
+                    .attackedPieces(
+                        attackedSquares.map((s) => ({
+                            square: s,
+                            piece: chess.get(s),
+                        })),
+                    )
+                    .sequence(tacticalSequence);
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
-    getCosmeticSkewers(context: _TacticContext): Move[][] {
+    private getCosmeticSkewers(context: _TacticContext): Square[][] {
         const { evaluation, position } = context;
         const currentMove = evaluation.sequence[0];
         if (["p", "k", "n"].includes(currentMove.piece)) {
@@ -91,9 +83,11 @@ class SkewerTactics extends BaseTactic {
                 if (
                     m.captured &&
                     PIECE_VALUES[move.captured] > PIECE_VALUES[m.captured] &&
-                    !attackingSquareIsBad(chess.fen(), m.to)
+                    !attackingSquareIsBad(chess.fen(), m.to) &&
+                    filterOutInitiallyAttackedSquares(position, currentMove, [move.to, m.to])
+                        .length === 2
                 ) {
-                    cosmeticSkewers.push([move, m]);
+                    cosmeticSkewers.push([move.to, m.to]);
                 }
             }
         }

@@ -6,34 +6,35 @@ import {
     colorToPlay,
     getMaterialChange,
 } from "@utils";
-import { Fen, Tactic } from "@types";
+import { Fen } from "@types";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
 
 class SacrificeTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
+    isTactic(context: _DefaultTacticContext): boolean {
         const { position, evaluation } = context;
-        const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
 
-        chess.move(currentMove);
-        chess.undo();
-        if (this.sacrificedMaterial(position, currentMove) && evaluation.sequence.length > 0) {
+        if (this.sacrificedMaterial(position, currentMove)) {
             const endPosition = positionAfterSequence(position, evaluation.sequence);
             const materialChange = getMaterialChange(position, endPosition, colorToPlay(position));
-            return {
-                type: "sacrifice",
-                attackedPieces: [{ square: currentMove.to, piece: chess.get(currentMove.to) }],
+            const tacticalSequence = {
                 sequence: evaluation.sequence,
                 startPosition: position,
                 endPosition: endPosition,
                 materialChange: materialChange,
             };
+            const chess = new Chess(position);
+            this.tacticBuilder
+                .type("sacrifice")
+                .attackedPieces([{ square: currentMove.to, piece: chess.get(currentMove.to) }])
+                .sequence(tacticalSequence);
+            return true;
         }
-        return null;
+        return false;
     }
 
-    sacrificedMaterial(position: Fen, currentMove: Move) {
+    private sacrificedMaterial(position: Fen, currentMove: Move) {
         if (currentMove.promotion || currentMove.piece === "p") {
             return false;
         }

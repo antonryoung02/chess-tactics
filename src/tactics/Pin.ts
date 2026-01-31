@@ -1,48 +1,39 @@
-import { Chess, Move } from "chess.js";
+import { Chess, Move, Square } from "chess.js";
 import { filterOutInitiallyAttackedSquares, getMoveDiff, invertTurn, PIECE_VALUES } from "@utils";
 import { BaseTactic } from "@tactics";
 import { _DefaultTacticContext } from "src/_types";
-import { Fen, Tactic } from "@types";
+import { Fen } from "@types";
 
 class PinTactics extends BaseTactic {
-    isTactic(context: _DefaultTacticContext): Partial<Tactic> | null {
+    isTactic(context: _DefaultTacticContext): boolean {
         const { position, evaluation } = context;
-        const chess = new Chess(position);
         const currentMove = evaluation.sequence[0];
 
-        let cosmeticPins = this.getCosmeticPins(position, currentMove);
-
-        for (const [nextMoveWithPiece, nextMoveWithoutPiece] of cosmeticPins) {
-            if (
-                filterOutInitiallyAttackedSquares(position, currentMove, [
-                    nextMoveWithPiece.to,
-                    nextMoveWithoutPiece.to,
-                ]).length < 2
-            ) {
-                continue;
-            }
+        const cosmeticPins = this.getCosmeticPins(position, currentMove);
+        for (const attackedSquares of cosmeticPins) {
+            const attackerSquares = [currentMove.to];
             const tacticalSequence = this.sequenceInterpreter.identifyWinningSequence(
-                [currentMove.to],
-                [nextMoveWithPiece.to, nextMoveWithoutPiece.to]
+                attackerSquares,
+                attackedSquares,
             );
             if (tacticalSequence) {
-                return {
-                    type: "pin",
-                    attackedPieces: [
-                        { square: nextMoveWithPiece.to, piece: chess.get(nextMoveWithPiece.to) },
-                        {
-                            square: nextMoveWithoutPiece.to,
-                            piece: chess.get(nextMoveWithoutPiece.to),
-                        },
-                    ],
-                    ...tacticalSequence,
-                };
+                const chess = new Chess(position);
+                this.tacticBuilder
+                    .type("pin")
+                    .attackedPieces(
+                        attackedSquares.map((s) => ({
+                            square: s,
+                            piece: chess.get(s),
+                        })),
+                    )
+                    .sequence(tacticalSequence);
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
-    getCosmeticPins(position: Fen, currentMove: Move): Array<Array<Move>> {
+    private getCosmeticPins(position: Fen, currentMove: Move): Square[][] {
         if (["p", "k", "n"].includes(currentMove.piece)) {
             return [];
         }
@@ -73,23 +64,25 @@ class PinTactics extends BaseTactic {
             for (const m of newMoves) {
                 if (m.captured && PIECE_VALUES[move.captured] < PIECE_VALUES[m.captured]) {
                     if (
-                        move.captured === "p" &&
-                        !this.movePreventsPawnMobility(position, currentMove, move, m)
+                        (move.captured === "p" &&
+                            !this.movePreventsPawnMobility(position, currentMove, move, m)) ||
+                        filterOutInitiallyAttackedSquares(position, currentMove, [move.to, m.to])
+                            .length < 2
                     ) {
                         continue;
                     }
-                    cosmeticPins.push([move, m]); // [move to capture pinned piece, move to capture piece behind it]
+                    cosmeticPins.push([move.to, m.to]); // [move to capture pinned piece, move to capture piece behind it]
                 }
             }
         }
         return cosmeticPins;
     }
 
-    movePreventsPawnMobility(
+    private movePreventsPawnMobility(
         position: Fen,
         currentMove: Move,
         moveCapturingPawn: Move,
-        moveCapturingBehindPiece: Move
+        moveCapturingBehindPiece: Move,
     ) {
         // do any of the possible pawn movements uncover the pin -> losing material?
 
